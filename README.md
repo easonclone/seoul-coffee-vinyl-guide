@@ -6,8 +6,6 @@
 
 ```text
 .
-├── .openai/
-│   └── hosting.json       # ChatGPT Sites 靜態部署設定
 ├── .github/
 │   └── workflows/
 │       └── pages.yml      # GitHub Pages 自動部署流程
@@ -77,10 +75,6 @@ python3 -m http.server 8000 --directory dist
 ## 部署
 
 所有平台的發佈目錄皆為 `dist`，不需要 build command。
-
-### ChatGPT Sites
-
-本專案已包含 `.openai/hosting.json`，其中 `static.directory` 指向 `dist`。透過 ChatGPT Sites 發佈時，直接封裝目前專案即可。
 
 ### Vercel
 

@@ -154,6 +154,197 @@ h1 span {
   bottom: -1.5rem;
 }
 
+.area-map {
+  padding-top: 2rem;
+}
+
+.area-map-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--line-strong);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.area-map-heading p {
+  margin: 0;
+}
+
+.area-map-heading p:first-child {
+  color: var(--accent);
+}
+
+.area-map-canvas {
+  position: relative;
+  height: clamp(20rem, 34vw, 28rem);
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.area-map-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.area-map-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-silhouette {
+  fill: url(#seoul-dots);
+  opacity: 0.62;
+}
+
+.map-river {
+  fill: none;
+  stroke: var(--paper);
+  stroke-width: 22;
+}
+
+.area-map-shape circle {
+  fill: var(--line-strong);
+}
+
+.map-node {
+  position: absolute;
+  z-index: 2;
+  top: var(--y);
+  left: var(--x);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+  text-decoration: none;
+  transform: translate(-1rem, -50%);
+}
+
+.map-node-yeonhui {
+  --x: 20%;
+  --y: 37%;
+}
+
+.map-node-yeonnam {
+  --x: 24%;
+  --y: 53%;
+}
+
+.map-node-mangwon {
+  --x: 14%;
+  --y: 64%;
+}
+
+.map-node-gongdeok {
+  --x: 38%;
+  --y: 63%;
+}
+
+.map-node-seochon {
+  --x: 45%;
+  --y: 31%;
+}
+
+.map-node-wonseo {
+  --x: 59%;
+  --y: 27%;
+}
+
+.map-node-dongnimmun {
+  --x: 34%;
+  --y: 27%;
+}
+
+.map-node-jangchung {
+  --x: 65%;
+  --y: 54%;
+}
+
+.map-node-yongsan {
+  --x: 48%;
+  --y: 76%;
+}
+
+.map-node-yangjae {
+  --x: 73%;
+  --y: 78%;
+}
+
+.map-node-seongsan {
+  --x: 91%;
+  --y: 84%;
+}
+
+.map-node > span {
+  position: relative;
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
+  background: var(--accent);
+  border: 0.35rem solid var(--surface);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--accent);
+  transition: transform 160ms ease, background-color 160ms ease;
+}
+
+.map-node > span::after {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: var(--surface);
+  border-radius: 50%;
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.map-node b {
+  padding: 0.3rem 0.45rem;
+  background: rgba(251, 250, 247, 0.9);
+  font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.map-node small {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.map-node:hover > span,
+.map-node:focus-visible > span {
+  background: var(--ink);
+  transform: scale(1.18);
+}
+
+.map-node:focus-visible {
+  outline-offset: 0.35rem;
+}
+
+.map-node.is-jeju::before {
+  position: absolute;
+  right: calc(100% + 0.35rem);
+  width: 2.4rem;
+  border-top: 1px dashed var(--line-strong);
+  content: "";
+}
+
 .toolbar {
   padding: 1.75rem 0;
   border-bottom: 1px solid var(--line);
@@ -276,6 +467,7 @@ input[type="search"]::placeholder {
   gap: clamp(1.25rem, 4vw, 4rem);
   padding: 2.5rem 0 3.5rem;
   border-bottom: 1px solid var(--ink);
+  scroll-margin-top: 1rem;
 }
 
 .group-header {
@@ -503,6 +695,33 @@ noscript {
 
   .record-mark span {
     display: none;
+  }
+
+  .area-map {
+    padding-top: 1.5rem;
+  }
+
+  .area-map-heading {
+    font-size: 0.7rem;
+  }
+
+  .area-map-canvas {
+    height: 28rem;
+    overflow-x: auto;
+  }
+
+  .area-map-track {
+    min-width: 43rem;
+  }
+
+  .map-node > span {
+    width: 2.15rem;
+    height: 2.15rem;
+    flex-basis: 2.15rem;
+  }
+
+  .map-node b {
+    font-size: 1rem;
   }
 
   .search-wrap {

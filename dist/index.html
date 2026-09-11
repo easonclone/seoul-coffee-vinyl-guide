@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Seoul Coffee &amp; Vinyl Guide</title>
     <meta name="description" content="Curated coffee shops, roasteries and vinyl listening spaces in Seoul and Korea.">
     <meta property="og:type" content="website">
@@ -28,6 +30,38 @@
           <span>01</span>
         </div>
       </div>
+
+      <nav class="area-map" aria-label="依區域快速瀏覽">
+        <div class="area-map-heading">
+          <p>AREA MAP / SEOUL</p>
+          <p>選擇區域快速前往</p>
+        </div>
+        <div class="area-map-canvas">
+          <div class="area-map-track">
+            <svg class="area-map-shape" viewBox="0 0 1000 430" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <defs>
+                <pattern id="seoul-dots" width="26" height="26" patternUnits="userSpaceOnUse">
+                  <circle cx="7" cy="7" r="5.2"></circle>
+                </pattern>
+              </defs>
+              <path class="map-silhouette" d="M61 201C77 151 119 135 157 121C207 103 236 63 291 68C331 72 352 107 393 108C440 109 471 59 520 62C571 65 593 110 638 118C690 127 724 87 778 92C828 96 848 132 894 143C932 152 954 179 944 216C933 257 889 266 859 286C821 312 813 352 762 361C715 369 686 337 641 338C586 340 557 382 503 370C457 360 441 319 395 310C349 301 319 331 272 321C228 312 216 277 177 262C131 245 43 255 61 201Z"></path>
+              <path class="map-river" d="M60 235C152 199 229 248 310 231C397 212 451 173 540 204C624 233 701 268 793 234C849 213 895 202 944 221"></path>
+            </svg>
+
+            <a class="map-node map-node-yeonhui" href="#area-yeonhui"><span></span><b>延禧洞<small>Yeonhui</small></b></a>
+            <a class="map-node map-node-yeonnam" href="#area-yeonnam"><span></span><b>延南洞<small>Yeonnam</small></b></a>
+            <a class="map-node map-node-mangwon" href="#area-mangwon"><span></span><b>望遠洞<small>Mangwon</small></b></a>
+            <a class="map-node map-node-gongdeok" href="#area-gongdeok"><span></span><b>孔德<small>Gongdeok</small></b></a>
+            <a class="map-node map-node-seochon" href="#area-seochon"><span></span><b>西村<small>Seochon</small></b></a>
+            <a class="map-node map-node-wonseo" href="#area-wonseo"><span></span><b>苑西洞<small>Wonseo</small></b></a>
+            <a class="map-node map-node-dongnimmun" href="#area-dongnimmun"><span></span><b>獨立門<small>Dongnimmun</small></b></a>
+            <a class="map-node map-node-jangchung" href="#area-jangchung"><span></span><b>獎忠洞<small>Jangchung</small></b></a>
+            <a class="map-node map-node-yongsan" href="#area-yongsan"><span></span><b>龍山<small>Yongsan</small></b></a>
+            <a class="map-node map-node-yangjae" href="#area-yangjae"><span></span><b>良才<small>Yangjae</small></b></a>
+            <a class="map-node map-node-seongsan is-jeju" href="#area-seongsan"><span></span><b>城山・濟州<small>Seongsan</small></b></a>
+          </div>
+        </div>
+      </nav>
     </header>
 
     <main>
