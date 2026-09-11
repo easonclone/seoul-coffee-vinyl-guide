@@ -459,7 +459,8 @@
     const sticker = stickers[Math.floor(rank / stickerEvery) % stickers.length];
     const image = document.createElement("img");
     image.className = "page-sticker";
-    image.src = sticker.src;
+    // 手機不顯示貼紙，所以也不要下載：等版面夠寬才補上 src
+    image.dataset.src = sticker.src;
     image.alt = "";
     image.loading = "lazy";
     image.decoding = "async";
@@ -470,6 +471,23 @@
     image.style.setProperty("--sticker-drop", `${1.4 + ((rank * 37) % 4) * 0.5}rem`);
     image.style.setProperty("--sticker-indent", `${((rank * 53) % 5) * 0.45}rem`);
     return image;
+  }
+
+  /** 版面夠寬時才真的載入貼紙圖，避免手機白白下載用不到的裝飾 */
+  function hydrateStickers() {
+    if (!stickers.length || typeof window.matchMedia !== "function") return;
+
+    const wide = window.matchMedia("(min-width: 768px)");
+    const load = () => {
+      if (!wide.matches) return;
+      document.querySelectorAll(".page-sticker[data-src]").forEach((image) => {
+        image.src = image.dataset.src;
+        delete image.dataset.src;
+      });
+    };
+
+    load();
+    if (typeof wide.addEventListener === "function") wide.addEventListener("change", load);
   }
 
   function renderGroupedPlaces(visiblePlaces) {
@@ -828,6 +846,7 @@
     placesContainer.hidden = visiblePlaces.length === 0;
     syncControls();
     writeUrlState();
+    hydrateStickers();
   }
 
   function resetFilters() {

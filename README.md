@@ -172,21 +172,27 @@ window.ROUTES = [
 **小塗鴉**：星星、愛心、咖啡杯、閃光、花、唱片、貓，全部是 SVG data URI，
 可重用也方便控制密度。目前只用在章節標題旁（一章一個，依章節循環）與區域小標旁。
 
-**裝飾貼紙**（選用）：把去背的單張貼紙圖檔放進 `dist/stickers/`，再登記到
-`dist/data/stickers.js`，就會散落在章節左欄。`window.STICKERS` 為空陣列時
-完全不 render，也不會發出任何圖片請求。
+**裝飾貼紙**：`dist/stickers/` 收了 27 張從貼紙表切出來的單張去背 WebP（共約 380 KB，
+單張 8–20 KB），由 `dist/data/stickers.js` 決定要用哪幾張、多大、傾斜幾度。
+貼紙散落在章節左欄，依章節序號輪流取用，位置固定不會亂跳。
 
 ```js
 window.STICKERS = [
-  { src: "stickers/ticket-subway.png", width: 132, tilt: -4 },
-  { src: "stickers/tag-icn.png", width: 96, tilt: 5 }
+  { src: "stickers/label-seoul.webp", width: 118, tilt: -4 },
+  { src: "stickers/icon-star.webp", width: 62, tilt: 6 }
 ];
 window.STICKER_EVERY = 2;   // 每幾章放一張；1 = 每章、0 = 關閉
 ```
 
-貼紙一律 `aria-hidden`、`pointer-events: none`、`loading="lazy"`，
-並且只在 768px 以上出現，手機版不顯示以免干擾閱讀。
-密度直接用 `STICKER_EVERY` 控制，不需要改 CSS。
+密度只靠 `STICKER_EVERY` 一個數字控制。貼紙一律 `aria-hidden`、`pointer-events: none`，
+**只在 768px 以上出現，而且手機上根本不會下載**——`src` 等版面夠寬才補上，
+手機端對 `stickers/` 的請求數是 0。陣列留空則完全不 render。
+
+預設只啟用沒有具體虛構資訊的那幾張（서울 標籤、星星、愛心、箭頭、定位針、
+行李吊牌、格紋膠帶、咖啡豆、冰美式、여행하자 標籤）。車票、登機證、收據、
+菜單、集點卡那幾張上面有站名、日期、金額、姓名與虛構店名（카페 영희），
+貼在真實店家旁邊容易被誤讀成該店資訊，因此預設關閉，檔案仍保留在
+`dist/stickers/`，`stickers.js` 裡有完整清單可自行啟用。
 
 **章節**：左側裝訂線 + 彩色分頁標籤（顏色依章節循環）+ 標題 + 羅馬拼音 +
 由該群分類推導出來的一行小標（如 `coffee + vinyl`）+ 選填的手寫副標，
