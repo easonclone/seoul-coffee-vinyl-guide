@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Seoul Coffee &amp; Vinyl Guide</title>
+    <meta name="description" content="Curated coffee shops, roasteries and vinyl listening spaces in Seoul and Korea.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Seoul Coffee &amp; Vinyl Guide">
+    <meta property="og:description" content="Curated coffee shops, roasteries and vinyl listening spaces in Seoul and Korea.">
+    <meta name="theme-color" content="#f4f1ea">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f4f1ea'/%3E%3Ccircle cx='32' cy='32' r='21' fill='%2323211e'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23f4f1ea'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%23923d36'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+    <script src="data/places.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#places">跳至店家列表</a>
+
+    <header class="site-header">
+      <div class="header-inner">
+        <div>
+          <p class="edition">SEOUL · KOREA / CURATED INDEX</p>
+          <h1>Seoul Coffee <span>&amp;</span> Vinyl Guide</h1>
+          <p class="subtitle">首爾咖啡、烘焙與黑膠空間收藏</p>
+        </div>
+        <div class="record-mark" aria-hidden="true">
+          <span>01</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="toolbar" aria-label="搜尋與篩選">
+        <div class="search-wrap">
+          <label for="search">搜尋</label>
+          <input id="search" type="search" autocomplete="off" placeholder="搜尋店名、韓文店名、區域、地址">
+          <button id="clear-search" class="clear-search" type="button" hidden>清除搜尋</button>
+        </div>
+
+        <div class="toolbar-row">
+          <div class="filters" aria-label="店家篩選">
+            <button class="filter-chip is-active" type="button" data-filter-type="all" aria-pressed="true">全部</button>
+            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="coffee" aria-pressed="false">Coffee</button>
+            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="vinyl" aria-pressed="false">Vinyl</button>
+            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="roastery" aria-pressed="false">Roastery</button>
+            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="fritz" aria-pressed="false">Fritz</button>
+            <button class="filter-chip" type="button" data-filter-type="city" data-filter-value="Seoul" aria-pressed="false">Seoul</button>
+            <button class="filter-chip" type="button" data-filter-type="city" data-filter-value="Jeju" aria-pressed="false">Jeju</button>
+          </div>
+
+          <div class="sort-control">
+            <label for="sort">排序</label>
+            <select id="sort">
+              <option value="area">區域</option>
+              <option value="name">店名</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="results-summary" aria-live="polite" aria-atomic="true">
+        <p id="result-count">14 places</p>
+        <p id="active-area" class="active-area" hidden></p>
+      </section>
+
+      <div id="places" class="places" tabindex="-1"></div>
+
+      <section id="empty-state" class="empty-state" hidden>
+        <p class="empty-kicker">NO MATCHES</p>
+        <h2>找不到符合條件的店家</h2>
+        <p>試著縮短關鍵字，或清除部分篩選條件。</p>
+        <button id="reset-filters" type="button">顯示全部店家</button>
+      </section>
+    </main>
+
+    <footer>
+      <p>Seoul Coffee &amp; Vinyl Guide</p>
+      <p>地址與營業資訊可能異動，出發前請透過 NAVER Map 再次確認。</p>
+    </footer>
+
+    <noscript>此網站需要 JavaScript 才能顯示店家資料與使用篩選功能。</noscript>
+  </body>
+</html>
