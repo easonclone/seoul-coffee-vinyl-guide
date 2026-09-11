@@ -240,7 +240,7 @@ h1 span {
 .area-map-figure {
   position: relative;
   margin: 0;
-  aspect-ratio: 1000 / 676;
+  aspect-ratio: 1118 / 676;
   overflow: hidden;
   background-color: var(--map-land);
   border-right: 1px solid var(--line);
@@ -1175,7 +1175,7 @@ noscript {
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 1300px) {
   .area-map-body {
     grid-template-columns: 1fr;
   }
@@ -1264,9 +1264,9 @@ noscript {
   }
 
   .map-node i {
-    width: 1.35rem;
-    height: 1.35rem;
-    font-size: 0.58rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.56rem;
   }
 
   .area-index a {

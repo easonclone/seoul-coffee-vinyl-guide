@@ -1,6 +1,6 @@
 # Seoul Coffee & Vinyl Guide
 
-「首爾咖啡與黑膠店收藏」是一個輕量、手機優先的資料驅動靜態網站。目前收錄首爾的咖啡店、烘焙空間、黑膠聆聽場所、餐廳與景點，不需要後端、資料庫、API 金鑰或建置流程。
+「首爾咖啡與黑膠店收藏」是一個輕量、手機優先的資料驅動靜態網站。目前收錄首爾的咖啡店、烘焙空間、黑膠聆聽場所、餐廳、服飾店與景點，不需要後端、資料庫、API 金鑰或建置流程。
 
 ## 檔案結構
 
@@ -72,8 +72,12 @@
 ### Area schema（`dist/data/areas.js`）
 
 - `window.CLUSTERS`：以實際旅遊動線（可步行／同一趟行程）分群，陣列順序即列表與地圖編號順序
-- `window.AREAS`：每個 `areaSlug` 的顯示名稱、所屬 cluster 與經緯度；選填的 `nudge` 只是地圖上的視覺位移，用來避免節點重疊
-- `window.MAP_VIEW`：地圖投影範圍，必須與 `index.html` 底圖 SVG 的 `viewBox` 一致
+- `window.AREAS`：每個 `areaSlug` 的顯示名稱、所屬 cluster 與經緯度；選填的 `nudge` 只是
+  地圖上的視覺位移，用來避免節點重疊、並確保點落在漢江正確的一岸。新增區域後請重新檢查
+  節點是否重疊（手機寬度最嚴苛），不要只看桌機
+- `window.MAP_VIEW`：地圖投影範圍，必須與 `index.html` 底圖 SVG 的 `viewBox` 一致。
+  要納入更東邊的區域時，維持 `width / (east - west)` 的比例尺不變、只加大 `east` 與
+  `width`，既有的底圖路徑座標就完全不必重算
 - `window.CATEGORY_ORDER`：只影響分類按鈕的排序，實際選項仍由 places 資料 derive
 
 已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`instagramUrl`、`websiteUrl`、`priceLevel`、`rating`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。

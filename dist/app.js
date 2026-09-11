@@ -290,9 +290,9 @@
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `在新分頁開啟 ${place.name} 的 NAVER Map`);
       article.append(link);
-    } else if (place.koreanName) {
+    } else if (place.koreanName || place.name) {
       // 沒有確切的 NAVER 連結時只給關鍵字搜尋，不臆造 place id
-      const query = [place.koreanName, place.address].filter(Boolean).join(" ");
+      const query = [place.koreanName || place.name, place.address].filter(Boolean).join(" ");
       const link = createElement("a", "map-link is-search", "NAVER 搜尋");
       link.href = `https://map.naver.com/p/search/${encodeURIComponent(query)}`;
       link.target = "_blank";
