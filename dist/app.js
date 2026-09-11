@@ -7,6 +7,8 @@
   const categoryOrder = Array.isArray(window.CATEGORY_ORDER) ? window.CATEGORY_ORDER : [];
   const mapView = window.MAP_VIEW || null;
   const routes = Array.isArray(window.ROUTES) ? window.ROUTES : [];
+  const stickers = Array.isArray(window.STICKERS) ? window.STICKERS.filter((item) => item && item.src) : [];
+  const stickerEvery = Number.isFinite(window.STICKER_EVERY) ? Math.max(0, window.STICKER_EVERY) : 2;
 
   const searchInput = document.querySelector("#search");
   const clearSearchButton = document.querySelector("#clear-search");
@@ -447,6 +449,29 @@
       .join(" + ");
   }
 
+  /**
+   * 章節邊欄的裝飾貼紙。沒有 STICKERS 資料就完全不產生節點。
+   * 依章節序號輪流取用，重繪時位置固定不會亂跳。
+   */
+  function createSticker(rank) {
+    if (!stickers.length || !stickerEvery || rank % stickerEvery !== 0) return null;
+
+    const sticker = stickers[Math.floor(rank / stickerEvery) % stickers.length];
+    const image = document.createElement("img");
+    image.className = "page-sticker";
+    image.src = sticker.src;
+    image.alt = "";
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.setAttribute("aria-hidden", "true");
+    if (sticker.width) image.style.width = `${sticker.width}px`;
+    image.style.setProperty("--sticker-tilt", `${sticker.tilt || 0}deg`);
+    // 同一章節固定的落點，看起來像隨手貼上去但不會蓋到文字
+    image.style.setProperty("--sticker-drop", `${1.4 + ((rank * 37) % 4) * 0.5}rem`);
+    image.style.setProperty("--sticker-indent", `${((rank * 53) % 5) * 0.45}rem`);
+    return image;
+  }
+
   function renderGroupedPlaces(visiblePlaces) {
     let pageNumber = 0;
     const grouped = visiblePlaces.reduce((groups, place) => {
@@ -487,6 +512,10 @@
       );
       // 章節副標，選填，由 CLUSTERS[].note 提供
       if (label.note) header.append(createElement("p", "group-note", label.note));
+
+      // 裝飾貼紙放在章節文字全部排完之後
+      const sticker = createSticker(rank);
+      if (sticker) header.append(sticker);
 
       section.setAttribute("aria-labelledby", headingId);
       section.append(header);

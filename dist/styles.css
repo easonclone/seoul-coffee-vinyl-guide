@@ -988,6 +988,30 @@ input[type="search"]::placeholder {
   line-height: 1.45;
 }
 
+/* --- 邊欄貼紙：純裝飾，沒有 STICKERS 資料就不存在 --- */
+.page-sticker {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .page-sticker {
+    display: block;
+    max-width: 82%;
+    height: auto;
+    margin: var(--sticker-drop, 1.6rem) 0 0 var(--sticker-indent, 0);
+    filter: drop-shadow(0 3px 6px rgba(35, 42, 53, 0.14));
+    pointer-events: none;
+    transform: rotate(var(--sticker-tilt, 0deg));
+    user-select: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-sticker {
+    transform: none;
+  }
+}
+
 .group-folio {
   display: flex;
   align-items: center;

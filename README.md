@@ -13,8 +13,10 @@
 │   ├── index.html         # 語意化頁面結構、CSP 與 SEO metadata
 │   ├── styles.css         # 響應式視覺樣式與字體設定
 │   ├── app.js             # 搜尋、篩選、排序、URL 狀態與畫面產生
+│   ├── stickers/          # 裝飾貼紙圖檔（選用，預設不存在）
 │   └── data/
 │       ├── areas.js       # 區域定義：顯示名稱、cluster、座標、地圖投影範圍
+│       ├── stickers.js    # 裝飾貼紙清單與密度（預設空陣列）
 │       └── places.js      # 唯一的店家資料來源
 └── README.md
 ```
@@ -169,6 +171,22 @@ window.ROUTES = [
 
 **小塗鴉**：星星、愛心、咖啡杯、閃光、花、唱片、貓，全部是 SVG data URI，
 可重用也方便控制密度。目前只用在章節標題旁（一章一個，依章節循環）與區域小標旁。
+
+**裝飾貼紙**（選用）：把去背的單張貼紙圖檔放進 `dist/stickers/`，再登記到
+`dist/data/stickers.js`，就會散落在章節左欄。`window.STICKERS` 為空陣列時
+完全不 render，也不會發出任何圖片請求。
+
+```js
+window.STICKERS = [
+  { src: "stickers/ticket-subway.png", width: 132, tilt: -4 },
+  { src: "stickers/tag-icn.png", width: 96, tilt: 5 }
+];
+window.STICKER_EVERY = 2;   // 每幾章放一張；1 = 每章、0 = 關閉
+```
+
+貼紙一律 `aria-hidden`、`pointer-events: none`、`loading="lazy"`，
+並且只在 768px 以上出現，手機版不顯示以免干擾閱讀。
+密度直接用 `STICKER_EVERY` 控制，不需要改 CSS。
 
 **章節**：左側裝訂線 + 彩色分頁標籤（顏色依章節循環）+ 標題 + 羅馬拼音 +
 由該群分類推導出來的一行小標（如 `coffee + vinyl`）+ 選填的手寫副標，
