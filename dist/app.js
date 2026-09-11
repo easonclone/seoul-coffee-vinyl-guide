@@ -427,30 +427,14 @@
     }
   }
 
-  function shareTextOf(place) {
-    const lines = [place.koreanName || place.name];
-    if (place.koreanName && place.name) lines.push(place.name);
-    if (place.address) lines.push(place.address);
-    if (place.naverMapUrl) lines.push(`NAVER: ${place.naverMapUrl}`);
-    return lines.filter(Boolean).join("\n");
-  }
-
-  async function sharePlace(place) {
-    const url = permalinkOf(place);
-    const text = shareTextOf(place);
-
-    if (typeof navigator.share === "function") {
-      try {
-        await navigator.share({ title: `${place.koreanName || place.name} — Seoul Guide`, text, url });
-        return;
-      } catch (error) {
-        // 使用者按取消屬於正常操作，不提示也不 fallback
-        if (error && (error.name === "AbortError" || error.name === "NotAllowedError")) return;
-      }
-    }
-
-    const ok = await copyText(`${text}\n${url}`);
-    showToast(ok ? "分享連結已複製 ✓" : "無法複製，請手動選取網址", ok ? "ok" : "error");
+  /**
+   * 只複製永久連結，不使用 Web Share API。
+   * 桌面版 Chrome 的 Web Share 會在呼叫時直接終止分頁
+   *（Aw, Snap! / RESULT_CODE_KILLED_BAD_MESSAGE），複製連結穩定得多。
+   */
+  async function copyPlaceLink(place) {
+    const ok = await copyText(permalinkOf(place));
+    showToast(ok ? "連結已複製 ✓" : "無法複製，請手動選取網址", ok ? "ok" : "error");
   }
 
   // ------------------------------------------------------- place 定位
@@ -504,10 +488,15 @@
     button.type = "button";
     button.setAttribute("aria-label", accessibleLabel);
     button.addEventListener("click", () => {
-      // handler 可能是 async，錯誤一律轉成提示，不讓它冒泡成未捕捉例外
-      Promise.resolve()
-        .then(handler)
-        .catch(() => showToast("操作失敗，請再試一次", "error"));
+      // 同步呼叫 handler，讓 clipboard / share 還握有這次點擊的 user activation
+      try {
+        const result = handler();
+        if (result && typeof result.catch === "function") {
+          result.catch(() => showToast("操作失敗，請再試一次", "error"));
+        }
+      } catch (error) {
+        showToast("操作失敗，請再試一次", "error");
+      }
     });
     return button;
   }
@@ -616,7 +605,7 @@
     }
 
     tools.append(
-      createToolButton("공유", `分享 ${place.name}`, () => sharePlace(place))
+      createToolButton("링크 복사", `複製 ${place.name} 的分享連結`, () => copyPlaceLink(place))
     );
 
     actions.append(tools);
