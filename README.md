@@ -62,8 +62,9 @@
 - `subcategory`：選填細分類，多個值以 `" / "` 分隔（例如 `"Korean / Seafood"`），UI 會自動拆成第二層篩選
 - `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊；`areaSlug` 對應 `data/areas.js`
 - `address`、`naverMapUrl`：地址與外部地圖連結
-- `openingHours`、`notes`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
-  一律使用排版體呈現
+- `openingHours`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
+  與 Area／Address 同屬 FACTS，一律排版體、不上螢光筆
+- `notes`：旅行中隨手記下的一句，會進 MY NOTE 區塊並標上螢光筆
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態
 - `visited`、`favorite`、`recommended`：選填布林值，設為 `true` 才會在卡片上蓋章；
@@ -76,15 +77,30 @@
 
 | 欄位 | 型別 | 呈現方式 |
 | --- | --- | --- |
-| `personalNote` | string | 標成 **MY NOTE**，是全站唯一使用手寫視覺語言的卡片區塊 |
+| `personalNote` | string | 更私人的一句。與 `notes` 並存時由它取得螢光筆，`notes` 降為未標記的補充 |
+| `noteColor` | `yellow` \| `green` \| `pink` \| `blue` | 螢光筆顏色，省略時依 tags 推導 |
+| `noteStyle` | `marker` \| `underline` \| `plain` | 筆觸樣式，省略時自動判斷 |
 | `visitedAt` | `"2025-04-12"` | 卡片上顯示 `VISITED 2025-04-12`，並蓋 VISITED 章 |
 | `plannedAt` | `"2025-04-14"` | 顯示 `PLANNED …`，並蓋 PLANNED 章（已有 visitedAt 時不重複） |
 | `tripDay` | number | 顯示 `DAY 2` |
 | `favorite` / `recommended` | boolean | 蓋對應的章 |
 | `photo` | object | 見下方「照片插頁」 |
 
-`notes` 與 `personalNote` 是**刻意分開**的：前者是客觀補充（走排版體、放在
-Address／Hours 同一組 FACTS 裡），後者才是自己的話。不要把主觀感想寫進 `notes`。
+### MY NOTE 與螢光筆
+
+卡片分成兩層：**FACTS**（Area／Address／Hours／Source）維持乾淨的 editorial typography，
+完全不上色；**MY NOTE** 才是旅行中補寫的個人註記，使用手寫體並加上螢光筆筆觸。
+
+- 每張卡**最多一段**被標記的文字，不會整張卡花掉
+- 沒有 `notes` 也沒有 `personalNote` 時，整個區塊不 render，不留 placeholder
+- 顏色語意：`yellow` 推薦／必試、`green` 順路再說、`pink` 個人偏好、`blue` 時間與排隊提醒
+- `noteColor` 未指定時的推導順序：`favorite` → pink、tag `queue` → blue、
+  tag `nature`／`attraction` → green、其餘 → yellow（保守預設）
+- 超過 24 字的長句自動改用底線式筆觸而非整段塗滿，可用 `noteStyle` 覆寫
+- 四色為淡螢光筆色（yellow `#f3e05a`／green `#a9df7c`／pink `#f4a6c0`／blue `#93d4ef`），
+  以約 0.58 的不透明度疊在紙上，維持「淡」但看得出是螢光筆
+- 筆觸是以 SVG data URI 畫的半透明不規則色塊（邊緣有起伏、有兩道疊筆模擬重複劃過），
+  紙張顆粒會透出來；沒有引入任何函式庫
 
 ### 照片插頁
 
@@ -140,8 +156,8 @@ window.ROUTES = [
 - **筆記本章節**：每個 cluster 是一個章節 —— 左側裝訂線、貼在線上的側標編號、
   章節標題與羅馬拼音、選填的手寫副標，章節結尾用一條細線加頁碼（`— 018 —`）作結，
   不再使用粗黑分隔線
-- **FACTS 與 MY NOTE 分離**：Area／Address／Hours／Notes／Source 一律排版體，
-  只有 `personalNote` 會被標成 MY NOTE 並使用手寫體
+- **FACTS 與 MY NOTE 分離**：Area／Address／Hours／Source 一律排版體且不上色，
+  只有 `notes`／`personalNote` 會進 MY NOTE 區塊，使用手寫體與螢光筆筆觸
 - **手繪標記**：區域小標底線、結果數量的圈選、地圖說明旁的箭頭，只用在這三處
 - **地圖的鉛筆／墨水筆觸**：丘陵排線、河道虛線中心線、虛線羅盤
 

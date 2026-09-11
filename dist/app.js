@@ -297,6 +297,60 @@
     return figure;
   }
 
+  /**
+   * 螢光筆顏色：優先用資料給的 noteColor，否則依 tags 保守推導。
+   * yellow 推薦 / green 順路 / pink 個人偏好 / blue 時間與排隊等提醒
+   */
+  const NOTE_COLORS = ["yellow", "green", "pink", "blue"];
+
+  function noteColorOf(place) {
+    const explicit = normalize(place.noteColor);
+    if (NOTE_COLORS.includes(explicit)) return explicit;
+
+    const tags = new Set((place.tags || []).map(normalize));
+    if (place.favorite) return "pink";
+    if (tags.has("queue")) return "blue";
+    if (tags.has("nature") || tags.has("attraction")) return "green";
+    return "yellow";
+  }
+
+  /**
+   * 主要註記只有一段，長句改用底線式筆觸，避免整段被塗滿而難讀。
+   * noteStyle 可明確指定 marker / underline / plain。
+   */
+  function noteStyleOf(place, text) {
+    const explicit = normalize(place.noteStyle);
+    if (["marker", "underline", "plain"].includes(explicit)) return explicit;
+    return text.length > 24 ? "underline" : "marker";
+  }
+
+  /**
+   * MY NOTE 區塊。personalNote 優先成為被標記的那一段，
+   * notes 則作為未標記的補充；兩者皆無就不 render。
+   */
+  function createNote(place) {
+    const primary = place.personalNote || place.notes;
+    if (!primary) return null;
+
+    const secondary = place.personalNote && place.notes ? place.notes : "";
+    const style = noteStyleOf(place, primary);
+
+    const block = createElement("div", "card-note");
+    block.dataset.noteColor = noteColorOf(place);
+    block.dataset.noteStyle = style;
+
+    const body = createElement("p", "card-note-body");
+    if (style === "plain") {
+      body.textContent = primary;
+    } else {
+      body.append(createElement("span", "note-mark", primary));
+    }
+
+    block.append(createElement("p", "card-note-label", "My note"), body);
+    if (secondary) block.append(createElement("p", "card-note-extra", secondary));
+    return block;
+  }
+
   function createPlaceCard(place, index) {
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
@@ -323,7 +377,6 @@
     appendDetail(details, "Area", place.area);
     appendDetail(details, "Address", place.address);
     appendDetail(details, "Hours", place.openingHours);
-    appendDetail(details, "Notes", place.notes);
     appendDetail(details, "Source", place.source);
     article.append(details);
 
@@ -340,15 +393,8 @@
     const photo = createPhoto(place);
     if (photo) article.append(photo);
 
-    // MY NOTE：只有自己寫的那一段才用手寫視覺語言
-    if (place.personalNote) {
-      const note = createElement("div", "card-note");
-      note.append(
-        createElement("p", "card-note-label", "My note"),
-        createElement("p", "card-note-body", place.personalNote)
-      );
-      article.append(note);
-    }
+    const note = createNote(place);
+    if (note) article.append(note);
 
     if (Array.isArray(place.tags) && place.tags.length) {
       const tags = createElement("ul", "tags");

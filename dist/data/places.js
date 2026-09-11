@@ -9,9 +9,14 @@
    *   koreanName, subcategory, district, address, naverMapUrl,
    *   openingHours, notes, source, brand, latitude, longitude
    *
-   * 事實與個人記錄分開：
-   *   notes        客觀補充，走一般排版體
-   *   personalNote 自己的話，會被標成 MY NOTE 並使用手寫視覺語言
+   * 事實與隨手筆記分開：
+   *   FACTS（Area / Address / Hours / Source）一律排版體，不上任何螢光筆
+   *   notes        隨手記下的一句，會進 MY NOTE 區塊並標上螢光筆
+   *   personalNote 更私人的一句；同時有兩者時由 personalNote 取得螢光筆，
+   *                notes 則降為未標記的補充
+   *   noteColor    選填 yellow / green / pink / blue，省略時依 tags 保守推導
+   *   noteStyle    選填 marker / underline / plain，省略時超過 24 字自動改用
+   *                底線式筆觸以維持可讀
    *
    * 選填的旅行記錄（都不填就完全不會 render）：
    *   visitedAt    "2025-04-12"，會蓋 VISITED 章
