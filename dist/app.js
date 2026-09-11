@@ -356,7 +356,7 @@
     article.dataset.placeId = place.id;
 
     const seed = hashOf(place.id);
-    article.dataset.paper = String(seed % 4);
+    article.dataset.paper = String(seed % 6);
     article.dataset.tape = String((seed >>> 5) % 3);
 
     const topline = createElement("div", "card-topline");
@@ -433,6 +433,20 @@
     return article;
   }
 
+  /** 章節小標：由該群實際有的分類組出來，像手帳上隨手寫的一行 */
+  function taglineOf(groupPlaces) {
+    const counts = new Map();
+    groupPlaces.forEach((place) => {
+      if (!place.category) return;
+      counts.set(place.category, (counts.get(place.category) || 0) + 1);
+    });
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "en"))
+      .slice(0, 2)
+      .map(([name]) => name.toLowerCase())
+      .join(" + ");
+  }
+
   function renderGroupedPlaces(visiblePlaces) {
     let pageNumber = 0;
     const grouped = visiblePlaces.reduce((groups, place) => {
@@ -456,12 +470,18 @@
       const heading = createElement("h2", "", label.name);
       heading.id = headingId;
 
+      const rank = clusterRank.has(slug) ? clusterRank.get(slug) : 0;
       const header = createElement("header", "group-header");
+      header.dataset.tab = String(rank % 7);
+      header.dataset.doodle = String(rank % 7);
       header.append(
-        createElement("p", "group-index", String((clusterRank.get(slug) || 0) + 1).padStart(2, "0")),
+        createElement("p", "group-index", String(rank + 1).padStart(2, "0")),
         heading
       );
       if (label.roman) header.append(createElement("p", "group-roman", label.roman));
+
+      const tagline = taglineOf(groupPlaces);
+      if (tagline) header.append(createElement("p", "group-tagline", tagline));
       header.append(
         createElement("p", "group-count", `${groupPlaces.length} ${groupPlaces.length === 1 ? "place" : "places"}`)
       );
