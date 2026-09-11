@@ -277,6 +277,31 @@
     render();
   });
 
+  function setupAreaMap() {
+    const counts = places.reduce((totals, place) => {
+      const slug = normalize(place.areaSlug);
+      totals[slug] = (totals[slug] || 0) + 1;
+      return totals;
+    }, {});
+
+    document.querySelectorAll("[data-area-count]").forEach((element) => {
+      element.textContent = String(counts[normalize(element.dataset.areaCount)] || 0);
+    });
+
+    document.querySelectorAll(".area-index a[data-area]").forEach((link) => {
+      const node = document.querySelector(`.map-node-${link.dataset.area}`);
+      if (!node) return;
+
+      const highlight = (isHot) => node.classList.toggle("is-hot", isHot);
+
+      link.addEventListener("mouseenter", () => highlight(true));
+      link.addEventListener("mouseleave", () => highlight(false));
+      link.addEventListener("focus", () => highlight(true));
+      link.addEventListener("blur", () => highlight(false));
+    });
+  }
+
+  setupAreaMap();
   readUrlState();
   render();
 })();

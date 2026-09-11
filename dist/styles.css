@@ -7,6 +7,11 @@
   --line-strong: #989187;
   --accent: #923d36;
   --accent-dark: #702e29;
+  --map-land: #efece4;
+  --water: #dde6e8;
+  --water-line: #c4d2d5;
+  --hill: #e4e5d8;
+  --hill-line: #b9bca6;
   --max-width: 1320px;
   color-scheme: light;
 }
@@ -155,42 +160,55 @@ h1 span {
 }
 
 .area-map {
-  padding-top: 2rem;
+  margin-top: 2.25rem;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
 }
 
-.area-map-heading {
+.area-map-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.7rem 0;
-  border-top: 1px solid var(--line-strong);
+  gap: 0.5rem 1.25rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.area-map-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.area-map-head h2 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.area-map-note {
+  margin: 0 0 0 auto;
   color: var(--muted);
   font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.04em;
 }
 
-.area-map-heading p {
+.area-map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 20rem);
+}
+
+.area-map-figure {
+  position: relative;
   margin: 0;
-}
-
-.area-map-heading p:first-child {
-  color: var(--accent);
-}
-
-.area-map-canvas {
-  position: relative;
-  height: clamp(20rem, 34vw, 28rem);
+  aspect-ratio: 1000 / 740;
   overflow: hidden;
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-
-.area-map-track {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  background: var(--map-land);
+  border-right: 1px solid var(--line);
 }
 
 .area-map-shape {
@@ -200,19 +218,115 @@ h1 span {
   height: 100%;
 }
 
-.map-silhouette {
-  fill: url(#seoul-dots);
-  opacity: 0.62;
+.map-land {
+  fill: var(--map-land);
 }
 
-.map-river {
+.map-grid-fill {
+  color: var(--line);
+  opacity: 0.4;
+}
+
+#map-grid path {
   fill: none;
-  stroke: var(--paper);
-  stroke-width: 22;
+  stroke: currentColor;
+  stroke-width: 1;
 }
 
-.area-map-shape circle {
-  fill: var(--line-strong);
+#map-hill line {
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.map-hills ellipse {
+  color: var(--hill-line);
+  fill: var(--hill);
+  stroke: var(--hill-line);
+  stroke-width: 1;
+}
+
+.map-water-bank {
+  fill: none;
+  stroke: var(--water-line);
+  stroke-width: 42;
+  stroke-linecap: round;
+}
+
+.map-water {
+  fill: none;
+  stroke: var(--water);
+  stroke-width: 34;
+  stroke-linecap: round;
+}
+
+.map-island {
+  fill: var(--map-land);
+  stroke: var(--water-line);
+  stroke-width: 1;
+}
+
+.map-label text {
+  fill: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.map-label text:first-child {
+  fill: #7d949a;
+}
+
+.map-inset rect {
+  fill: var(--surface);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.map-inset-title {
+  fill: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.map-inset-land {
+  fill: var(--map-land);
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.map-inset-peak {
+  fill: var(--hill-line);
+}
+
+.map-compass circle {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.map-compass-needle {
+  fill: var(--accent);
+}
+
+.map-compass text {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.map-scale path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.map-scale text {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 .map-node {
@@ -220,129 +334,169 @@ h1 span {
   z-index: 2;
   top: var(--y);
   left: var(--x);
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
   color: var(--ink);
   text-decoration: none;
-  transform: translate(-1rem, -50%);
-}
-
-.map-node-yeonhui {
-  --x: 20%;
-  --y: 37%;
-}
-
-.map-node-yeonnam {
-  --x: 24%;
-  --y: 53%;
-}
-
-.map-node-mangwon {
-  --x: 14%;
-  --y: 64%;
-}
-
-.map-node-gongdeok {
-  --x: 38%;
-  --y: 63%;
-}
-
-.map-node-seochon {
-  --x: 45%;
-  --y: 31%;
-}
-
-.map-node-wonseo {
-  --x: 59%;
-  --y: 27%;
-}
-
-.map-node-dongnimmun {
-  --x: 34%;
-  --y: 27%;
-}
-
-.map-node-jangchung {
-  --x: 65%;
-  --y: 54%;
-}
-
-.map-node-yongsan {
-  --x: 48%;
-  --y: 76%;
-}
-
-.map-node-yangjae {
-  --x: 73%;
-  --y: 78%;
-}
-
-.map-node-seongsan {
-  --x: 91%;
-  --y: 84%;
-}
-
-.map-node > span {
-  position: relative;
-  display: block;
-  width: 2rem;
-  height: 2rem;
-  flex: 0 0 2rem;
-  background: var(--accent);
-  border: 0.35rem solid var(--surface);
-  border-radius: 50%;
-  box-shadow: 0 0 0 1px var(--accent);
-  transition: transform 160ms ease, background-color 160ms ease;
-}
-
-.map-node > span::after {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 0.35rem;
-  height: 0.35rem;
-  background: var(--surface);
-  border-radius: 50%;
-  content: "";
   transform: translate(-50%, -50%);
 }
 
+.map-node-yeonhui { --x: 39.2%; --y: 24.7%; }
+.map-node-yeonnam { --x: 36.7%; --y: 29%; }
+.map-node-mangwon { --x: 28.4%; --y: 32.7%; }
+.map-node-gongdeok { --x: 47.5%; --y: 40.7%; }
+.map-node-seochon { --x: 54.9%; --y: 17.3%; }
+.map-node-wonseo { --x: 61.4%; --y: 16.7%; }
+.map-node-dongnimmun { --x: 50.4%; --y: 21.3%; }
+.map-node-jangchung { --x: 69%; --y: 31.3%; }
+.map-node-yongsan { --x: 52.9%; --y: 50%; }
+.map-node-yangjae { --x: 80%; --y: 80.7%; }
+.map-node-seongsan { --x: 21.2%; --y: 84.9%; }
+
+.map-node i {
+  display: grid;
+  width: clamp(1.5rem, 2.5vw, 1.9rem);
+  height: clamp(1.5rem, 2.5vw, 1.9rem);
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(35, 33, 30, 0.12);
+  color: var(--muted);
+  font-size: clamp(0.6rem, 1vw, 0.72rem);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+
 .map-node b {
-  padding: 0.3rem 0.45rem;
-  background: rgba(251, 250, 247, 0.9);
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: calc(100% + 0.55rem);
+  padding: 0.35rem 0.55rem;
+  background: var(--ink);
+  color: var(--surface);
   font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 400;
-  line-height: 1.05;
+  line-height: 1.15;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 140ms ease;
   white-space: nowrap;
+}
+
+.map-node.is-left b {
+  right: calc(100% + 0.55rem);
+  left: auto;
 }
 
 .map-node small {
   display: block;
-  margin-top: 0.2rem;
-  color: var(--muted);
+  color: var(--line);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
-.map-node:hover > span,
-.map-node:focus-visible > span {
-  background: var(--ink);
+.map-node:hover i,
+.map-node:focus-visible i,
+.map-node.is-hot i {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
   transform: scale(1.18);
 }
 
-.map-node:focus-visible {
-  outline-offset: 0.35rem;
+.map-node:hover b,
+.map-node:focus-visible b,
+.map-node.is-hot b {
+  opacity: 1;
 }
 
-.map-node.is-jeju::before {
-  position: absolute;
-  right: calc(100% + 0.35rem);
-  width: 2.4rem;
-  border-top: 1px dashed var(--line-strong);
-  content: "";
+.map-node.is-jeju i {
+  width: clamp(1.3rem, 2.1vw, 1.6rem);
+  height: clamp(1.3rem, 2.1vw, 1.6rem);
+  font-size: clamp(0.55rem, 0.9vw, 0.65rem);
+}
+
+.area-index {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  list-style: none;
+}
+
+.area-index li + li {
+  border-top: 1px solid var(--line);
+}
+
+.area-index li.is-away {
+  border-top: 1px solid var(--line-strong);
+}
+
+.area-index li {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.area-index a {
+  display: grid;
+  width: 100%;
+  align-content: center;
+  padding: 0.5rem 1rem;
+  gap: 0.1rem 0.7rem;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  text-decoration: none;
+  transition: background-color 140ms ease;
+}
+
+.area-index a:hover,
+.area-index a:focus-visible {
+  background: var(--paper);
+}
+
+.area-index i {
+  grid-area: 1 / 1 / span 2 / auto;
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.area-index b {
+  grid-area: 1 / 2;
+  font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.area-index small {
+  grid-area: 2 / 2;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.area-index em {
+  grid-area: 1 / 3 / span 2 / auto;
+  align-self: center;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.area-index a:hover i,
+.area-index a:focus-visible i {
+  color: var(--accent);
 }
 
 .toolbar {
@@ -667,6 +821,37 @@ noscript {
   }
 }
 
+@media (max-width: 1100px) {
+  .area-map-body {
+    grid-template-columns: 1fr;
+  }
+
+  .area-map-figure {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .area-index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .area-index li,
+  .area-index li + li,
+  .area-index li.is-away {
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .area-index li:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .area-index li:last-child {
+    border-bottom: 0;
+  }
+}
+
 @media (max-width: 767px) {
   .site-header,
   main,
@@ -698,30 +883,34 @@ noscript {
   }
 
   .area-map {
-    padding-top: 1.5rem;
+    margin-top: 1.75rem;
   }
 
-  .area-map-heading {
-    font-size: 0.7rem;
+  .area-map-head {
+    padding: 0.85rem 1rem;
   }
 
-  .area-map-canvas {
-    height: 28rem;
-    overflow-x: auto;
+  .area-map-note {
+    margin-left: 0;
+    flex-basis: 100%;
   }
 
-  .area-map-track {
-    min-width: 43rem;
+  .map-node i {
+    width: 1.35rem;
+    height: 1.35rem;
+    font-size: 0.58rem;
   }
 
-  .map-node > span {
-    width: 2.15rem;
-    height: 2.15rem;
-    flex-basis: 2.15rem;
-  }
+  /* 小螢幕上真實座標會擠在一起，這裡把市中心幾個點稍微拉開 */
+  .map-node-yeonhui { --x: 40.5%; --y: 22.5%; }
+  .map-node-yeonnam { --x: 35.5%; --y: 30.5%; }
+  .map-node-dongnimmun { --x: 48.5%; --y: 20%; }
+  .map-node-seochon { --x: 55.5%; --y: 14.5%; }
+  .map-node-wonseo { --x: 64%; --y: 19%; }
 
-  .map-node b {
-    font-size: 1rem;
+  .area-index a {
+    padding: 0.55rem 0.75rem;
+    grid-template-columns: 1.4rem minmax(0, 1fr) auto;
   }
 
   .search-wrap {

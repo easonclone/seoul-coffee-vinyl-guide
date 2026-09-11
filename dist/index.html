@@ -31,35 +31,97 @@
         </div>
       </div>
 
-      <nav class="area-map" aria-label="依區域快速瀏覽">
-        <div class="area-map-heading">
-          <p>AREA MAP / SEOUL</p>
-          <p>選擇區域快速前往</p>
+      <nav class="area-map" aria-labelledby="area-map-title">
+        <div class="area-map-head">
+          <p class="area-map-kicker">AREA MAP / SEOUL</p>
+          <h2 id="area-map-title">首爾中心區域分布</h2>
+          <p class="area-map-note">示意地圖 — 點選任一區域可跳至該區店家</p>
         </div>
-        <div class="area-map-canvas">
-          <div class="area-map-track">
-            <svg class="area-map-shape" viewBox="0 0 1000 430" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+
+        <div class="area-map-body">
+          <figure class="area-map-figure">
+            <svg class="area-map-shape" viewBox="0 0 1000 740" role="img" aria-label="首爾中心區域示意地圖，標示漢江、南山、北岳山與十個收錄區域">
               <defs>
-                <pattern id="seoul-dots" width="26" height="26" patternUnits="userSpaceOnUse">
-                  <circle cx="7" cy="7" r="5.2"></circle>
+                <pattern id="map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                  <path d="M50 0 V50 H0"></path>
                 </pattern>
+                <pattern id="map-hill" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                  <line x1="0" y1="0" x2="0" y2="7"></line>
+                </pattern>
+                <clipPath id="map-frame">
+                  <rect x="0" y="0" width="1000" height="740"></rect>
+                </clipPath>
               </defs>
-              <path class="map-silhouette" d="M61 201C77 151 119 135 157 121C207 103 236 63 291 68C331 72 352 107 393 108C440 109 471 59 520 62C571 65 593 110 638 118C690 127 724 87 778 92C828 96 848 132 894 143C932 152 954 179 944 216C933 257 889 266 859 286C821 312 813 352 762 361C715 369 686 337 641 338C586 340 557 382 503 370C457 360 441 319 395 310C349 301 319 331 272 321C228 312 216 277 177 262C131 245 43 255 61 201Z"></path>
-              <path class="map-river" d="M60 235C152 199 229 248 310 231C397 212 451 173 540 204C624 233 701 268 793 234C849 213 895 202 944 221"></path>
+
+              <rect class="map-land" x="0" y="0" width="1000" height="740"></rect>
+              <rect class="map-grid-fill" x="0" y="0" width="1000" height="740" fill="url(#map-grid)"></rect>
+
+              <g clip-path="url(#map-frame)">
+                <g class="map-hills">
+                  <ellipse cx="505" cy="80" rx="54" ry="31" transform="rotate(-20 505 80)"></ellipse>
+                  <ellipse cx="602" cy="52" rx="60" ry="28" transform="rotate(-8 602 52)"></ellipse>
+                  <ellipse cx="600" cy="268" rx="58" ry="33" transform="rotate(-10 600 268)"></ellipse>
+                  <ellipse cx="706" cy="676" rx="54" ry="27" transform="rotate(6 706 676)"></ellipse>
+                </g>
+
+                <path class="map-water-bank" d="M-30 134 C 60 164 112 182 176 228 C 236 272 302 331 372 362 C 440 391 472 407 540 423 C 600 438 642 446 702 443 C 772 439 802 429 862 406 C 922 384 964 371 1030 356"></path>
+                <path class="map-water" d="M-30 134 C 60 164 112 182 176 228 C 236 272 302 331 372 362 C 440 391 472 407 540 423 C 600 438 642 446 702 443 C 772 439 802 429 862 406 C 922 384 964 371 1030 356"></path>
+                <ellipse class="map-island" cx="374" cy="364" rx="38" ry="8" transform="rotate(23 374 364)"></ellipse>
+              </g>
+
+              <g class="map-label">
+                <text x="654" y="480" transform="rotate(-4 654 480)">漢江 HAN RIVER</text>
+                <text x="600" y="272" text-anchor="middle">남산 NAMSAN</text>
+                <text x="612" y="34" text-anchor="middle">북악산 BUGAKSAN</text>
+                <text x="708" y="680" text-anchor="middle">우면산</text>
+              </g>
+
+              <g class="map-inset">
+                <rect x="40" y="540" width="216" height="162"></rect>
+                <text class="map-inset-title" x="54" y="564">JEJU 濟州島</text>
+                <ellipse class="map-inset-land" cx="146" cy="634" rx="82" ry="34"></ellipse>
+                <circle class="map-inset-peak" cx="146" cy="634" r="7"></circle>
+              </g>
+
+              <g class="map-compass" transform="translate(940 62)">
+                <circle r="24"></circle>
+                <path class="map-compass-needle" d="M0 -17 L7 6 L0 1 L-7 6 Z"></path>
+                <text y="-30" text-anchor="middle">N</text>
+              </g>
+
+              <g class="map-scale" transform="translate(836 706)">
+                <path d="M0 0 H89"></path>
+                <path d="M0 -6 V6 M89 -6 V6"></path>
+                <text x="97" y="5">2 km</text>
+              </g>
             </svg>
 
-            <a class="map-node map-node-yeonhui" href="#area-yeonhui"><span></span><b>延禧洞<small>Yeonhui</small></b></a>
-            <a class="map-node map-node-yeonnam" href="#area-yeonnam"><span></span><b>延南洞<small>Yeonnam</small></b></a>
-            <a class="map-node map-node-mangwon" href="#area-mangwon"><span></span><b>望遠洞<small>Mangwon</small></b></a>
-            <a class="map-node map-node-gongdeok" href="#area-gongdeok"><span></span><b>孔德<small>Gongdeok</small></b></a>
-            <a class="map-node map-node-seochon" href="#area-seochon"><span></span><b>西村<small>Seochon</small></b></a>
-            <a class="map-node map-node-wonseo" href="#area-wonseo"><span></span><b>苑西洞<small>Wonseo</small></b></a>
-            <a class="map-node map-node-dongnimmun" href="#area-dongnimmun"><span></span><b>獨立門<small>Dongnimmun</small></b></a>
-            <a class="map-node map-node-jangchung" href="#area-jangchung"><span></span><b>獎忠洞<small>Jangchung</small></b></a>
-            <a class="map-node map-node-yongsan" href="#area-yongsan"><span></span><b>龍山<small>Yongsan</small></b></a>
-            <a class="map-node map-node-yangjae" href="#area-yangjae"><span></span><b>良才<small>Yangjae</small></b></a>
-            <a class="map-node map-node-seongsan is-jeju" href="#area-seongsan"><span></span><b>城山・濟州<small>Seongsan</small></b></a>
-          </div>
+            <a class="map-node map-node-yeonhui" href="#area-yeonhui"><i>01</i><b>延禧洞<small>Yeonhui</small></b></a>
+            <a class="map-node map-node-yeonnam" href="#area-yeonnam"><i>02</i><b>延南洞<small>Yeonnam</small></b></a>
+            <a class="map-node map-node-mangwon" href="#area-mangwon"><i>03</i><b>望遠洞<small>Mangwon</small></b></a>
+            <a class="map-node map-node-gongdeok" href="#area-gongdeok"><i>04</i><b>孔德<small>Gongdeok</small></b></a>
+            <a class="map-node map-node-seochon" href="#area-seochon"><i>05</i><b>西村<small>Seochon</small></b></a>
+            <a class="map-node map-node-wonseo is-left" href="#area-wonseo"><i>06</i><b>苑西洞<small>Wonseo</small></b></a>
+            <a class="map-node map-node-dongnimmun" href="#area-dongnimmun"><i>07</i><b>獨立門<small>Dongnimmun</small></b></a>
+            <a class="map-node map-node-jangchung is-left" href="#area-jangchung"><i>08</i><b>獎忠洞<small>Jangchung</small></b></a>
+            <a class="map-node map-node-yongsan" href="#area-yongsan"><i>09</i><b>龍山<small>Yongsan</small></b></a>
+            <a class="map-node map-node-yangjae is-left" href="#area-yangjae"><i>10</i><b>良才<small>Yangjae</small></b></a>
+            <a class="map-node map-node-seongsan is-jeju" href="#area-seongsan"><i>11</i><b>城山<small>Seongsan</small></b></a>
+          </figure>
+
+          <ol class="area-index">
+            <li><a href="#area-yeonhui" data-area="yeonhui"><i>01</i><b>延禧洞</b><small>Yeonhui</small><em data-area-count="yeonhui">3</em></a></li>
+            <li><a href="#area-yeonnam" data-area="yeonnam"><i>02</i><b>延南洞</b><small>Yeonnam</small><em data-area-count="yeonnam">1</em></a></li>
+            <li><a href="#area-mangwon" data-area="mangwon"><i>03</i><b>望遠洞</b><small>Mangwon</small><em data-area-count="mangwon">1</em></a></li>
+            <li><a href="#area-gongdeok" data-area="gongdeok"><i>04</i><b>孔德・桃花洞</b><small>Gongdeok</small><em data-area-count="gongdeok">1</em></a></li>
+            <li><a href="#area-seochon" data-area="seochon"><i>05</i><b>西村・景福宮</b><small>Seochon</small><em data-area-count="seochon">1</em></a></li>
+            <li><a href="#area-wonseo" data-area="wonseo"><i>06</i><b>苑西洞・昌德宮</b><small>Wonseo</small><em data-area-count="wonseo">1</em></a></li>
+            <li><a href="#area-dongnimmun" data-area="dongnimmun"><i>07</i><b>獨立門</b><small>Dongnimmun</small><em data-area-count="dongnimmun">1</em></a></li>
+            <li><a href="#area-jangchung" data-area="jangchung"><i>08</i><b>獎忠洞・東大入口</b><small>Jangchung</small><em data-area-count="jangchung">2</em></a></li>
+            <li><a href="#area-yongsan" data-area="yongsan"><i>09</i><b>龍山</b><small>Yongsan</small><em data-area-count="yongsan">1</em></a></li>
+            <li><a href="#area-yangjae" data-area="yangjae"><i>10</i><b>良才・江南</b><small>Yangjae</small><em data-area-count="yangjae">1</em></a></li>
+            <li class="is-away"><a href="#area-seongsan" data-area="seongsan"><i>11</i><b>城山</b><small>Seongsan, Jeju</small><em data-area-count="seongsan">1</em></a></li>
+          </ol>
         </div>
       </nav>
     </header>
