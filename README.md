@@ -65,6 +65,9 @@
 - `openingHours`、`notes`、`source`：可為 `null` 的補充資訊（`source` 用於節目、推薦人等出處）
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態
+- `visited`、`favorite`、`recommended`：選填布林值，設為 `true` 才會在卡片上蓋章；
+  未設定就不蓋。其餘印章由 tags 推導（`recommended`／`chef` → RECOMMENDED、
+  `tv` → ON TV、`queue` → EXPECT A QUEUE），一張卡最多兩枚
 
 ### Area schema（`dist/data/areas.js`）
 
@@ -75,11 +78,36 @@
 
 已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`instagramUrl`、`websiteUrl`、`priceLevel`、`rating`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。
 
+## 視覺語言
+
+整體定位是「設計師的首爾旅行筆記本」，不是旅遊部落格也不是後台介面。實作方式：
+
+- **紙張質感**：以 SVG `feTurbulence` 產生的極淡顆粒（data URI，不需外部圖檔），
+  疊在頁面、地圖面板與卡片上
+- **四種便條紙**：素面、便條本（撕邊 + 橫線）、方格紙、索引卡（左側紅色邊界線）。
+  以 `place.id` 的雜湊決定，重繪時不會跳動
+- **三種紙膠帶**：左上短條、右上斜角、中央雙條，用另一組雜湊分配
+- **手寫註記**：只有 `notes`（個人備註）使用手寫體與墨藍色側線，
+  其餘欄位維持排版體，避免整頁都像手寫
+- **語意貼紙**：`category` 對應的低彩度色標
+- **橡皮章**：雙線外框、褪色墨水、極小角度
+- **筆記本索引標籤**：cluster 標題的編號做成書籤形狀
+- **手繪標記**：區域小標底線、結果數量的圈選、地圖說明旁的箭頭，只用在這三處
+- **地圖的鉛筆／墨水筆觸**：丘陵排線、河道虛線中心線、虛線羅盤
+
+刻意避免：高彩度粉色、卡通圖示、emoji、無意義貼紙、強烈陰影、大量旋轉、
+咖啡漬、幼稚手寫字。旋轉只用在兩種紙張（約 0.3 度）與印章。
+`prefers-reduced-motion` 開啟時全部不旋轉、不位移。
+
 ## 字體
 
 顯示字體為 Google Fonts 的 Fraunces（標題）與 Inter（介面），中文標題使用
-Noto Serif TC，韓文店名使用 Noto Sans KR；全部以 `display=swap` 載入，
-未載入完成前會退回 Georgia 與系統字體。
+Noto Serif TC，韓文店名使用 Noto Sans KR，個人備註使用 Caveat；全部以
+`display=swap` 載入，未載入完成前會退回 Georgia 與系統字體。
+
+中文手寫體 Google Fonts 沒有合適的繁體選擇，因此備註的字體堆疊為
+`Caveat` → `LXGW WenKai TC`（使用者本機有才會套用）→ `Noto Serif TC`，
+中文部分靠墨藍色與側線呈現註記感，而不是硬套裝飾字體。
 
 為此 `index.html` 的 CSP 放寬了兩個網域，其餘指令維持不變：
 

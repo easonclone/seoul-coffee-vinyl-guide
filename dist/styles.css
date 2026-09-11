@@ -17,6 +17,15 @@
   --font-display: "Fraunces", "Noto Serif TC", Georgia, "Times New Roman", serif;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans KR", Arial, sans-serif;
   --font-korean: "Noto Sans KR", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-hand: "Caveat", "LXGW WenKai TC", "Noto Serif TC", Georgia, cursive;
+  --ink-blue: #3c5566;
+  --pencil: #a09a8f;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+  --hand-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5.4C30 2.4 52 7 80 4.1S132 1.9 158 5.3 188 4.1 198 3.1' fill='none' stroke='%23923d36' stroke-width='1.5' stroke-linecap='round' opacity='0.38'/%3E%3C/svg%3E");
+  --hand-ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 46' preserveAspectRatio='none'%3E%3Cpath d='M104 7C78-1 30 0 15 12 0 24 9 38 38 42c30 4 74 0 84-13 6-8-1-17-21-22' fill='none' stroke='%23923d36' stroke-width='1.5' stroke-linecap='round' opacity='0.45'/%3E%3C/svg%3E");
+  --hand-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 34'%3E%3Cg fill='none' stroke='%23716c63' stroke-width='1.6' stroke-linecap='round' opacity='0.6'%3E%3Cpath d='M40 4C30 7 15 11 8 27'/%3E%3Cpath d='M6 30l9-5M6 30l4-9'/%3E%3C/g%3E%3C/svg%3E");
+  --torn-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v5.6c-8-1.8-12 2.4-20 .6s-14-3.4-22 .8-16-2.6-24 .4-14 2.6-22 .2L0 8z' fill='%23f4f1ea'/%3E%3C/svg%3E");
   --max-width: 1320px;
   color-scheme: light;
 }
@@ -27,6 +36,23 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+body::before {
+  position: fixed;
+  z-index: 0;
+  background-image: var(--grain);
+  background-size: 150px 150px;
+  content: "";
+  inset: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.05;
+  pointer-events: none;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
 }
 
 body {
@@ -168,8 +194,10 @@ h1 span {
 
 .area-map {
   margin-top: 2.25rem;
+  background-color: var(--surface);
+  background-image: var(--grain-soft);
+  background-size: 150px 150px;
   border: 1px solid var(--line-strong);
-  background: var(--surface);
 }
 
 .area-map-head {
@@ -214,8 +242,20 @@ h1 span {
   margin: 0;
   aspect-ratio: 1000 / 676;
   overflow: hidden;
-  background: var(--map-land);
+  background-color: var(--map-land);
   border-right: 1px solid var(--line);
+}
+
+.area-map-figure::after {
+  position: absolute;
+  z-index: 1;
+  background-image: var(--grain);
+  background-size: 150px 150px;
+  content: "";
+  inset: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.07;
+  pointer-events: none;
 }
 
 .area-map-shape {
@@ -230,8 +270,8 @@ h1 span {
 }
 
 .map-grid-fill {
-  color: var(--line);
-  opacity: 0.4;
+  color: var(--pencil);
+  opacity: 0.45;
 }
 
 #map-grid path {
@@ -242,14 +282,19 @@ h1 span {
 
 #map-hill line {
   stroke: currentColor;
-  stroke-width: 1.6;
+  stroke-width: 1;
 }
 
 .map-hills ellipse {
-  color: var(--hill-line);
   fill: var(--hill);
   stroke: var(--hill-line);
   stroke-width: 1;
+}
+
+/* 等高線式的鉛筆排線 */
+.map-hatch {
+  color: var(--hill-line);
+  opacity: 0.32;
 }
 
 .map-water-bank {
@@ -264,6 +309,15 @@ h1 span {
   stroke: var(--water);
   stroke-width: 34;
   stroke-linecap: round;
+}
+
+.map-water-line {
+  fill: none;
+  opacity: 0.5;
+  stroke: var(--ink-blue);
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+  stroke-width: 1.2;
 }
 
 .map-island {
@@ -285,7 +339,8 @@ h1 span {
 
 .map-compass circle {
   fill: none;
-  stroke: var(--line-strong);
+  stroke: var(--ink-blue);
+  stroke-dasharray: 3 2.5;
   stroke-width: 1;
 }
 
@@ -294,7 +349,7 @@ h1 span {
 }
 
 .map-compass text {
-  fill: var(--muted);
+  fill: var(--ink-blue);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -302,7 +357,8 @@ h1 span {
 
 .map-scale path {
   fill: none;
-  stroke: var(--ink);
+  stroke: var(--ink-blue);
+  stroke-linecap: round;
   stroke-width: 1.5;
 }
 
@@ -640,6 +696,35 @@ input[type="search"]::placeholder {
   border-color: var(--ink);
 }
 
+/* 手繪底線只用在區域小標，且只畫在文字底下 */
+.area-heading {
+  display: inline-block;
+  padding-bottom: 0.6rem;
+  padding-right: 0.4rem;
+  background: var(--hand-rule) bottom left / 100% 7px no-repeat;
+  border-bottom: 0;
+}
+
+#result-count {
+  padding: 0.35rem 0.9rem;
+  background: var(--hand-ring) center / 100% 100% no-repeat;
+}
+
+.area-map-note {
+  position: relative;
+  padding-right: 2.6rem;
+}
+
+.area-map-note::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.55rem;
+  width: 2rem;
+  height: 1.55rem;
+  background: var(--hand-arrow) center / contain no-repeat;
+  content: "";
+}
+
 .results-summary {
   display: flex;
   justify-content: space-between;
@@ -658,6 +743,11 @@ input[type="search"]::placeholder {
   color: var(--accent);
 }
 
+/* 紙膠帶會稍微超出卡片邊緣，這裡夾住避免在窄螢幕產生水平捲動 */
+.places {
+  overflow-x: clip;
+}
+
 .place-group {
   display: grid;
   grid-template-columns: minmax(185px, 0.28fr) minmax(0, 1fr);
@@ -672,15 +762,24 @@ input[type="search"]::placeholder {
 }
 
 .group-index {
-  margin: 0 0 1.3rem;
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 0.25rem 1.15rem 0.4rem;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-bottom: 0;
+  border-radius: 0.45rem 0.45rem 0 0;
   color: var(--accent);
   font-family: var(--font-display);
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   font-style: italic;
+  line-height: 1;
 }
 
 .group-header h2 {
   margin: 0 0 0.4rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line-strong);
   font-family: var(--font-display);
   font-size: clamp(1.5rem, 2.5vw, 2.3rem);
   font-weight: 400;
@@ -711,26 +810,98 @@ input[type="search"]::placeholder {
   min-width: 0;
   min-height: 22rem;
   flex-direction: column;
-  padding: 1.5rem 1.35rem 1.35rem;
-  background: var(--note);
+  padding: 1.6rem 1.35rem 1.35rem;
+  background-color: var(--note);
+  background-image: var(--grain-soft);
+  background-size: 150px 150px;
   border: 1px solid var(--line);
-  box-shadow: 0 1px 1px rgba(35, 33, 30, 0.05), 0 6px 14px -8px rgba(35, 33, 30, 0.28);
-  transition: transform 200ms ease, box-shadow 200ms ease;
+  box-shadow: 0 1px 1px rgba(35, 33, 30, 0.04), 0 5px 12px -9px rgba(35, 33, 30, 0.25);
+  transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-/* 一疊手貼上去的紙，左右輕微交錯 */
-.place-card:nth-child(odd) {
-  transform: rotate(-0.35deg);
+/* 一疊手貼上去的紙，只用極小的角度，不做整頁亂轉 */
+.place-card[data-paper="1"] {
+  transform: rotate(-0.3deg);
 }
 
-.place-card:nth-child(even) {
-  transform: rotate(0.3deg);
+.place-card[data-paper="3"] {
+  transform: rotate(0.25deg);
 }
 
 .place-card:hover,
 .place-card:focus-within {
-  box-shadow: 0 2px 2px rgba(35, 33, 30, 0.06), 0 14px 26px -12px rgba(35, 33, 30, 0.34);
-  transform: rotate(0deg) translateY(-3px);
+  box-shadow: 0 2px 2px rgba(35, 33, 30, 0.05), 0 12px 22px -14px rgba(35, 33, 30, 0.3);
+  transform: rotate(0deg) translateY(-2px);
+}
+
+/* --- 四種便條紙 --- */
+
+/* 1 便條本：撕下來的上緣 + 橫線 */
+.place-card[data-paper="1"] {
+  background-image:
+    var(--torn-top),
+    repeating-linear-gradient(to bottom, transparent 0 1.65rem, rgba(60, 85, 102, 0.07) 1.65rem calc(1.65rem + 1px)),
+    var(--grain-soft);
+  background-position: top center, top 2.4rem left 0, 0 0;
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: 100% 10px, 100% 100%, 150px 150px;
+  border-top: 0;
+}
+
+/* 2 方格紙 */
+.place-card[data-paper="2"] {
+  background-image:
+    repeating-linear-gradient(to bottom, transparent 0 1rem, rgba(60, 85, 102, 0.05) 1rem calc(1rem + 1px)),
+    repeating-linear-gradient(to right, transparent 0 1rem, rgba(60, 85, 102, 0.05) 1rem calc(1rem + 1px)),
+    var(--grain-soft);
+  background-size: 100% 100%, 100% 100%, 150px 150px;
+}
+
+/* 3 索引卡：左側紅色邊界線 */
+.place-card[data-paper="3"] {
+  padding-left: 2.5rem;
+  background-image:
+    linear-gradient(to right, transparent 0 1.85rem, rgba(146, 61, 54, 0.22) 1.85rem calc(1.85rem + 1px), transparent 0),
+    repeating-linear-gradient(to bottom, transparent 0 1.65rem, rgba(60, 85, 102, 0.06) 1.65rem calc(1.65rem + 1px)),
+    var(--grain-soft);
+  background-position: 0 0, top 2.4rem left 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px;
+}
+
+/* --- 三種紙膠帶 --- */
+.place-card::before {
+  position: absolute;
+  background: rgba(146, 61, 54, 0.08);
+  border-left: 1px solid rgba(146, 61, 54, 0.13);
+  border-right: 1px solid rgba(146, 61, 54, 0.13);
+  content: "";
+}
+
+.place-card[data-tape="0"]::before {
+  top: -0.4rem;
+  left: 1.6rem;
+  width: 3.4rem;
+  height: 0.85rem;
+  transform: rotate(-2.5deg);
+}
+
+.place-card[data-tape="1"]::before {
+  top: 0.55rem;
+  right: -0.5rem;
+  width: 4.3rem;
+  height: 0.8rem;
+  background: rgba(60, 85, 102, 0.1);
+  border-color: rgba(60, 85, 102, 0.18);
+  transform: rotate(41deg);
+}
+
+.place-card[data-tape="2"]::before {
+  top: -0.35rem;
+  left: 50%;
+  width: 2.6rem;
+  height: 0.75rem;
+  box-shadow: 3.4rem 0.15rem 0 rgba(146, 61, 54, 0.06);
+  transform: translateX(-80%) rotate(1.5deg);
 }
 
 /* 右下角摺角 */
@@ -738,32 +909,18 @@ input[type="search"]::placeholder {
   position: absolute;
   right: -1px;
   bottom: -1px;
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.35rem;
+  height: 1.35rem;
   background: linear-gradient(315deg, var(--paper) 0 50%, var(--note-fold) 50% 52%, transparent 52%);
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   content: "";
 }
 
-/* 頂端的紙膠帶 */
-.place-card::before {
-  position: absolute;
-  top: -0.45rem;
-  left: 1.6rem;
-  width: 3.4rem;
-  height: 0.9rem;
-  background: rgba(146, 61, 54, 0.09);
-  border-left: 1px solid rgba(146, 61, 54, 0.14);
-  border-right: 1px solid rgba(146, 61, 54, 0.14);
-  content: "";
-  transform: rotate(-2.5deg);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .place-card,
-  .place-card:nth-child(odd),
-  .place-card:nth-child(even),
+  .place-card[data-paper="1"],
+  .place-card[data-paper="3"],
   .place-card:hover,
   .place-card:focus-within {
     transform: none;
@@ -773,17 +930,65 @@ input[type="search"]::placeholder {
 
 .card-topline {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 2.2rem;
+  margin-bottom: 1.9rem;
+}
+
+.card-index {
   color: var(--muted);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
+}
+
+.card-kind {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* 語意標籤：顏色只用來分辨類別，維持低彩度 */
+.card-sticker {
+  display: inline-block;
+  padding: 0.18rem 0.45rem;
+  background: var(--sticker-bg, #e3ded2);
+  color: var(--sticker-fg, #5b5445);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 
-.card-topline span:last-child {
-  text-align: right;
+.card-sticker[data-category="coffee"] {
+  --sticker-bg: #e7ddcc;
+  --sticker-fg: #5c4a33;
+}
+
+.card-sticker[data-category="vinyl"] {
+  --sticker-bg: #e8d9d6;
+  --sticker-fg: #6d2f2a;
+}
+
+.card-sticker[data-category="restaurant"] {
+  --sticker-bg: #dee3d5;
+  --sticker-fg: #495039;
+}
+
+.card-sticker[data-category="attraction"] {
+  --sticker-bg: #d8e0e5;
+  --sticker-fg: #35505f;
+}
+
+.card-sub {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .place-card h3 {
@@ -825,6 +1030,55 @@ input[type="search"]::placeholder {
 .detail-row dd {
   margin: 0;
   overflow-wrap: anywhere;
+}
+
+/* 只有個人備註用手寫體，其餘欄位維持排版體 */
+.card-note {
+  margin: 0 0 1.3rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid rgba(60, 85, 102, 0.3);
+  color: var(--ink-blue);
+  font-family: var(--font-hand);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.card-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin: 0 0 1.3rem;
+}
+
+/* 橡皮章：雙線外框、輕微傾斜、褪色墨水 */
+.stamp {
+  display: inline-block;
+  padding: 0.26rem 0.5rem;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  text-transform: uppercase;
+}
+
+.stamp.is-accent {
+  color: var(--accent);
+  transform: rotate(-3deg);
+}
+
+.stamp.is-ink {
+  color: var(--ink-blue);
+  transform: rotate(1.5deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp {
+    transform: none;
+  }
 }
 
 .tags {

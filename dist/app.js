@@ -40,6 +40,36 @@
     return String(value || "").trim().toLocaleLowerCase();
   }
 
+  /** 穩定的雜湊，用來固定每張卡片的紙張與紙膠帶樣式，重繪時不會跳動 */
+  function hashOf(value) {
+    let hash = 0;
+    const text = String(value || "");
+    for (let index = 0; index < text.length; index += 1) {
+      hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+    }
+    return hash;
+  }
+
+  /**
+   * 印章一律由資料推導，不另外憑空標記。
+   * visited / favorite 為選填布林欄位，未設定就不會蓋章。
+   */
+  function stampsOf(place) {
+    const tags = new Set((place.tags || []).map(normalize));
+    const stamps = [];
+
+    if (place.visited) stamps.push({ label: "Visited", tone: "ink" });
+    if (place.favorite) stamps.push({ label: "Favourite", tone: "accent" });
+    if (place.recommended || tags.has("recommended") || tags.has("chef")) {
+      stamps.push({ label: "Recommended", tone: "accent" });
+    }
+    if (tags.has("tv")) stamps.push({ label: "On TV", tone: "ink" });
+    if (tags.has("queue")) stamps.push({ label: "Expect a queue", tone: "ink" });
+
+    // 一張卡最多兩枚，避免變成貼紙牆
+    return stamps.slice(0, 2);
+  }
+
   /** subcategory 以 " / " 分隔，拆成可獨立篩選的細分類 */
   function facetsOf(place) {
     return String(place.subcategory || "")
@@ -208,12 +238,17 @@
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
 
-    const categoryLabel = [place.category, place.subcategory].filter(Boolean).join(" / ");
+    const seed = hashOf(place.id);
+    article.dataset.paper = String(seed % 4);
+    article.dataset.tape = String((seed >>> 5) % 3);
+
     const topline = createElement("div", "card-topline");
-    topline.append(
-      createElement("span", "", String(index + 1).padStart(2, "0")),
-      createElement("span", "", categoryLabel)
-    );
+    const kind = createElement("span", "card-kind");
+    const sticker = createElement("b", "card-sticker", place.category);
+    sticker.dataset.category = normalize(place.category);
+    kind.append(sticker);
+    if (place.subcategory) kind.append(createElement("i", "card-sub", place.subcategory));
+    topline.append(createElement("span", "card-index", String(index + 1).padStart(2, "0")), kind);
 
     article.append(topline, createElement("h3", "", place.name));
     if (place.koreanName) {
@@ -224,14 +259,28 @@
     appendDetail(details, "Area", place.area);
     appendDetail(details, "Address", place.address);
     appendDetail(details, "Hours", place.openingHours);
-    appendDetail(details, "Notes", place.notes);
     appendDetail(details, "Source", place.source);
     article.append(details);
+
+    // 個人備註才用手寫體呈現，其餘欄位維持排版體
+    if (place.notes) {
+      article.append(createElement("p", "card-note", place.notes));
+    }
 
     if (Array.isArray(place.tags) && place.tags.length) {
       const tags = createElement("ul", "tags");
       place.tags.forEach((tag) => tags.append(createElement("li", "", tag)));
       article.append(tags);
+    }
+
+    const stamps = stampsOf(place);
+    if (stamps.length) {
+      const stampRow = createElement("div", "card-stamps");
+      stamps.forEach((stamp) => {
+        const mark = createElement("span", `stamp is-${stamp.tone}`, stamp.label);
+        stampRow.append(mark);
+      });
+      article.append(stampRow);
     }
 
     if (place.naverMapUrl) {
