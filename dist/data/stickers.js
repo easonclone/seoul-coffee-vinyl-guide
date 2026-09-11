@@ -31,31 +31,39 @@
   ];
 
   /**
-   * 以下這些貼紙上面有具體的站名、日期、金額、姓名或店名（카페 영희），
-   * 貼在真實店家旁邊可能被誤讀成該店的資訊，所以預設不啟用。
-   * 想用的話搬到上面的陣列即可，檔案都已經在 dist/stickers/。
+   * 背景散落的貼紙：沿列表往下平均分佈、左右交錯，塞在卡片後面，
+   * 只從頁緣露出一角，因此不會蓋到任何文字。
    *
-   *   stickers/ticket-subway.webp       지하철 승차권（서울역 ▶ 연남동、1,400원）
-   *   stickers/ticket-bus.webp          시내버스 승차권（1,500원）
-   *   stickers/ticket-ktx.webp          KTX 승차권（서울 ▶ 부산、座位號）
-   *   stickers/ticket-exhibition.webp   전시회 입장권（展期、12,000원）
-   *   stickers/pass-boarding.webp       탑승권（含姓名 KIM / JIYEON、航班）
-   *   stickers/tag-baggage.webp         BAGGAGE CLAIM STUB（行李條碼）
-   *   stickers/tag-number.webp          번호표 057
-   *   stickers/note-course.webp         오늘의 코스（서울역→성수→연남동→한강）
-   *   stickers/receipt-cafe.webp        카페 영희 영수증（品項與金額）
-   *   stickers/menu-cafe.webp           CAFE MENU（價目表）
-   *   stickers/card-stamp.webp          카페 영희 集點卡
-   *   stickers/bag-coffee.webp          카페 영희 咖啡豆袋
-   *   stickers/note-coffee.webp         便條（좋은 커피는 필수!）
-   *   stickers/cup-takeaway.webp        카페 영희 外帶杯
-   *   stickers/cup-latte.webp           拿鐵杯
-   *   stickers/cake.webp                起司蛋糕
+   * 這裡放的是票券、收據、菜單那類帶有具體站名、日期、金額、姓名與
+   * 虛構店名（카페 영희）的貼紙。它們當背景紙片沒問題，但不要搬到上面的
+   * STICKERS，否則會緊貼在真實店家旁邊，容易被誤讀成該店的資訊。
+   *
+   * 同樣是純裝飾：aria-hidden、pointer-events: none、lazy load，
+   * 且只在 768px 以上載入與顯示。
    */
+  window.SCATTER_STICKERS = [
+    { src: "stickers/ticket-subway.webp", width: 132, tilt: -5 },
+    { src: "stickers/receipt-cafe.webp", width: 96, tilt: 4 },
+    { src: "stickers/tag-number.webp", width: 92, tilt: -7 },
+    { src: "stickers/cup-takeaway.webp", width: 84, tilt: 6 },
+    { src: "stickers/ticket-ktx.webp", width: 146, tilt: 3 },
+    { src: "stickers/card-stamp.webp", width: 124, tilt: -4 },
+    { src: "stickers/note-course.webp", width: 150, tilt: 5 },
+    { src: "stickers/cake.webp", width: 118, tilt: -3 },
+    { src: "stickers/pass-boarding.webp", width: 156, tilt: 4 },
+    { src: "stickers/menu-cafe.webp", width: 92, tilt: -6 },
+    { src: "stickers/ticket-bus.webp", width: 112, tilt: 5 },
+    { src: "stickers/bag-coffee.webp", width: 104, tilt: -4 },
+    { src: "stickers/ticket-exhibition.webp", width: 142, tilt: 3 },
+    { src: "stickers/cup-latte.webp", width: 98, tilt: -5 },
+    { src: "stickers/tag-baggage.webp", width: 86, tilt: 6 },
+    { src: "stickers/note-coffee.webp", width: 126, tilt: -3 }
+  ];
 
   /**
-   * 密度：每幾個章節放一張貼紙。
+   * 密度：每幾個章節放一張邊欄貼紙。
    * 1 = 每章都放、2 = 每兩章、0 = 關閉。
+   * 背景散落貼紙的數量則直接由 SCATTER_STICKERS 的長度決定。
    */
   window.STICKER_EVERY = 2;
 })();

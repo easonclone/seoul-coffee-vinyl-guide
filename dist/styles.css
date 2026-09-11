@@ -61,6 +61,9 @@
 }
 
 html {
+  /* 紙膠帶與散落貼紙會超出內容欄，在捲動容器這一層夾住避免水平捲動；
+     用 clip 而不是 hidden，才不會把 position: fixed 的底紙一起關進來 */
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
@@ -69,10 +72,10 @@ body::before {
   position: fixed;
   z-index: 0;
   background-image:
-    linear-gradient(to right, rgba(116, 158, 190, 0.3) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(116, 158, 190, 0.3) 1px, transparent 1px),
-    linear-gradient(to right, rgba(116, 158, 190, 0.15) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(116, 158, 190, 0.15) 1px, transparent 1px);
+    linear-gradient(to right, rgba(116, 158, 190, 0.17) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(116, 158, 190, 0.17) 1px, transparent 1px),
+    linear-gradient(to right, rgba(116, 158, 190, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(116, 158, 190, 0.075) 1px, transparent 1px);
   background-size:
     var(--grid-bold) var(--grid-bold),
     var(--grid-bold) var(--grid-bold),
@@ -878,11 +881,6 @@ input[type="search"]::placeholder {
   color: var(--accent);
 }
 
-/* 紙膠帶會稍微超出卡片邊緣，這裡夾住避免在窄螢幕產生水平捲動 */
-.places {
-  overflow-x: clip;
-}
-
 .place-group {
   display: grid;
   grid-template-columns: minmax(185px, 0.28fr) minmax(0, 1fr);
@@ -986,6 +984,52 @@ input[type="search"]::placeholder {
   font-family: var(--font-hand);
   font-size: 1.08rem;
   line-height: 1.45;
+}
+
+/* --- 背景散落的貼紙：躲在卡片後面，只從頁緣露出來 --- */
+.places {
+  position: relative;
+}
+
+.scatter-layer {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .scatter-layer {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .scatter-sticker {
+    position: absolute;
+    top: var(--scatter-y, 50%);
+    height: auto;
+    filter: drop-shadow(0 3px 7px rgba(35, 42, 53, 0.13));
+    opacity: 0.92;
+    transform: rotate(var(--sticker-tilt, 0deg));
+    user-select: none;
+  }
+
+  .scatter-sticker.is-right {
+    right: var(--scatter-x, -1rem);
+  }
+}
+
+/* 卡片與章節文字一律蓋在散落貼紙之上 */
+.place-group,
+.name-grid {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scatter-sticker {
+    transform: none;
+  }
 }
 
 /* --- 邊欄貼紙：純裝飾，沒有 STICKERS 資料就不存在 --- */
@@ -1907,6 +1951,14 @@ noscript {
 
   .place-group > .area-block {
     grid-column: 1;
+  }
+
+  /* 手機上細格線太密，只保留放大後的粗格 */
+  body::before {
+    background-image:
+      linear-gradient(to right, rgba(116, 158, 190, 0.12) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(116, 158, 190, 0.12) 1px, transparent 1px);
+    background-size: 88px 88px, 88px 88px;
   }
 
   .group-header {

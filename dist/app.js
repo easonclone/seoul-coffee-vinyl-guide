@@ -9,6 +9,9 @@
   const routes = Array.isArray(window.ROUTES) ? window.ROUTES : [];
   const stickers = Array.isArray(window.STICKERS) ? window.STICKERS.filter((item) => item && item.src) : [];
   const stickerEvery = Number.isFinite(window.STICKER_EVERY) ? Math.max(0, window.STICKER_EVERY) : 2;
+  const scatterStickers = Array.isArray(window.SCATTER_STICKERS)
+    ? window.SCATTER_STICKERS.filter((item) => item && item.src)
+    : [];
 
   const searchInput = document.querySelector("#search");
   const clearSearchButton = document.querySelector("#clear-search");
@@ -473,14 +476,49 @@
     return image;
   }
 
+  /**
+   * 背景散落的貼紙：沿頁面往下平均分佈、左右交錯，塞在卡片後面，
+   * 只從頁緣露出一角，所以不會蓋到任何文字。沒有資料就不產生節點。
+   */
+  function renderScatter() {
+    const existing = placesContainer.querySelector(".scatter-layer");
+    if (existing) existing.remove();
+    if (!scatterStickers.length) return;
+
+    const layer = createElement("div", "scatter-layer");
+    layer.setAttribute("aria-hidden", "true");
+
+    scatterStickers.forEach((sticker, index) => {
+      const seed = hashOf(sticker.src);
+      const image = document.createElement("img");
+      image.className = "scatter-sticker";
+      image.dataset.src = sticker.src;
+      image.alt = "";
+      image.loading = "lazy";
+      image.decoding = "async";
+      // 一律靠右：右側是不透明的卡片欄，貼紙只會從卡片邊緣露出一角；
+      // 左欄有章節標題文字，放了會擋住字
+      image.classList.add("is-right");
+      if (sticker.width) image.style.width = `${sticker.width}px`;
+      image.style.setProperty("--sticker-tilt", `${sticker.tilt || 0}deg`);
+      // 沿頁面平均分佈再加一點固定的偏移，看起來像隨手貼的
+      const band = (index + 0.5) / scatterStickers.length * 100;
+      image.style.setProperty("--scatter-y", `${(band + ((seed % 7) - 3) * 0.7).toFixed(2)}%`);
+      image.style.setProperty("--scatter-x", `-${(0.5 + (seed % 5) * 0.4).toFixed(2)}rem`);
+      layer.append(image);
+    });
+
+    placesContainer.append(layer);
+  }
+
   /** 版面夠寬時才真的載入貼紙圖，避免手機白白下載用不到的裝飾 */
   function hydrateStickers() {
-    if (!stickers.length || typeof window.matchMedia !== "function") return;
+    if ((!stickers.length && !scatterStickers.length) || typeof window.matchMedia !== "function") return;
 
     const wide = window.matchMedia("(min-width: 768px)");
     const load = () => {
       if (!wide.matches) return;
-      document.querySelectorAll(".page-sticker[data-src]").forEach((image) => {
+      document.querySelectorAll(".page-sticker[data-src], .scatter-sticker[data-src]").forEach((image) => {
         image.src = image.dataset.src;
         delete image.dataset.src;
       });
@@ -844,6 +882,7 @@
     resultCount.textContent = `${visiblePlaces.length} ${countLabel}`;
     emptyState.hidden = visiblePlaces.length !== 0;
     placesContainer.hidden = visiblePlaces.length === 0;
+    renderScatter();
     syncControls();
     writeUrlState();
     hydrateStickers();
