@@ -10,8 +10,8 @@
 │   └── workflows/
 │       └── pages.yml      # GitHub Pages 自動部署流程
 ├── dist/                  # 可直接部署的網站根目錄
-│   ├── index.html         # 語意化頁面結構與 SEO metadata
-│   ├── styles.css         # 響應式視覺樣式
+│   ├── index.html         # 語意化頁面結構、CSP 與 SEO metadata
+│   ├── styles.css         # 響應式視覺樣式與字體設定
 │   ├── app.js             # 搜尋、篩選、排序、URL 狀態與畫面產生
 │   └── data/
 │       ├── areas.js       # 區域定義：顯示名稱、cluster、座標、地圖投影範圍
@@ -74,6 +74,21 @@
 - `window.CATEGORY_ORDER`：只影響分類按鈕的排序，實際選項仍由 places 資料 derive
 
 已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`instagramUrl`、`websiteUrl`、`priceLevel`、`rating`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。
+
+## 字體
+
+顯示字體為 Google Fonts 的 Fraunces（標題）與 Inter（介面），中文標題使用
+Noto Serif TC，韓文店名使用 Noto Sans KR；全部以 `display=swap` 載入，
+未載入完成前會退回 Georgia 與系統字體。
+
+為此 `index.html` 的 CSP 放寬了兩個網域，其餘指令維持不變：
+
+```
+style-src 'self' https://fonts.googleapis.com;
+font-src  'self' https://fonts.gstatic.com;
+```
+
+若要完全不連外，可改為自行託管字體檔並把這兩條改回 `'self'`。
 
 ## 本機預覽
 

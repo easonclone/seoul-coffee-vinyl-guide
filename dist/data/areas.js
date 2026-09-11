@@ -25,16 +25,16 @@
    * 陣列順序即為列表與地圖編號順序。
    */
   window.CLUSTERS = [
-    { slug: "seochon", name: "西村・景福宮・仁王山", roman: "Seochon · Gyeongbokgung · Inwangsan" },
+    { slug: "seochon", name: "西村・景福宮・仁王山", roman: "Seochon · Inwangsan" },
     { slug: "wonseo", name: "苑西洞・昌德宮", roman: "Wonseo · Changdeokgung" },
     { slug: "junggu", name: "中區・會賢洞", roman: "Jung-gu · Hoehyeon" },
-    { slug: "jangchung", name: "獎忠洞・東大入口", roman: "Jangchung · Dongguk Univ." },
-    { slug: "hongdae", name: "延禧・延南・望遠・弘大", roman: "Yeonhui · Yeonnam · Mangwon · Hongdae" },
+    { slug: "jangchung", name: "獎忠洞・東大入口", roman: "Jangchung" },
+    { slug: "hongdae", name: "延禧・延南・望遠・弘大", roman: "Yeonnam · Hongdae" },
     { slug: "gongdeok", name: "孔德・桃花洞", roman: "Gongdeok · Dohwa" },
     { slug: "yongsan", name: "龍山", roman: "Yongsan" },
     { slug: "yeouido", name: "汝矣島", roman: "Yeouido" },
-    { slug: "gangnam", name: "江南・論峴・新沙・驛三・大峙", roman: "Gangnam · Nonhyeon · Sinsa · Yeoksam · Daechi" },
-    { slug: "seocho", name: "瑞草・方背・瑞來村", roman: "Seocho · Bangbae · Seorae Village" },
+    { slug: "gangnam", name: "江南・論峴・新沙・驛三・大峙", roman: "Gangnam · Sinsa · Daechi" },
+    { slug: "seocho", name: "瑞草・方背・瑞來村", roman: "Seocho · Seorae" },
     { slug: "yangjae", name: "良才", roman: "Yangjae" }
   ];
 
