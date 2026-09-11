@@ -1,6 +1,6 @@
 # Seoul Coffee & Vinyl Guide
 
-「首爾咖啡與黑膠店收藏」是一個輕量、手機優先的資料驅動靜態網站。第一版收錄首爾的咖啡店、烘焙空間與黑膠聆聽場所，不需要後端、資料庫、API 金鑰或建置流程。
+「首爾咖啡與黑膠店收藏」是一個輕量、手機優先的資料驅動靜態網站。目前收錄首爾的咖啡店、烘焙空間、黑膠聆聽場所、餐廳與景點，不需要後端、資料庫、API 金鑰或建置流程。
 
 ## 檔案結構
 
@@ -14,6 +14,7 @@
 │   ├── styles.css         # 響應式視覺樣式
 │   ├── app.js             # 搜尋、篩選、排序、URL 狀態與畫面產生
 │   └── data/
+│       ├── areas.js       # 區域定義：顯示名稱、cluster、座標、地圖投影範圍
 │       └── places.js      # 唯一的店家資料來源
 └── README.md
 ```
@@ -22,12 +23,15 @@
 
 只需編輯 `dist/data/places.js`，在 `window.PLACES` 陣列中加入一個物件，不需要修改 HTML 或 `app.js`。請確保 `id` 與 `areaSlug` 使用穩定、唯一、適合網址的英文小寫值。
 
+分類篩選、次分類篩選、地圖節點與區域索引全部由資料 derive，新增分類或次分類不需要改動 UI。若新增的 `areaSlug` 尚未出現在 `dist/data/areas.js`，該區域仍會正常分組與顯示，只是不會出現在地圖上；要讓它上地圖，請在 `window.AREAS` 補一筆定義。
+
 ```js
 {
   id: "example-place",
   name: "Example Place",
   koreanName: "예시 장소",
   category: "Coffee",
+  subcategory: "Roastery",
   area: "區域中文名 Area",
   areaSlug: "area",
   district: "行政區 District-gu",
@@ -35,6 +39,7 @@
   naverMapUrl: "https://map.naver.com/p/search/...",
   openingHours: null,
   notes: null,
+  source: null,
   tags: ["coffee", "area"],
   brand: null,
   city: "Seoul",
@@ -53,12 +58,20 @@
 
 - `id`：穩定且唯一的識別值
 - `name`、`koreanName`：英文與韓文名稱
-- `category`：可讀的類別文字
-- `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊
+- `category`：單一 top-level 分類（`Coffee`／`Vinyl`／`Restaurant`／`Attraction`…），篩選選項由此 derive
+- `subcategory`：選填細分類，多個值以 `" / "` 分隔（例如 `"Korean / Seafood"`），UI 會自動拆成第二層篩選
+- `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊；`areaSlug` 對應 `data/areas.js`
 - `address`、`naverMapUrl`：地址與外部地圖連結
-- `openingHours`、`notes`：可為 `null` 的補充資訊
+- `openingHours`、`notes`、`source`：可為 `null` 的補充資訊（`source` 用於節目、推薦人等出處）
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態
+
+### Area schema（`dist/data/areas.js`）
+
+- `window.CLUSTERS`：以實際旅遊動線（可步行／同一趟行程）分群，陣列順序即列表與地圖編號順序
+- `window.AREAS`：每個 `areaSlug` 的顯示名稱、所屬 cluster 與經緯度；選填的 `nudge` 只是地圖上的視覺位移，用來避免節點重疊
+- `window.MAP_VIEW`：地圖投影範圍，必須與 `index.html` 底圖 SVG 的 `viewBox` 一致
+- `window.CATEGORY_ORDER`：只影響分類按鈕的排序，實際選項仍由 places 資料 derive
 
 已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`instagramUrl`、`websiteUrl`、`priceLevel`、`rating`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。
 
@@ -106,13 +119,16 @@ python3 -m http.server 8000 --directory dist
 
 ## URL 狀態
 
-搜尋、標籤、城市、區域與排序狀態會寫入 query parameters，重新整理後仍會保留。支援例如：
+搜尋、分類、次分類、品牌、標籤、城市、區域與排序狀態會寫入 query parameters，重新整理後仍會保留。支援例如：
 
 - `?q=fritz`
-- `?tag=vinyl`
-- `?tag=coffee&city=seoul`
+- `?category=Restaurant`
+- `?category=Restaurant&sub=chinese&sub=eel`
+- `?category=Coffee&brand=fritz%20coffee%20company`
 - `?area=yeonhui`
 - `?sort=name`
+
+舊版的 `?tag=` 與 `?city=` 仍然可用。
 
 ## 未來擴充
 
@@ -126,3 +142,7 @@ python3 -m http.server 8000 --directory dist
 ## 資料維護原則
 
 不猜測地址、營業時間、座標、營業狀態或 NAVER place ID。新增或更新資料前應由可信來源查證；網站頁尾也提醒訪客出發前再次確認。
+
+- 不要把即時營業狀態（`영업 중`／`곧 영업 시작`／`브레이크타임`／`영업 종료`）寫進資料，那些只是複製當下的瞬間狀態。
+- 沒有可靠來源時，`openingHours`、`latitude`、`longitude`、評分、價格、電話、訂位連結一律留空。
+- `naverMapUrl` 只填確切已知的連結。沒有時請留 `null`；此時卡片會改顯示「NAVER 搜尋」，以 `koreanName` + `address` 組成關鍵字搜尋網址，不會臆造 place id。

@@ -309,23 +309,10 @@ h1 span {
 .map-node {
   position: absolute;
   z-index: 2;
-  top: var(--y);
-  left: var(--x);
   color: var(--ink);
   text-decoration: none;
   transform: translate(-50%, -50%);
 }
-
-.map-node-yeonhui { --x: 39.2%; --y: 27%; }
-.map-node-yeonnam { --x: 36.7%; --y: 31.8%; }
-.map-node-mangwon { --x: 28.4%; --y: 35.8%; }
-.map-node-gongdeok { --x: 47.5%; --y: 44.5%; }
-.map-node-seochon { --x: 54.9%; --y: 19%; }
-.map-node-wonseo { --x: 61.4%; --y: 18.3%; }
-.map-node-dongnimmun { --x: 50.4%; --y: 23.4%; }
-.map-node-jangchung { --x: 69%; --y: 34.3%; }
-.map-node-yongsan { --x: 52.9%; --y: 54.7%; }
-.map-node-yangjae { --x: 80%; --y: 88.3%; }
 
 .map-node i {
   display: grid;
@@ -561,6 +548,70 @@ input[type="search"]::placeholder {
   border: 1px solid var(--line-strong);
   border-radius: 0;
   color: var(--ink);
+}
+
+.filters-sub {
+  padding-top: 1rem;
+}
+
+.filters-sub .filter-chip {
+  min-height: 2.3rem;
+  padding: 0.3rem 0.8rem;
+  border-color: var(--line);
+  font-size: 0.82rem;
+}
+
+.filters-sub .filter-chip:hover {
+  border-color: var(--line-strong);
+}
+
+.filters-sub .filter-chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+.filters-sub .filter-chip.is-brand {
+  font-style: italic;
+}
+
+.group-roman {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.place-group > .area-block {
+  grid-column: 2;
+}
+
+.place-group > .area-block + .area-block {
+  margin-top: 2rem;
+}
+
+.area-heading {
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  scroll-margin-top: 1rem;
+}
+
+.map-link.is-search {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.map-link.is-search:hover {
+  border-color: var(--ink);
 }
 
 .results-summary {
@@ -866,13 +917,6 @@ noscript {
     font-size: 0.58rem;
   }
 
-  /* 小螢幕上真實座標會擠在一起，這裡把市中心幾個點稍微拉開 */
-  .map-node-yeonhui { --x: 40.5%; --y: 24.6%; }
-  .map-node-yeonnam { --x: 35.5%; --y: 33.4%; }
-  .map-node-dongnimmun { --x: 48.5%; --y: 21.9%; }
-  .map-node-seochon { --x: 55.5%; --y: 15.9%; }
-  .map-node-wonseo { --x: 64%; --y: 20.8%; }
-
   .area-index a {
     padding: 0.55rem 0.75rem;
     grid-template-columns: 1.4rem minmax(0, 1fr) auto;
@@ -905,6 +949,27 @@ noscript {
     grid-template-columns: 1fr;
     gap: 1.2rem;
     padding: 2.1rem 0 2.6rem;
+  }
+
+  .place-group > .area-block {
+    grid-column: 1;
+  }
+
+  .place-group > .area-block + .area-block {
+    margin-top: 1.5rem;
+  }
+
+  .filters-sub {
+    padding-top: 0.85rem;
+  }
+
+  /* cluster 名稱較長，手機上改回單欄避免每列折成三行 */
+  .area-index {
+    grid-template-columns: 1fr;
+  }
+
+  .area-index li:nth-child(odd) {
+    border-right: 0;
   }
 
   .group-index {

@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <title>Seoul Coffee &amp; Vinyl Guide</title>
-    <meta name="description" content="Curated coffee shops, roasteries and vinyl listening spaces in Seoul.">
+    <title>Seoul Coffee, Vinyl &amp; Food Guide</title>
+    <meta name="description" content="Curated coffee shops, vinyl listening spaces, restaurants and sights in Seoul, grouped by walkable area.">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Seoul Coffee &amp; Vinyl Guide">
-    <meta property="og:description" content="Curated coffee shops, roasteries and vinyl listening spaces in Seoul.">
+    <meta property="og:title" content="Seoul Coffee, Vinyl &amp; Food Guide">
+    <meta property="og:description" content="Curated coffee shops, vinyl listening spaces, restaurants and sights in Seoul, grouped by walkable area.">
     <meta name="theme-color" content="#f4f1ea">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23f4f1ea'/%3E%3Ccircle cx='32' cy='32' r='21' fill='%2323211e'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23f4f1ea'/%3E%3Ccircle cx='32' cy='32' r='3' fill='%23923d36'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="styles.css">
+    <script src="data/areas.js" defer></script>
     <script src="data/places.js" defer></script>
     <script src="app.js" defer></script>
   </head>
@@ -24,7 +25,7 @@
         <div>
           <p class="edition">SEOUL · KOREA / CURATED INDEX</p>
           <h1>Seoul Coffee <span>&amp;</span> Vinyl Guide</h1>
-          <p class="subtitle">首爾咖啡、烘焙與黑膠空間收藏</p>
+          <p class="subtitle">首爾咖啡、黑膠、餐廳與景點收藏</p>
         </div>
         <div class="record-mark" aria-hidden="true">
           <span>01</span>
@@ -35,12 +36,12 @@
         <div class="area-map-head">
           <p class="area-map-kicker">AREA MAP / SEOUL</p>
           <h2 id="area-map-title">首爾中心區域分布</h2>
-          <p class="area-map-note">示意地圖 — 點選任一區域可跳至該區店家</p>
+          <p class="area-map-note">示意地圖 — 依實際旅遊動線分群，點選可跳至該群店家</p>
         </div>
 
         <div class="area-map-body">
-          <figure class="area-map-figure">
-            <svg class="area-map-shape" viewBox="0 0 1000 676" role="img" aria-label="首爾中心區域示意地圖，標示漢江、南山、北岳山與首爾十個收錄區域">
+          <figure class="area-map-figure" id="area-map-figure">
+            <svg class="area-map-shape" viewBox="0 0 1000 676" role="img" aria-label="首爾中心區域示意地圖，標示漢江、南山、北岳山與首爾各收錄區域">
               <defs>
                 <pattern id="map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
                   <path d="M50 0 V50 H0"></path>
@@ -69,7 +70,7 @@
               </g>
 
               <g class="map-label">
-                <text x="654" y="480" transform="rotate(-4 654 480)">漢江 HAN RIVER</text>
+                <text x="424" y="462" transform="rotate(16 424 462)">漢江 HAN RIVER</text>
                 <text x="600" y="272" text-anchor="middle">남산 NAMSAN</text>
                 <text x="612" y="34" text-anchor="middle">북악산 BUGAKSAN</text>
               </g>
@@ -87,30 +88,9 @@
               </g>
             </svg>
 
-            <a class="map-node map-node-yeonhui" href="#area-yeonhui"><i>01</i><b>延禧洞<small>Yeonhui</small></b></a>
-            <a class="map-node map-node-yeonnam" href="#area-yeonnam"><i>02</i><b>延南洞<small>Yeonnam</small></b></a>
-            <a class="map-node map-node-mangwon" href="#area-mangwon"><i>03</i><b>望遠洞<small>Mangwon</small></b></a>
-            <a class="map-node map-node-gongdeok" href="#area-gongdeok"><i>04</i><b>孔德<small>Gongdeok</small></b></a>
-            <a class="map-node map-node-seochon" href="#area-seochon"><i>05</i><b>西村<small>Seochon</small></b></a>
-            <a class="map-node map-node-wonseo is-left" href="#area-wonseo"><i>06</i><b>苑西洞<small>Wonseo</small></b></a>
-            <a class="map-node map-node-dongnimmun" href="#area-dongnimmun"><i>07</i><b>獨立門<small>Dongnimmun</small></b></a>
-            <a class="map-node map-node-jangchung is-left" href="#area-jangchung"><i>08</i><b>獎忠洞<small>Jangchung</small></b></a>
-            <a class="map-node map-node-yongsan" href="#area-yongsan"><i>09</i><b>龍山<small>Yongsan</small></b></a>
-            <a class="map-node map-node-yangjae is-left" href="#area-yangjae"><i>10</i><b>良才<small>Yangjae</small></b></a>
           </figure>
 
-          <ol class="area-index">
-            <li><a href="#area-yeonhui" data-area="yeonhui"><i>01</i><b>延禧洞</b><small>Yeonhui</small><em data-area-count="yeonhui">3</em></a></li>
-            <li><a href="#area-yeonnam" data-area="yeonnam"><i>02</i><b>延南洞</b><small>Yeonnam</small><em data-area-count="yeonnam">1</em></a></li>
-            <li><a href="#area-mangwon" data-area="mangwon"><i>03</i><b>望遠洞</b><small>Mangwon</small><em data-area-count="mangwon">1</em></a></li>
-            <li><a href="#area-gongdeok" data-area="gongdeok"><i>04</i><b>孔德・桃花洞</b><small>Gongdeok</small><em data-area-count="gongdeok">1</em></a></li>
-            <li><a href="#area-seochon" data-area="seochon"><i>05</i><b>西村・景福宮</b><small>Seochon</small><em data-area-count="seochon">1</em></a></li>
-            <li><a href="#area-wonseo" data-area="wonseo"><i>06</i><b>苑西洞・昌德宮</b><small>Wonseo</small><em data-area-count="wonseo">1</em></a></li>
-            <li><a href="#area-dongnimmun" data-area="dongnimmun"><i>07</i><b>獨立門</b><small>Dongnimmun</small><em data-area-count="dongnimmun">1</em></a></li>
-            <li><a href="#area-jangchung" data-area="jangchung"><i>08</i><b>獎忠洞・東大入口</b><small>Jangchung</small><em data-area-count="jangchung">2</em></a></li>
-            <li><a href="#area-yongsan" data-area="yongsan"><i>09</i><b>龍山</b><small>Yongsan</small><em data-area-count="yongsan">1</em></a></li>
-            <li><a href="#area-yangjae" data-area="yangjae"><i>10</i><b>良才・江南</b><small>Yangjae</small><em data-area-count="yangjae">1</em></a></li>
-          </ol>
+          <ol class="area-index" id="area-index"></ol>
         </div>
       </nav>
     </header>
@@ -119,18 +99,12 @@
       <section class="toolbar" aria-label="搜尋與篩選">
         <div class="search-wrap">
           <label for="search">搜尋</label>
-          <input id="search" type="search" autocomplete="off" placeholder="搜尋店名、韓文店名、區域、地址">
+          <input id="search" type="search" autocomplete="off" placeholder="搜尋店名、韓文店名、分類、區域、地址、備註">
           <button id="clear-search" class="clear-search" type="button" hidden>清除搜尋</button>
         </div>
 
         <div class="toolbar-row">
-          <div class="filters" aria-label="店家篩選">
-            <button class="filter-chip is-active" type="button" data-filter-type="all" aria-pressed="true">全部</button>
-            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="coffee" aria-pressed="false">Coffee</button>
-            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="vinyl" aria-pressed="false">Vinyl</button>
-            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="roastery" aria-pressed="false">Roastery</button>
-            <button class="filter-chip" type="button" data-filter-type="tag" data-filter-value="fritz" aria-pressed="false">Fritz</button>
-          </div>
+          <div class="filters" id="category-filters" role="group" aria-label="分類篩選"></div>
 
           <div class="sort-control">
             <label for="sort">排序</label>
@@ -140,10 +114,12 @@
             </select>
           </div>
         </div>
+
+        <div class="filters filters-sub" id="sub-filters" role="group" aria-label="次分類篩選" hidden></div>
       </section>
 
       <section class="results-summary" aria-live="polite" aria-atomic="true">
-        <p id="result-count">13 places</p>
+        <p id="result-count">27 places</p>
         <p id="active-area" class="active-area" hidden></p>
       </section>
 
@@ -162,6 +138,6 @@
       <p>地址與營業資訊可能異動，出發前請透過 NAVER Map 再次確認。</p>
     </footer>
 
-    <noscript>此網站需要 JavaScript 才能顯示店家資料與使用篩選功能。</noscript>
+    <noscript>此網站需要 JavaScript 才能顯示區域地圖、店家資料與篩選功能。</noscript>
   </body>
 </html>
