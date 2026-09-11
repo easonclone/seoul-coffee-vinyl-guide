@@ -261,26 +261,6 @@
       active: true,
       latitude: null,
       longitude: null
-    },
-    {
-      id: "fritz-seongsan",
-      name: "Fritz Coffee Company Seongsan",
-      koreanName: "프릳츠 성산",
-      category: "Coffee / Bakery / Roastery",
-      area: "城山 Seongsan",
-      areaSlug: "seongsan",
-      district: "Seogwipo-si",
-      address: "222 Ilchul-ro, Seongsan-eup, Seogwipo-si, Jeju-do",
-      naverMapUrl: "https://map.naver.com/p/search/프릳츠%20성산",
-      openingHours: null,
-      notes: "不在首爾",
-      tags: ["coffee", "bakery", "fritz", "jeju"],
-      brand: "Fritz Coffee Company",
-      city: "Jeju",
-      country: "South Korea",
-      active: true,
-      latitude: null,
-      longitude: null
     }
   ];
 })();
