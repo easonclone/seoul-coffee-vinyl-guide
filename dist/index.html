@@ -40,6 +40,7 @@
           <p class="area-map-kicker">AREA MAP / SEOUL</p>
           <h2 id="area-map-title">首爾中心區域分布</h2>
           <p class="area-map-note">示意地圖 — 依實際旅遊動線分群，點選可跳至該群店家</p>
+          <ul class="route-legend" id="route-legend" hidden></ul>
         </div>
 
         <div class="area-map-body">
@@ -77,6 +78,9 @@
                 <path class="map-water-line" d="M-30 134 C 60 164 112 182 176 228 C 236 272 302 331 372 362 C 440 391 472 407 540 423 C 606 437 650 428 706 412 C 760 397 778 382 830 380 C 884 378 906 392 946 404 C 1000 420 1064 431 1160 449"></path>
                 <ellipse class="map-island" cx="374" cy="364" rx="38" ry="8" transform="rotate(23 374 364)"></ellipse>
               </g>
+
+              <!-- 路線由 app.js 依 data/areas.js 的 ROUTES 產生，底圖本身不含任何路線 -->
+              <g class="map-routes" id="map-routes"></g>
 
               <g class="map-label">
                 <text x="420" y="464" transform="rotate(16 420 464)">漢江 HAN RIVER</text>

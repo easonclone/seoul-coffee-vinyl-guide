@@ -62,16 +62,58 @@
 - `subcategory`：選填細分類，多個值以 `" / "` 分隔（例如 `"Korean / Seafood"`），UI 會自動拆成第二層篩選
 - `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊；`areaSlug` 對應 `data/areas.js`
 - `address`、`naverMapUrl`：地址與外部地圖連結
-- `openingHours`、`notes`、`source`：可為 `null` 的補充資訊（`source` 用於節目、推薦人等出處）
+- `openingHours`、`notes`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
+  一律使用排版體呈現
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態
 - `visited`、`favorite`、`recommended`：選填布林值，設為 `true` 才會在卡片上蓋章；
   未設定就不蓋。其餘印章由 tags 推導（`recommended`／`chef` → RECOMMENDED、
   `tv` → ON TV、`queue` → EXPECT A QUEUE），一張卡最多兩枚
 
+### 選填的旅行記錄
+
+以下欄位全部可省略，沒有資料時對應的區塊完全不會 render：
+
+| 欄位 | 型別 | 呈現方式 |
+| --- | --- | --- |
+| `personalNote` | string | 標成 **MY NOTE**，是全站唯一使用手寫視覺語言的卡片區塊 |
+| `visitedAt` | `"2025-04-12"` | 卡片上顯示 `VISITED 2025-04-12`，並蓋 VISITED 章 |
+| `plannedAt` | `"2025-04-14"` | 顯示 `PLANNED …`，並蓋 PLANNED 章（已有 visitedAt 時不重複） |
+| `tripDay` | number | 顯示 `DAY 2` |
+| `favorite` / `recommended` | boolean | 蓋對應的章 |
+| `photo` | object | 見下方「照片插頁」 |
+
+`notes` 與 `personalNote` 是**刻意分開**的：前者是客觀補充（走排版體、放在
+Address／Hours 同一組 FACTS 裡），後者才是自己的話。不要把主觀感想寫進 `notes`。
+
+### 照片插頁
+
+```js
+photo: { src: "photos/protokoll.jpg", caption: "延禧洞的早晨", style: "polaroid" }
+photo: { srcs: ["a.jpg", "b.jpg", "c.jpg"], caption: "Contact sheet", style: "contact" }
+photo: { src: "photos/receipt.jpg", caption: "收據 · 2025-04-13", style: "ticket" }
+```
+
+`style` 為 `polaroid`（預設）／`contact`（最多 4 張的印樣條）／`ticket`（票根、收據）。
+圖檔請放在 `dist/` 底下用相對路徑引用（CSP 的 `img-src` 只允許 `'self'` 與 `data:`）。
+照片刻意不做滿版，是夾進筆記本的插頁而不是主視覺。
+
 ### Area schema（`dist/data/areas.js`）
 
-- `window.CLUSTERS`：以實際旅遊動線（可步行／同一趟行程）分群，陣列順序即列表與地圖編號順序
+- `window.CLUSTERS`：以實際旅遊動線（可步行／同一趟行程）分群，陣列順序即列表與地圖編號順序。
+  選填的 `note` 會成為章節標題下的一句手寫副標，請用自己的話寫，空著就不 render
+- `window.ROUTES`：選填的手繪路線圖層，空陣列就完全不畫。只放資料，SVG 由 `app.js`
+  依 `AREAS` 的座標產生，兩者分離，且不串接任何 routing API
+
+```js
+window.ROUTES = [
+  { day: 1, label: "DAY 01", stops: ["cheongun", "seochon", "wonseo", "jangchung"] },
+  { day: 2, label: "DAY 02", tone: "ink", stops: ["mangwon", "seogyo", "yeonnam", "yeonhui"] }
+];
+```
+
+`stops` 是 `areaSlug` 陣列（至少兩個），`tone` 可選 `accent`（預設）或 `ink`。
+地圖上會畫出虛線路徑、段落中點的方向箭頭與 DAY 標註，並在地圖標頭顯示圖例。
 - `window.AREAS`：每個 `areaSlug` 的顯示名稱、所屬 cluster 與經緯度；選填的 `nudge` 只是
   地圖上的視覺位移，用來避免節點重疊、並確保點落在漢江正確的一岸。新增區域後請重新檢查
   節點是否重疊（手機寬度最嚴苛），不要只看桌機
@@ -95,7 +137,11 @@
   其餘欄位維持排版體，避免整頁都像手寫
 - **語意貼紙**：`category` 對應的低彩度色標
 - **橡皮章**：雙線外框、褪色墨水、極小角度
-- **筆記本索引標籤**：cluster 標題的編號做成書籤形狀
+- **筆記本章節**：每個 cluster 是一個章節 —— 左側裝訂線、貼在線上的側標編號、
+  章節標題與羅馬拼音、選填的手寫副標，章節結尾用一條細線加頁碼（`— 018 —`）作結，
+  不再使用粗黑分隔線
+- **FACTS 與 MY NOTE 分離**：Area／Address／Hours／Notes／Source 一律排版體，
+  只有 `personalNote` 會被標成 MY NOTE 並使用手寫體
 - **手繪標記**：區域小標底線、結果數量的圈選、地圖說明旁的箭頭，只用在這三處
 - **地圖的鉛筆／墨水筆觸**：丘陵排線、河道虛線中心線、虛線羅盤
 

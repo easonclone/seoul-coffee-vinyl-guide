@@ -6,6 +6,7 @@
   const clusters = Array.isArray(window.CLUSTERS) ? window.CLUSTERS : [];
   const categoryOrder = Array.isArray(window.CATEGORY_ORDER) ? window.CATEGORY_ORDER : [];
   const mapView = window.MAP_VIEW || null;
+  const routes = Array.isArray(window.ROUTES) ? window.ROUTES : [];
 
   const searchInput = document.querySelector("#search");
   const clearSearchButton = document.querySelector("#clear-search");
@@ -58,7 +59,10 @@
     const tags = new Set((place.tags || []).map(normalize));
     const stamps = [];
 
-    if (place.visited) stamps.push({ label: "Visited", tone: "ink" });
+    if (place.visited || place.visitedAt) stamps.push({ label: "Visited", tone: "ink" });
+    if (!place.visited && !place.visitedAt && place.plannedAt) {
+      stamps.push({ label: "Planned", tone: "ink" });
+    }
     if (place.favorite) stamps.push({ label: "Favourite", tone: "accent" });
     if (place.recommended || tags.has("recommended") || tags.has("chef")) {
       stamps.push({ label: "Recommended", tone: "accent" });
@@ -234,6 +238,65 @@
     list.append(row);
   }
 
+  /** 旅行記錄：全部選填，沒有就不 render */
+  function travelMetaOf(place) {
+    const items = [];
+    if (place.tripDay) items.push(`Day ${place.tripDay}`);
+    if (place.visitedAt) items.push(`Visited ${place.visitedAt}`);
+    else if (place.plannedAt) items.push(`Planned ${place.plannedAt}`);
+    return items;
+  }
+
+  /**
+   * 照片插頁：polaroid / contact / ticket 三種。
+   * 沒有 photo 欄位就回傳 null，完全不 render。
+   */
+  function createPhoto(place) {
+    const photo = place.photo;
+    if (!photo) return null;
+
+    const style = normalize(photo.style) || "polaroid";
+    const figure = createElement("figure", `card-photo is-${style}`);
+
+    if (style === "contact") {
+      const srcs = (Array.isArray(photo.srcs) ? photo.srcs : [photo.src]).filter(Boolean);
+      if (!srcs.length) return null;
+      const strip = createElement("div", "contact-strip");
+      srcs.slice(0, 4).forEach((src) => {
+        const frame = createElement("span", "contact-frame");
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
+        img.loading = "lazy";
+        frame.append(img);
+        strip.append(frame);
+      });
+      figure.append(strip);
+    } else if (style === "ticket") {
+      const slip = createElement("div", "ticket-slip");
+      if (photo.src) {
+        const img = document.createElement("img");
+        img.src = photo.src;
+        img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
+        img.loading = "lazy";
+        slip.append(img);
+      }
+      figure.append(slip);
+    } else {
+      if (!photo.src) return null;
+      const img = document.createElement("img");
+      img.src = photo.src;
+      img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
+      img.loading = "lazy";
+      figure.append(img);
+    }
+
+    if (photo.caption) {
+      figure.append(createElement("figcaption", "", photo.caption));
+    }
+    return figure;
+  }
+
   function createPlaceCard(place, index) {
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
@@ -255,16 +318,36 @@
       article.append(createElement("p", "korean-name", place.koreanName));
     }
 
+    // FACTS：一律維持排版體
     const details = createElement("dl", "place-details");
     appendDetail(details, "Area", place.area);
     appendDetail(details, "Address", place.address);
     appendDetail(details, "Hours", place.openingHours);
+    appendDetail(details, "Notes", place.notes);
     appendDetail(details, "Source", place.source);
     article.append(details);
 
-    // 個人備註才用手寫體呈現，其餘欄位維持排版體
-    if (place.notes) {
-      article.append(createElement("p", "card-note", place.notes));
+    const meta = travelMetaOf(place);
+    if (meta.length) {
+      const metaRow = createElement("p", "card-travel");
+      meta.forEach((item, position) => {
+        if (position) metaRow.append(createElement("span", "card-travel-sep", "·"));
+        metaRow.append(createElement("span", "", item));
+      });
+      article.append(metaRow);
+    }
+
+    const photo = createPhoto(place);
+    if (photo) article.append(photo);
+
+    // MY NOTE：只有自己寫的那一段才用手寫視覺語言
+    if (place.personalNote) {
+      const note = createElement("div", "card-note");
+      note.append(
+        createElement("p", "card-note-label", "My note"),
+        createElement("p", "card-note-body", place.personalNote)
+      );
+      article.append(note);
     }
 
     if (Array.isArray(place.tags) && place.tags.length) {
@@ -305,6 +388,7 @@
   }
 
   function renderGroupedPlaces(visiblePlaces) {
+    let pageNumber = 0;
     const grouped = visiblePlaces.reduce((groups, place) => {
       const slug = clusterSlugOf(place);
       if (!groups.has(slug)) groups.set(slug, []);
@@ -333,8 +417,10 @@
       );
       if (label.roman) header.append(createElement("p", "group-roman", label.roman));
       header.append(
-        createElement("p", "", `${groupPlaces.length} ${groupPlaces.length === 1 ? "place" : "places"}`)
+        createElement("p", "group-count", `${groupPlaces.length} ${groupPlaces.length === 1 ? "place" : "places"}`)
       );
+      // 章節副標，選填，由 CLUSTERS[].note 提供
+      if (label.note) header.append(createElement("p", "group-note", label.note));
 
       section.setAttribute("aria-labelledby", headingId);
       section.append(header);
@@ -363,6 +449,11 @@
           block.append(areaHeading, grid);
           section.append(block);
         });
+
+      pageNumber += groupPlaces.length;
+      const folio = createElement("p", "group-folio");
+      folio.append(createElement("span", "", String(pageNumber).padStart(3, "0")));
+      section.append(folio);
 
       placesContainer.append(section);
     });
@@ -464,6 +555,97 @@
     return { x: (x / mapView.width) * 100, y: (y / mapView.height) * 100 };
   }
 
+  /**
+   * 手繪風路線：只把 AREAS 的座標連起來，不做任何真實路徑規劃。
+   * 控制點稍微偏移做出手繪的抖動，並在每段中點畫一個箭頭。
+   */
+  function renderRoutes(svgNode) {
+    const layer = svgNode && svgNode.querySelector("#map-routes");
+    const legend = document.querySelector("#route-legend");
+    if (!layer) return;
+
+    layer.replaceChildren();
+    if (legend) {
+      legend.replaceChildren();
+      legend.hidden = true;
+    }
+    if (!routes.length) return;
+
+    const svgEl = (name) => document.createElementNS("http://www.w3.org/2000/svg", name);
+    const point = (slug) => {
+      const area = areaBySlug.get(slug);
+      if (!area) return null;
+      const nudge = area.nudge || {};
+      return {
+        x: ((area.lng - mapView.west) / (mapView.east - mapView.west)) * mapView.width + (nudge.x || 0),
+        y: ((mapView.north - area.lat) / (mapView.north - mapView.south)) * mapView.height + (nudge.y || 0)
+      };
+    };
+
+    let drawn = 0;
+    routes.forEach((route, routeIndex) => {
+      const stops = (route.stops || []).map(point).filter(Boolean);
+      if (stops.length < 2) return;
+
+      const tone = normalize(route.tone) === "ink" ? "ink" : "accent";
+      const group = svgEl("g");
+      group.setAttribute("class", `map-route is-${tone}`);
+
+      // 每段用一個二次貝茲，控制點依固定偏移錯開，看起來像手繪
+      let d = `M${stops[0].x.toFixed(1)} ${stops[0].y.toFixed(1)}`;
+      for (let i = 1; i < stops.length; i += 1) {
+        const from = stops[i - 1];
+        const to = stops[i];
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const length = Math.hypot(dx, dy) || 1;
+        const bow = (i % 2 ? 1 : -1) * Math.min(26, length * 0.12);
+        d += ` Q${(midX - (dy / length) * bow).toFixed(1)} ${(midY + (dx / length) * bow).toFixed(1)} ${to.x.toFixed(1)} ${to.y.toFixed(1)}`;
+      }
+      const path = svgEl("path");
+      path.setAttribute("class", "route-line");
+      path.setAttribute("d", d);
+      group.append(path);
+
+      // 段落中點的方向箭頭
+      for (let i = 1; i < stops.length; i += 1) {
+        const from = stops[i - 1];
+        const to = stops[i];
+        const angle = (Math.atan2(to.y - from.y, to.x - from.x) * 180) / Math.PI;
+        const arrow = svgEl("path");
+        arrow.setAttribute("class", "route-arrow");
+        arrow.setAttribute("d", "M-5 -4 L4 0 L-5 4");
+        arrow.setAttribute(
+          "transform",
+          `translate(${((from.x + to.x) / 2).toFixed(1)} ${((from.y + to.y) / 2).toFixed(1)}) rotate(${angle.toFixed(1)})`
+        );
+        group.append(arrow);
+      }
+
+      // DAY 標註放在起點旁
+      const label = svgEl("text");
+      label.setAttribute("class", "route-label");
+      label.setAttribute("x", (stops[0].x + 14).toFixed(1));
+      label.setAttribute("y", (stops[0].y - 16).toFixed(1));
+      label.textContent = route.label || `DAY ${String(route.day || routeIndex + 1).padStart(2, "0")}`;
+      group.append(label);
+
+      layer.append(group);
+      drawn += 1;
+
+      if (legend) {
+        const item = document.createElement("li");
+        item.className = `is-${tone}`;
+        item.textContent = label.textContent;
+        legend.append(item);
+      }
+    });
+
+    if (legend) legend.hidden = drawn === 0;
+  }
+
   function renderAreaMap() {
     if (!mapFigure || !areaIndex || !mapView) return;
 
@@ -496,6 +678,8 @@
         node.setAttribute("aria-label", `${area.name} ${area.roman}（${countByArea[area.slug]} 間）`);
         mapFigure.append(node);
       });
+
+    renderRoutes(mapFigure.querySelector("svg"));
 
     // 索引以 cluster 為單位，對應地圖上的編號
     areaIndex.replaceChildren();

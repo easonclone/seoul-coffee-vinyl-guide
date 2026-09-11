@@ -9,6 +9,19 @@
    *   koreanName, subcategory, district, address, naverMapUrl,
    *   openingHours, notes, source, brand, latitude, longitude
    *
+   * 事實與個人記錄分開：
+   *   notes        客觀補充，走一般排版體
+   *   personalNote 自己的話，會被標成 MY NOTE 並使用手寫視覺語言
+   *
+   * 選填的旅行記錄（都不填就完全不會 render）：
+   *   visitedAt    "2025-04-12"，會蓋 VISITED 章
+   *   plannedAt    "2025-04-13"，會蓋 PLANNED 章
+   *   tripDay      2，卡片上顯示 DAY 2
+   *   favorite     true，蓋 FAVOURITE 章
+   *   recommended  true，蓋 RECOMMENDED 章
+   *   photo        { src, caption, style }，style 為 polaroid | contact | ticket；
+   *                contact 用 srcs 陣列。沒有 photo 就完全不 render
+   *
    * category 為單一 top-level 分類（Coffee / Vinyl / Restaurant / Attraction…），
    * 可選的 subcategory 為細分類，多個值以 " / " 分隔，UI 會自動拆成篩選選項。
    * areaSlug 對應 data/areas.js 中的 area 定義（顯示名稱、cluster、座標）。
@@ -72,7 +85,8 @@
       address: "서울특별시 종로구 청운동 59-1",
       naverMapUrl: "https://naver.me/xq3a2H3Y",
       openingHours: null,
-      notes: "景福宮附近。使用者備註：10 點就要排隊。",
+      notes: "景福宮附近。",
+      personalNote: "10 點就要排隊。",
       source: null,
       tags: ["restaurant", "chinese", "jongno", "gyeongbokgung", "queue"],
       brand: null,

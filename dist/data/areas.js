@@ -23,6 +23,9 @@
   /**
    * 以實際旅遊動線（可步行 / 同一趟行程）分群，而不是行政區。
    * 陣列順序即為列表與地圖編號順序。
+   *
+   * 選填 note：章節標題下的一句手寫副標，請用自己的話寫，空著就不會 render。
+   *   例：{ slug: "hongdae", name: "…", roman: "…", note: "三天裡回來了三次" }
    */
   window.CLUSTERS = [
     { slug: "seochon", name: "西村・景福宮・仁王山", roman: "Seochon · Inwangsan" },
@@ -70,4 +73,20 @@
     { slug: "yangjae", name: "良才", roman: "Yangjae", cluster: "yangjae", lat: 37.484, lng: 127.034 },
     { slug: "jamsil", name: "蠶室", roman: "Jamsil", cluster: "jamsil", lat: 37.5125, lng: 127.1025, nudge: { x: 0, y: 6 } }
   ];
+
+  /**
+   * 選填的手繪路線圖層。空陣列就完全不畫。
+   * 這裡只放資料，實際的 SVG 由 app.js 依 AREAS 的座標產生，兩者分離；
+   * 不串接任何 routing API，線條是 areaSlug 之間的示意連線。
+   *
+   * stops 為 areaSlug 陣列，至少兩個；tone 可選 "accent"（預設）或 "ink"。
+   *
+   * 取消下面的註解即可看到效果：
+   *
+   * window.ROUTES = [
+   *   { day: 1, label: "DAY 01", stops: ["cheongun", "seochon", "wonseo", "jangchung"] },
+   *   { day: 2, label: "DAY 02", tone: "ink", stops: ["mangwon", "seogyo", "yeonnam", "yeonhui"] }
+   * ];
+   */
+  window.ROUTES = [];
 })();
