@@ -25,6 +25,7 @@
   const resetFiltersButton = document.querySelector("#reset-filters");
   const mapFigure = document.querySelector("#area-map-figure");
   const areaIndex = document.querySelector("#area-index");
+  const toast = document.querySelector("#toast");
 
   const state = {
     query: "",
@@ -34,8 +35,13 @@
     tags: new Set(),
     cities: new Set(),
     area: "",
-    sort: "area"
+    sort: "area",
+    place: ""
   };
+
+  // 只有「剛從網址進來」才需要捲動定位，之後重繪不再跳
+  let pendingPlaceFocus = false;
+  let highlightTimer = 0;
 
   const areaBySlug = new Map(areas.map((area) => [area.slug, area]));
   const clusterBySlug = new Map(clusters.map((cluster) => [cluster.slug, cluster]));
@@ -155,6 +161,8 @@
     state.category = params.get("category") || "";
     state.area = normalize(params.get("area"));
     state.sort = params.get("sort") === "name" ? "name" : "area";
+    state.place = params.get("place") || "";
+    pendingPlaceFocus = Boolean(state.place);
 
     params.getAll("sub").filter(Boolean).forEach((sub) => state.facets.add(normalize(sub)));
     params.getAll("brand").filter(Boolean).forEach((brand) => state.brands.add(normalize(brand)));
@@ -178,6 +186,8 @@
     state.tags.forEach((tag) => params.append("tag", tag));
     state.cities.forEach((city) => params.append("city", city));
     if (state.sort !== "area") params.set("sort", state.sort);
+    // place 只有在使用者明確離開單一店家情境時才會被清掉（見 leavePlaceContext）
+    if (state.place) params.set("place", state.place);
 
     const queryString = params.toString();
     const nextUrl = queryString ? `${window.location.pathname}?${queryString}` : window.location.pathname;
@@ -356,6 +366,152 @@
     return block;
   }
 
+  // ------------------------------------------------------- copy / share
+
+  /** 先用 Clipboard API，不可用時退回 textarea + execCommand */
+  async function copyText(text) {
+    const value = String(text || "");
+    if (!value) return false;
+
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
+        await navigator.clipboard.writeText(value);
+        return true;
+      } catch (error) {
+        // 使用者拒絕權限或非安全環境，往下走 fallback
+      }
+    }
+
+    try {
+      const field = document.createElement("textarea");
+      field.value = value;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.top = "0";
+      field.style.left = "0";
+      field.style.opacity = "0";
+      document.body.append(field);
+      field.select();
+      field.setSelectionRange(0, value.length);
+      const ok = document.execCommand("copy");
+      field.remove();
+      return ok;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  let toastTimer = 0;
+
+  /** 便條式的提示，本身就是 aria-live 區域 */
+  function showToast(message, tone) {
+    if (!toast) return;
+    toast.textContent = message;
+    toast.dataset.tone = tone || "ok";
+    toast.hidden = false;
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => {
+      toast.hidden = true;
+      toast.textContent = "";
+    }, tone === "error" ? 2600 : 1800);
+  }
+
+  /** 單一店家的永久連結，保留目前的篩選狀態 */
+  function permalinkOf(place) {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set("place", place.id);
+      return url.toString();
+    } catch (error) {
+      return `${window.location.origin}${window.location.pathname}?place=${encodeURIComponent(place.id)}`;
+    }
+  }
+
+  function shareTextOf(place) {
+    const lines = [place.koreanName || place.name];
+    if (place.koreanName && place.name) lines.push(place.name);
+    if (place.address) lines.push(place.address);
+    if (place.naverMapUrl) lines.push(`NAVER: ${place.naverMapUrl}`);
+    return lines.filter(Boolean).join("\n");
+  }
+
+  async function sharePlace(place) {
+    const url = permalinkOf(place);
+    const text = shareTextOf(place);
+
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ title: `${place.koreanName || place.name} — Seoul Guide`, text, url });
+        return;
+      } catch (error) {
+        // 使用者按取消屬於正常操作，不提示也不 fallback
+        if (error && (error.name === "AbortError" || error.name === "NotAllowedError")) return;
+      }
+    }
+
+    const ok = await copyText(`${text}\n${url}`);
+    showToast(ok ? "分享連結已複製 ✓" : "無法複製，請手動選取網址", ok ? "ok" : "error");
+  }
+
+  // ------------------------------------------------------- place 定位
+
+  /** 使用者主動換條件時才離開單一店家情境 */
+  function leavePlaceContext() {
+    state.place = "";
+    pendingPlaceFocus = false;
+    clearHighlight();
+  }
+
+  function clearHighlight() {
+    window.clearTimeout(highlightTimer);
+    placesContainer.querySelectorAll(".place-card.is-linked").forEach((card) => {
+      card.classList.remove("is-linked");
+      const tag = card.querySelector(".linked-tag");
+      if (tag) tag.remove();
+    });
+  }
+
+  /** 網址帶 ?place=id 時捲到該卡並短暫標記；找不到就安靜略過 */
+  function focusLinkedPlace() {
+    if (!pendingPlaceFocus || !state.place) return;
+    pendingPlaceFocus = false;
+
+    const card = placesContainer.querySelector(`.place-card[data-place-id="${CSS.escape(state.place)}"]`);
+    if (!card) return;
+
+    clearHighlight();
+    card.classList.add("is-linked");
+    card.append(createElement("span", "linked-tag", "分享的店家"));
+    card.setAttribute("tabindex", "-1");
+    card.focus({ preventScroll: true });
+
+    // 載入當下直接 scrollIntoView 會被瀏覽器的捲動還原蓋掉，
+    // 改成下一影格自己算位置，並在延後載入的圖片撐開版面後再校正一次
+    const scrollToCard = () => {
+      const rect = card.getBoundingClientRect();
+      const offset = Math.max(24, (window.innerHeight - rect.height) / 2);
+      window.scrollTo({ top: Math.max(0, rect.top + window.scrollY - offset), behavior: "smooth" });
+    };
+
+    window.requestAnimationFrame(scrollToCard);
+    window.setTimeout(scrollToCard, 700);
+
+    highlightTimer = window.setTimeout(clearHighlight, 6000);
+  }
+
+  function createToolButton(label, accessibleLabel, handler) {
+    const button = createElement("button", "card-tool", label);
+    button.type = "button";
+    button.setAttribute("aria-label", accessibleLabel);
+    button.addEventListener("click", () => {
+      // handler 可能是 async，錯誤一律轉成提示，不讓它冒泡成未捕捉例外
+      Promise.resolve()
+        .then(handler)
+        .catch(() => showToast("操作失敗，請再試一次", "error"));
+    });
+    return button;
+  }
+
   function createPlaceCard(place, index) {
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
@@ -417,13 +573,15 @@
       article.append(stampRow);
     }
 
+    const actions = createElement("div", "card-actions");
+
     if (place.naverMapUrl) {
       const link = createElement("a", "map-link", "NAVER Map");
       link.href = place.naverMapUrl;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `在新分頁開啟 ${place.name} 的 NAVER Map`);
-      article.append(link);
+      actions.append(link);
     } else if (place.koreanName || place.name) {
       // 沒有確切的 NAVER 連結時只給關鍵字搜尋，不臆造 place id
       const query = [place.koreanName || place.name, place.address].filter(Boolean).join(" ");
@@ -432,8 +590,37 @@
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `在新分頁以關鍵字搜尋 ${place.name}`);
-      article.append(link);
+      actions.append(link);
     }
+
+    // 次要動作：只用文字，不做成第二排主按鈕
+    const tools = createElement("div", "card-tools");
+
+    const nameValue = place.koreanName || place.name;
+    if (nameValue) {
+      tools.append(
+        createToolButton("이름 복사", `複製店名 ${nameValue}`, async () => {
+          const ok = await copyText(nameValue);
+          showToast(ok ? "店名已複製 ✓" : "複製失敗，請長按選取店名", ok ? "ok" : "error");
+        })
+      );
+    }
+
+    if (place.address) {
+      tools.append(
+        createToolButton("주소 복사", `複製 ${place.name} 的地址`, async () => {
+          const ok = await copyText(place.address);
+          showToast(ok ? "地址已複製 ✓" : "複製失敗，請長按選取地址", ok ? "ok" : "error");
+        })
+      );
+    }
+
+    tools.append(
+      createToolButton("공유", `分享 ${place.name}`, () => sharePlace(place))
+    );
+
+    actions.append(tools);
+    article.append(actions);
 
     return article;
   }
@@ -639,6 +826,7 @@
       state.category = "";
       state.facets.clear();
       state.brands.clear();
+      leavePlaceContext();
       render();
     });
     categoryFilters.append(allChip);
@@ -650,6 +838,7 @@
         state.category = isActive ? "" : category;
         state.facets.clear();
         state.brands.clear();
+        leavePlaceContext();
         render();
       });
       categoryFilters.append(chip);
@@ -679,6 +868,7 @@
         } else {
           collection.add(value);
         }
+        leavePlaceContext();
         render();
       });
       subFilters.append(chip);
@@ -886,6 +1076,7 @@
     syncControls();
     writeUrlState();
     hydrateStickers();
+    focusLinkedPlace();
   }
 
   function resetFilters() {
@@ -897,23 +1088,27 @@
     state.cities.clear();
     state.area = "";
     state.sort = "area";
+    leavePlaceContext();
     render();
     searchInput.focus();
   }
 
   searchInput.addEventListener("input", (event) => {
     state.query = event.target.value.trimStart();
+    leavePlaceContext();
     render();
   });
 
   clearSearchButton.addEventListener("click", () => {
     state.query = "";
+    leavePlaceContext();
     render();
     searchInput.focus();
   });
 
   sortSelect.addEventListener("change", (event) => {
     state.sort = event.target.value;
+    leavePlaceContext();
     render();
   });
 
@@ -926,6 +1121,15 @@
     readUrlState();
     render();
   });
+
+  // 自行控制捲動位置，避免瀏覽器還原的捲動蓋掉 ?place= 的定位
+  if ("scrollRestoration" in window.history) {
+    try {
+      window.history.scrollRestoration = "manual";
+    } catch (error) {
+      // 某些瀏覽器唯讀，忽略即可
+    }
+  }
 
   renderAreaMap();
   readUrlState();
