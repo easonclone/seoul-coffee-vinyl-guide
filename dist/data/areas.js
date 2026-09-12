@@ -76,7 +76,7 @@
 
   /**
    * 選填的手繪路線圖層。空陣列就完全不畫。
-   * 這裡只放資料，實際的 SVG 由 app.js 依 AREAS 的座標產生，兩者分離；
+   * 這裡只放資料，實際的 SVG 由 js/map.js 依 AREAS 的座標產生，兩者分離；
    * 不串接任何 routing API，線條是 areaSlug 之間的示意連線。
    *
    * stops 為 areaSlug 陣列，至少兩個；tone 可選 "accent"（預設）或 "ink"。

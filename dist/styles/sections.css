@@ -1,0 +1,211 @@
+.place-group {
+  display: grid;
+  grid-template-columns: minmax(185px, 0.28fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 4vw, 4rem);
+  padding: 2.5rem 0 2.6rem;
+  border-bottom: 0;
+  scroll-margin-top: 1rem;
+}
+
+.group-header {
+  align-self: start;
+  padding-left: 1.1rem;
+  border-left: 1px solid var(--line-strong);
+}
+
+/* 手帳分頁標籤：顏色依章節循環 */
+.group-header {
+  --tab-ink: var(--butter);
+}
+
+.group-header[data-tab="1"] { --tab-ink: var(--blush); }
+.group-header[data-tab="2"] { --tab-ink: var(--mint); }
+.group-header[data-tab="3"] { --tab-ink: var(--sky); }
+.group-header[data-tab="4"] { --tab-ink: var(--lilac); }
+.group-header[data-tab="5"] { --tab-ink: #f9d9b0; }
+.group-header[data-tab="6"] { --tab-ink: #d6ead2; }
+
+.group-index {
+  display: inline-block;
+  margin: 0 0 0.9rem -1.1rem;
+  padding: 0.3rem 1rem 0.35rem 1.1rem;
+  background: var(--tab-ink);
+  border: 1px solid rgba(35, 42, 53, 0.16);
+  border-left: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+/* 章節旁的小塗鴉，一章只有一個 */
+.group-header h2 {
+  position: relative;
+}
+
+.group-header h2::after {
+  display: inline-block;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-left: 0.5rem;
+  background: var(--chapter-doodle, var(--doodle-star)) center / contain no-repeat;
+  content: "";
+  opacity: 0.85;
+  transform: translateY(0.05em) rotate(-8deg);
+  vertical-align: baseline;
+}
+
+.group-header[data-doodle="0"] { --chapter-doodle: var(--doodle-star); }
+.group-header[data-doodle="1"] { --chapter-doodle: var(--doodle-heart); }
+.group-header[data-doodle="2"] { --chapter-doodle: var(--doodle-cup); }
+.group-header[data-doodle="3"] { --chapter-doodle: var(--doodle-sparkle); }
+.group-header[data-doodle="4"] { --chapter-doodle: var(--doodle-flower); }
+.group-header[data-doodle="5"] { --chapter-doodle: var(--doodle-disc); }
+.group-header[data-doodle="6"] { --chapter-doodle: var(--doodle-cat); }
+
+/* 由分類推導出來的一行小標 */
+.group-tagline {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.12rem 0.5rem;
+  background: var(--tab-ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+
+.group-header h2 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.5vw, 2.3rem);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.group-header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* 章節副標：唯一出現在章節層級的手寫元素 */
+.group-note {
+  max-width: 22ch;
+  margin-top: 0.85rem;
+  color: var(--ink-blue);
+  font-family: var(--font-hand);
+  font-size: 1.08rem;
+  line-height: 1.45;
+}
+
+/* --- 背景散落的貼紙：躲在卡片後面，只從頁緣露出來 --- */
+.places {
+  position: relative;
+}
+
+.scatter-layer {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .scatter-layer {
+    position: absolute;
+    z-index: 0;
+    display: block;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .scatter-sticker {
+    position: absolute;
+    top: var(--scatter-y, 50%);
+    height: auto;
+    filter: drop-shadow(0 3px 7px rgba(35, 42, 53, 0.13));
+    opacity: 0.92;
+    transform: rotate(var(--sticker-tilt, 0deg));
+    user-select: none;
+  }
+
+  .scatter-sticker.is-right {
+    right: var(--scatter-x, -1rem);
+  }
+}
+
+/* 卡片與章節文字一律蓋在散落貼紙之上 */
+.place-group,
+.name-grid {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scatter-sticker {
+    transform: none;
+  }
+}
+
+/* --- 邊欄貼紙：純裝飾，沒有 STICKERS 資料就不存在 --- */
+.page-sticker {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .page-sticker {
+    display: block;
+    max-width: 82%;
+    height: auto;
+    margin: var(--sticker-drop, 1.6rem) 0 0 var(--sticker-indent, 0);
+    filter: drop-shadow(0 3px 6px rgba(35, 42, 53, 0.14));
+    pointer-events: none;
+    transform: rotate(var(--sticker-tilt, 0deg));
+    user-select: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-sticker {
+    transform: none;
+  }
+}
+
+.group-folio {
+  display: flex;
+  align-items: center;
+  margin: 2.4rem 0 0;
+  gap: 0.9rem;
+  grid-column: 1 / -1;
+  color: var(--muted);
+}
+
+.group-folio::before,
+.group-folio::after {
+  height: 1px;
+  flex: 1;
+  background: var(--line);
+  content: "";
+}
+
+.group-folio span {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.16em;
+}
+
+.card-grid,
+.name-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.name-grid {
+  padding: 2.5rem 0 3.5rem;
+  border-bottom: 1px solid var(--ink);
+}
+

@@ -1,0 +1,224 @@
+.toolbar {
+  padding: 1.75rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.search-wrap {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.4rem;
+}
+
+.search-wrap label,
+.sort-control label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+input[type="search"] {
+  width: 100%;
+  min-width: 0;
+  padding: 0.55rem 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: 0;
+  color: var(--ink);
+  font-size: 1.1rem;
+}
+
+input[type="search"]::placeholder {
+  color: #8c867d;
+  opacity: 1;
+}
+
+.clear-search {
+  padding: 0.35rem 0;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-chip {
+  min-height: 2.6rem;
+  padding: 0.45rem 0.95rem;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.filter-chip:hover {
+  border-color: var(--ink);
+}
+
+.filter-chip {
+  border-radius: 999px;
+}
+
+.filter-chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex: 0 0 auto;
+}
+
+.sort-control select {
+  min-height: 2.6rem;
+  padding: 0.35rem 2.2rem 0.35rem 0.75rem;
+  background-color: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 0;
+  color: var(--ink);
+}
+
+.filters-sub {
+  padding-top: 1rem;
+}
+
+.filters-sub .filter-chip {
+  min-height: 2.3rem;
+  padding: 0.3rem 0.8rem;
+  border-color: var(--line);
+  font-size: 0.82rem;
+}
+
+.filters-sub .filter-chip:hover {
+  border-color: var(--line-strong);
+}
+
+.filters-sub .filter-chip.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+.filters-sub .filter-chip.is-brand {
+  font-style: italic;
+}
+
+.group-roman {
+  margin: 0 0 0.5rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.place-group > .area-block {
+  grid-column: 2;
+}
+
+.place-group > .area-block + .area-block {
+  margin-top: 2rem;
+}
+
+.area-heading {
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  scroll-margin-top: 1rem;
+}
+
+.map-link.is-search {
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+}
+
+.map-link.is-search:hover {
+  border-color: var(--ink);
+}
+
+/* 手繪底線只用在區域小標，且只畫在文字底下 */
+.area-heading::after {
+  display: inline-block;
+  width: 0.85rem;
+  height: 0.85rem;
+  margin-left: 0.45rem;
+  background: var(--doodle-sparkle) center / contain no-repeat;
+  content: "";
+  opacity: 0.6;
+  vertical-align: baseline;
+}
+
+.area-heading {
+  display: inline-block;
+  padding-bottom: 0.6rem;
+  padding-right: 0.4rem;
+  background: var(--hand-rule) bottom left / 100% 7px no-repeat;
+  border-bottom: 0;
+}
+
+#result-count {
+  padding: 0.35rem 0.9rem;
+  background: var(--hand-ring) center / 100% 100% no-repeat;
+}
+
+.area-map-note {
+  position: relative;
+  padding-right: 2.6rem;
+}
+
+.area-map-note::after {
+  position: absolute;
+  right: 0;
+  bottom: -0.55rem;
+  width: 2rem;
+  height: 1.55rem;
+  background: var(--hand-arrow) center / contain no-repeat;
+  content: "";
+}
+
+.results-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.results-summary p {
+  margin: 0;
+}
+
+.active-area {
+  color: var(--accent);
+}
+

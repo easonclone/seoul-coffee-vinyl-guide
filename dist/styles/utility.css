@@ -1,0 +1,47 @@
+.empty-state {
+  padding: clamp(4rem, 10vw, 8rem) 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--ink);
+}
+
+.empty-state h2 {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 400;
+}
+
+.empty-state > p:not(.empty-kicker) {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+}
+
+.empty-state button {
+  min-height: 3rem;
+  padding: 0.6rem 1.1rem;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: white;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 2rem 0 3rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+footer p {
+  margin: 0;
+}
+
+noscript {
+  display: block;
+  padding: 1rem;
+  background: var(--accent);
+  color: white;
+  text-align: center;
+}
+

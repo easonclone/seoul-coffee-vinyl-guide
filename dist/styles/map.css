@@ -1,0 +1,384 @@
+.area-map {
+  position: relative;
+  margin-top: 2.25rem;
+  background-color: var(--surface);
+  background-image: var(--grain-soft);
+  background-size: 150px 150px;
+  border: 1px solid var(--line-strong);
+}
+
+/* 像被膠帶貼進本子的一頁 */
+.area-map::before {
+  position: absolute;
+  z-index: 3;
+  top: -0.6rem;
+  left: 1.8rem;
+  width: 4.6rem;
+  height: 1.1rem;
+  background: rgba(251, 233, 160, 0.72);
+  border-left: 1px solid rgba(35, 42, 53, 0.1);
+  border-right: 1px solid rgba(35, 42, 53, 0.1);
+  content: "";
+  transform: rotate(-3deg);
+}
+
+.area-map::after {
+  position: absolute;
+  z-index: 3;
+  top: -0.55rem;
+  right: 2.4rem;
+  width: 4.2rem;
+  height: 1.05rem;
+  background: rgba(198, 231, 210, 0.75);
+  border-left: 1px solid rgba(35, 42, 53, 0.1);
+  border-right: 1px solid rgba(35, 42, 53, 0.1);
+  content: "";
+  transform: rotate(2.5deg);
+}
+
+.area-map-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 1.25rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.area-map-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.area-map-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.area-map-note {
+  margin: 0 0 0 auto;
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+
+.area-map-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 20rem);
+}
+
+.area-map-figure {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 1118 / 676;
+  overflow: hidden;
+  background-color: var(--map-land);
+  border-right: 1px solid var(--line);
+}
+
+.area-map-figure::after {
+  position: absolute;
+  z-index: 1;
+  background-image: var(--grain);
+  background-size: 150px 150px;
+  content: "";
+  inset: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+.area-map-shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-land {
+  fill: var(--map-land);
+}
+
+.map-grid-fill {
+  color: var(--pencil);
+  opacity: 0.45;
+}
+
+#map-grid path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+#map-hill line {
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.map-hills ellipse {
+  fill: var(--hill);
+  stroke: var(--hill-line);
+  stroke-width: 1;
+}
+
+/* 等高線式的鉛筆排線 */
+.map-hatch {
+  color: var(--hill-line);
+  opacity: 0.32;
+}
+
+.map-water-bank {
+  fill: none;
+  stroke: var(--water-line);
+  stroke-width: 42;
+  stroke-linecap: round;
+}
+
+.map-water {
+  fill: none;
+  stroke: var(--water);
+  stroke-width: 34;
+  stroke-linecap: round;
+}
+
+.map-water-line {
+  fill: none;
+  opacity: 0.5;
+  stroke: var(--ink-blue);
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+  stroke-width: 1.2;
+}
+
+.map-island {
+  fill: var(--map-land);
+  stroke: var(--water-line);
+  stroke-width: 1;
+}
+
+.map-label text {
+  fill: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.map-label text:first-child {
+  fill: #7d949a;
+}
+
+.map-compass circle {
+  fill: none;
+  stroke: var(--ink-blue);
+  stroke-dasharray: 3 2.5;
+  stroke-width: 1;
+}
+
+.map-compass-needle {
+  fill: var(--accent);
+}
+
+.map-compass text {
+  fill: var(--ink-blue);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.map-scale path {
+  fill: none;
+  stroke: var(--ink-blue);
+  stroke-linecap: round;
+  stroke-width: 1.5;
+}
+
+.map-scale text {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.map-node {
+  position: absolute;
+  z-index: 2;
+  color: var(--ink);
+  text-decoration: none;
+  transform: translate(-50%, -50%);
+}
+
+.map-node i {
+  display: grid;
+  width: clamp(1.5rem, 2.5vw, 1.9rem);
+  height: clamp(1.5rem, 2.5vw, 1.9rem);
+  place-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(35, 33, 30, 0.12);
+  color: var(--muted);
+  font-size: clamp(0.6rem, 1vw, 0.72rem);
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: background-color 160ms ease, color 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+
+.map-node b {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: calc(100% + 0.55rem);
+  padding: 0.35rem 0.55rem;
+  background: var(--ink);
+  color: var(--surface);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.15;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 140ms ease;
+  white-space: nowrap;
+}
+
+.map-node.is-left b {
+  right: calc(100% + 0.55rem);
+  left: auto;
+}
+
+.map-node small {
+  display: block;
+  color: var(--line);
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.map-node.is-hot::after,
+.map-node:hover::after {
+  position: absolute;
+  z-index: -1;
+  width: 2.9rem;
+  height: 2.9rem;
+  background: var(--hand-ring) center / 100% 100% no-repeat;
+  content: "";
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+}
+
+.map-node:hover i,
+.map-node:focus-visible i,
+.map-node.is-hot i {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.18);
+}
+
+.map-node:hover b,
+.map-node:focus-visible b,
+.map-node.is-hot b {
+  opacity: 1;
+}
+
+.area-map-aside {
+  /* 高度為 0，讓 grid 的列高永遠由地圖的 aspect-ratio 決定，
+     右欄再撐滿該高度，地圖下方就不會留下空白 */
+  position: relative;
+}
+
+.area-index {
+  position: absolute;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
+  inset: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.area-index li + li {
+  border-top: 1px solid var(--line);
+}
+
+.area-index li {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.area-index a {
+  display: grid;
+  width: 100%;
+  align-content: center;
+  padding: 0.35rem 0.95rem;
+  gap: 0 0.7rem;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  text-decoration: none;
+  transition: background-color 140ms ease;
+}
+
+/* 每列固定單行，索引整體才能塞進地圖高度而不需內部捲動 */
+.area-index b,
+.area-index small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.area-index a:hover,
+.area-index a:focus-visible {
+  background: var(--paper);
+}
+
+.area-index i {
+  grid-area: 1 / 1 / span 2 / auto;
+  align-self: center;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.area-index b {
+  grid-area: 1 / 2;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.area-index small {
+  grid-area: 2 / 2;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.area-index em {
+  grid-area: 1 / 3 / span 2 / auto;
+  align-self: center;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.area-index a:hover i,
+.area-index a:focus-visible i {
+  color: var(--accent);
+}
+

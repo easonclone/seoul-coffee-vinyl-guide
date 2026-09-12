@@ -1,0 +1,98 @@
+import fs from "node:fs";
+import path from "node:path";
+import vm from "node:vm";
+import { fileURLToPath } from "node:url";
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const distRoot = path.join(projectRoot, "dist");
+const html = fs.readFileSync(path.join(distRoot, "index.html"), "utf8");
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+const localReferences = [...html.matchAll(/(?:src|href)="([^"]+)"/g)]
+  .map((match) => match[1])
+  .filter((reference) => !/^(?:https?:|data:|#)/.test(reference));
+
+localReferences.forEach((reference) => {
+  assert(fs.existsSync(path.join(distRoot, reference)), `找不到本機資源：${reference}`);
+});
+
+const expectedScripts = [
+  "data/areas.js",
+  "data/stickers.js",
+  "data/places.js",
+  "js/core.js",
+  "js/cards.js",
+  "js/controls.js",
+  "js/map.js",
+  "app.js"
+];
+const actualScripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((match) => match[1]);
+assert(
+  JSON.stringify(actualScripts) === JSON.stringify(expectedScripts),
+  "JavaScript 載入順序與模組依賴不一致"
+);
+
+class FakeElement {
+  constructor() {
+    this.classList = {
+      add() {},
+      remove() {},
+      toggle() {}
+    };
+    this.dataset = {};
+    this.style = { setProperty() {} };
+    this.hidden = false;
+    this.value = "";
+  }
+
+  addEventListener() {}
+  append() {}
+  focus() {}
+  querySelector() { return null; }
+  querySelectorAll() { return []; }
+  remove() {}
+  replaceChildren() {}
+  setAttribute() {}
+}
+
+const body = new FakeElement();
+const windowObject = {
+  addEventListener() {},
+  clearTimeout() {},
+  history: { replaceState() {}, scrollRestoration: "auto" },
+  location: {
+    href: "http://localhost/",
+    origin: "http://localhost",
+    pathname: "/",
+    search: ""
+  },
+  setTimeout() { return 1; }
+};
+const documentObject = {
+  body,
+  createElement() { return new FakeElement(); },
+  createElementNS() { return new FakeElement(); },
+  querySelector() { return new FakeElement(); },
+  querySelectorAll() { return []; }
+};
+
+const context = vm.createContext({
+  CSS: { escape: (value) => String(value) },
+  URL,
+  URLSearchParams,
+  console,
+  document: documentObject,
+  navigator: {},
+  window: windowObject
+});
+
+expectedScripts.forEach((relativePath) => {
+  const source = fs.readFileSync(path.join(distRoot, relativePath), "utf8");
+  new vm.Script(source, { filename: relativePath }).runInContext(context);
+});
+
+assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");
+console.log(`前端檢查通過：${localReferences.length} 個資源、${expectedScripts.length} 個腳本`);

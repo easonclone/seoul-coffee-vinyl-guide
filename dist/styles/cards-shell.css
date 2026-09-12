@@ -1,0 +1,229 @@
+.place-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 22rem;
+  flex-direction: column;
+  padding: 1.6rem 1.35rem 1.35rem;
+  background-color: var(--note);
+  background-image: var(--grain-soft);
+  background-size: 150px 150px;
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 1px rgba(35, 33, 30, 0.04), 0 5px 12px -9px rgba(35, 33, 30, 0.25);
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+/* 一片片貼上去的紙：極小角度與上緣落差，不做整頁亂轉 */
+.place-card[data-paper="1"] {
+  margin-top: 0.55rem;
+  transform: rotate(-0.45deg);
+}
+
+.place-card[data-paper="3"] {
+  transform: rotate(0.4deg);
+}
+
+.place-card[data-paper="4"] {
+  margin-top: 0.35rem;
+  transform: rotate(-0.25deg);
+}
+
+.place-card[data-paper="5"] {
+  margin-top: 0.7rem;
+  transform: rotate(0.3deg);
+}
+
+.place-card:hover,
+.place-card:focus-within {
+  box-shadow: 0 2px 2px rgba(35, 33, 30, 0.05), 0 12px 22px -14px rgba(35, 33, 30, 0.3);
+  transform: rotate(0deg) translateY(-2px);
+}
+
+/* --- 六種紙片：memo / 便條本 / 方格 / 索引卡 / 收據 / 貼紙底 --- */
+
+/* 1 便條本：撕下來的上緣 + 橫線 */
+.place-card[data-paper="1"] {
+  background-image:
+    var(--torn-top),
+    repeating-linear-gradient(to bottom, transparent 0 1.65rem, rgba(53, 82, 110, 0.08) 1.65rem calc(1.65rem + 1px)),
+    var(--grain-soft);
+  background-position: top center, top 2.4rem left 0, 0 0;
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: 100% 10px, 100% 100%, 150px 150px;
+  border-top: 0;
+}
+
+/* 2 方格紙 */
+.place-card[data-paper="2"] {
+  background-image:
+    repeating-linear-gradient(to bottom, transparent 0 1rem, rgba(120, 160, 190, 0.13) 1rem calc(1rem + 1px)),
+    repeating-linear-gradient(to right, transparent 0 1rem, rgba(120, 160, 190, 0.13) 1rem calc(1rem + 1px)),
+    var(--grain-soft);
+  background-size: 100% 100%, 100% 100%, 150px 150px;
+}
+
+/* 3 索引卡：左側紅色邊界線 */
+.place-card[data-paper="3"] {
+  padding-left: 2.5rem;
+  background-image:
+    linear-gradient(to right, transparent 0 1.85rem, rgba(222, 77, 56, 0.3) 1.85rem calc(1.85rem + 1px), transparent 0),
+    repeating-linear-gradient(to bottom, transparent 0 1.65rem, rgba(53, 82, 110, 0.07) 1.65rem calc(1.65rem + 1px)),
+    var(--grain-soft);
+  background-position: 0 0, top 2.4rem left 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px;
+}
+
+/* 4 收據：上下鋸齒撕邊 + 一條虛線折痕 */
+.place-card[data-paper="4"] {
+  background-color: #fff;
+  background-image:
+    repeating-linear-gradient(to right, rgba(109, 114, 128, 0.28) 0 5px, transparent 5px 11px),
+    var(--grain-soft);
+  background-position: 0 3.1rem, 0 0;
+  background-repeat: repeat-x, repeat;
+  background-size: 100% 1px, 150px 150px;
+  border: 0;
+  /* 上下的撕票鋸齒，必須用 mask 簡寫才吃得到 position/size */
+  mask:
+    conic-gradient(from -45deg at 50% 0, #0000 25%, #000 0) 50% 0 / 15px 8px repeat-x,
+    conic-gradient(from 135deg at 50% 100%, #0000 25%, #000 0) 50% 100% / 15px 8px repeat-x,
+    linear-gradient(#000 0 0) 50% 50% / 100% calc(100% - 16px) no-repeat;
+  -webkit-mask:
+    conic-gradient(from -45deg at 50% 0, #0000 25%, #000 0) 50% 0 / 15px 8px repeat-x,
+    conic-gradient(from 135deg at 50% 100%, #0000 25%, #000 0) 50% 100% / 15px 8px repeat-x,
+    linear-gradient(#000 0 0) 50% 50% / 100% calc(100% - 16px) no-repeat;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* 收據不貼紙膠帶，也不留摺角，否則會被鋸齒 mask 切掉 */
+.place-card[data-paper="4"]::before {
+  content: none;
+}
+
+.place-card[data-paper="4"]::after {
+  content: none;
+}
+
+.place-card[data-paper="4"] .card-index,
+.place-card[data-paper="4"] .card-sub {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  letter-spacing: 0.04em;
+}
+
+/* 5 貼紙底：後面墊一張彩色紙 */
+.place-card[data-paper="5"] {
+  box-shadow: 0.42rem 0.42rem 0 var(--card-backing, var(--butter)), 0 1px 1px rgba(35, 42, 53, 0.04);
+}
+
+.place-card[data-paper="5"]:hover,
+.place-card[data-paper="5"]:focus-within {
+  box-shadow: 0.32rem 0.32rem 0 var(--card-backing, var(--butter)), 0 12px 22px -14px rgba(35, 42, 53, 0.3);
+}
+
+/* 貼紙底的顏色依 category 走，維持資料驅動 */
+.place-card:has(.card-sticker[data-category="coffee"]) {
+  --card-backing: var(--butter);
+}
+
+.place-card:has(.card-sticker[data-category="vinyl"]) {
+  --card-backing: var(--blush);
+}
+
+.place-card:has(.card-sticker[data-category="restaurant"]) {
+  --card-backing: var(--mint);
+}
+
+.place-card:has(.card-sticker[data-category="fashion"]) {
+  --card-backing: var(--lilac);
+}
+
+.place-card:has(.card-sticker[data-category="attraction"]) {
+  --card-backing: var(--sky);
+}
+
+/* 相片角：只給方格紙那一種，當作被相角固定住 */
+.place-card[data-paper="2"] .card-topline::before,
+.place-card[data-paper="2"] .card-topline::after {
+  position: absolute;
+  top: -0.55rem;
+  width: 0;
+  height: 0;
+  border: 0.62rem solid transparent;
+  content: "";
+}
+
+.place-card[data-paper="2"] .card-topline::before {
+  left: -0.62rem;
+  border-left-color: rgba(53, 82, 110, 0.22);
+  border-top-color: rgba(53, 82, 110, 0.22);
+}
+
+.place-card[data-paper="2"] .card-topline::after {
+  right: -0.62rem;
+  border-right-color: rgba(53, 82, 110, 0.22);
+  border-top-color: rgba(53, 82, 110, 0.22);
+}
+
+/* --- 三種紙膠帶 --- */
+.place-card::before {
+  position: absolute;
+  background: rgba(146, 61, 54, 0.08);
+  border-left: 1px solid rgba(146, 61, 54, 0.13);
+  border-right: 1px solid rgba(146, 61, 54, 0.13);
+  content: "";
+}
+
+.place-card[data-tape="0"]::before {
+  top: -0.4rem;
+  left: 1.6rem;
+  width: 3.4rem;
+  height: 0.85rem;
+  transform: rotate(-2.5deg);
+}
+
+.place-card[data-tape="1"]::before {
+  top: 0.55rem;
+  right: -0.5rem;
+  width: 4.3rem;
+  height: 0.8rem;
+  background: rgba(60, 85, 102, 0.1);
+  border-color: rgba(60, 85, 102, 0.18);
+  transform: rotate(41deg);
+}
+
+.place-card[data-tape="2"]::before {
+  top: -0.35rem;
+  left: 50%;
+  width: 2.6rem;
+  height: 0.75rem;
+  box-shadow: 3.4rem 0.15rem 0 rgba(146, 61, 54, 0.06);
+  transform: translateX(-80%) rotate(1.5deg);
+}
+
+/* 右下角摺角 */
+.place-card::after {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 1.35rem;
+  height: 1.35rem;
+  background: linear-gradient(315deg, var(--paper) 0 50%, var(--note-fold) 50% 52%, transparent 52%);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  content: "";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .place-card,
+  .place-card[data-paper="1"],
+  .place-card[data-paper="3"],
+  .place-card[data-paper="4"],
+  .place-card[data-paper="5"],
+  .place-card:hover,
+  .place-card:focus-within {
+    transform: none;
+    transition: none;
+  }
+}
+

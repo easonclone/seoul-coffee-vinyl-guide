@@ -11,8 +11,22 @@
 │       └── pages.yml      # GitHub Pages 自動部署流程
 ├── dist/                  # 可直接部署的網站根目錄
 │   ├── index.html         # 語意化頁面結構、CSP 與 SEO metadata
-│   ├── styles.css         # 響應式視覺樣式與字體設定
-│   ├── app.js             # 搜尋、篩選、排序、URL 狀態與畫面產生
+│   ├── app.js             # 啟動流程與事件綁定
+│   ├── js/
+│   │   ├── core.js        # 共用資料、狀態、搜尋與網址狀態
+│   │   ├── cards.js       # 店家卡片、複製與裝飾內容
+│   │   ├── controls.js    # 分類與次分類控制項
+│   │   └── map.js         # 地圖節點與旅遊路線
+│   ├── styles/
+│   │   ├── base.css       # 色票、字體、底紙與頁首
+│   │   ├── map.css        # 區域地圖與索引
+│   │   ├── controls.css   # 搜尋、篩選與結果摘要
+│   │   ├── sections.css   # 章節、區域與散落貼紙
+│   │   ├── cards-shell.css # 卡片紙張、膠帶與外框
+│   │   ├── cards-content.css # 卡片文字、標籤與照片
+│   │   ├── interactions.css # 路線、操作、提示與分享定位
+│   │   ├── utility.css    # 空狀態與頁尾
+│   │   └── responsive.css # 桌機、平板與手機版面
 │   ├── stickers/          # 裝飾貼紙圖檔（選用，預設不存在）
 │   └── data/
 │       ├── areas.js       # 區域定義：顯示名稱、cluster、座標、地圖投影範圍
@@ -20,6 +34,21 @@
 │       └── places.js      # 唯一的店家資料來源
 └── README.md
 ```
+
+## 前端模組與載入順序
+
+網站維持可直接部署的原生 HTML、CSS 與 JavaScript，不需要套件管理器或建置工具。JavaScript
+透過 `window.SeoulGuide` 共用必要狀態，並由 `index.html` 依下列順序載入：
+
+1. `data/*.js`：純資料
+2. `js/core.js`：共用狀態與工具
+3. `js/cards.js`、`js/controls.js`、`js/map.js`：各自的畫面功能
+4. `app.js`：組合功能、綁定事件並啟動網站
+
+這些檔案使用傳統 `defer` script，因此調整檔名或順序時，必須同步更新 `dist/index.html`。
+樣式檔也依 `base`、元件、互動、響應式覆寫的順序載入，請避免任意調換，以免改變 CSS cascade。
+
+修改前端後可執行 `node scripts/check-frontend.mjs`，檢查本機資源、腳本順序與啟動流程。
 
 ## 如何新增店家
 
@@ -120,7 +149,7 @@ photo: { src: "photos/receipt.jpg", caption: "收據 · 2025-04-13", style: "tic
 
 - `window.CLUSTERS`：以實際旅遊動線（可步行／同一趟行程）分群，陣列順序即列表與地圖編號順序。
   選填的 `note` 會成為章節標題下的一句手寫副標，請用自己的話寫，空著就不 render
-- `window.ROUTES`：選填的手繪路線圖層，空陣列就完全不畫。只放資料，SVG 由 `app.js`
+- `window.ROUTES`：選填的手繪路線圖層，空陣列就完全不畫。只放資料，SVG 由 `js/map.js`
   依 `AREAS` 的座標產生，兩者分離，且不串接任何 routing API
 
 ```js

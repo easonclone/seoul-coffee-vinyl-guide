@@ -1,0 +1,378 @@
+.card-topline {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.9rem;
+}
+
+.card-index {
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.card-kind {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* 語意標籤：顏色只用來分辨類別，維持低彩度 */
+.card-sticker {
+  display: inline-block;
+  padding: 0.18rem 0.45rem;
+  background: var(--sticker-bg, var(--butter));
+  border-radius: 999px;
+  color: var(--sticker-fg, #7a5a12);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.card-sticker[data-category="coffee"] {
+  --sticker-bg: var(--butter);
+  --sticker-fg: #7a5a12;
+}
+
+.card-sticker[data-category="vinyl"] {
+  --sticker-bg: var(--blush);
+  --sticker-fg: #a53a2c;
+}
+
+.card-sticker[data-category="restaurant"] {
+  --sticker-bg: var(--mint);
+  --sticker-fg: #2f6b4b;
+}
+
+.card-sticker[data-category="fashion"] {
+  --sticker-bg: var(--lilac);
+  --sticker-fg: #4b3f80;
+}
+
+.card-sticker[data-category="attraction"] {
+  --sticker-bg: var(--sky);
+  --sticker-fg: #245a7c;
+}
+
+.card-sub {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.place-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  font-weight: 400;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.korean-name {
+  margin: 0.55rem 0 1.4rem;
+  color: var(--accent);
+  font-family: var(--font-korean);
+  font-size: 1rem;
+}
+
+.place-details {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0 0 1.5rem;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.detail-row dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-row dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* MY NOTE：唯一使用手寫視覺語言的區塊，與上方的 FACTS 明確分開 */
+.card-note {
+  --note-mark: var(--mark-yellow);
+  --note-rule: var(--rule-yellow);
+  margin: 0 0 1.3rem;
+}
+
+.card-note[data-note-color="green"] {
+  --note-mark: var(--mark-green);
+  --note-rule: var(--rule-green);
+}
+
+.card-note[data-note-color="pink"] {
+  --note-mark: var(--mark-pink);
+  --note-rule: var(--rule-pink);
+}
+
+.card-note[data-note-color="blue"] {
+  --note-mark: var(--mark-blue);
+  --note-rule: var(--rule-blue);
+}
+
+/* 小手寫標題 + 一支細箭頭，不做成 badge */
+.card-note-label {
+  display: flex;
+  align-items: center;
+  margin: 0 0 0.15rem;
+  gap: 0.4rem;
+  color: var(--ink-blue);
+  font-family: var(--font-hand);
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.card-note-label::before {
+  width: 0.85rem;
+  height: 0.55rem;
+  background: currentColor;
+  content: "";
+  mask: var(--note-arrow) center / contain no-repeat;
+  -webkit-mask: var(--note-arrow) center / contain no-repeat;
+}
+
+.card-note-body {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: 1.12rem;
+  line-height: 1.72;
+}
+
+/* 螢光筆：半透明、邊緣不規則，紙張質感會透出來 */
+.note-mark {
+  padding: 0.1em 0.2em;
+  background-image: var(--note-mark);
+  background-position: 0 0.1em;
+  background-repeat: no-repeat;
+  background-size: 100% 1.22em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* 長句改成底線式筆觸，保持可讀 */
+.card-note[data-note-style="underline"] .note-mark {
+  background-image: var(--note-rule);
+  background-position: 0 0.92em;
+  background-size: 100% 0.46em;
+}
+
+/* 次要的客觀補充：不上色、不手寫 */
+.card-note-extra {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* 旅行記錄：一行小字，沒有資料就不會出現 */
+.card-travel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.2rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.card-travel-sep {
+  opacity: 0.5;
+}
+
+.card-stamps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin: 0 0 1.3rem;
+}
+
+/* 橡皮章：雙線外框、輕微傾斜、褪色墨水 */
+.stamp {
+  display: inline-block;
+  padding: 0.3rem 0.55rem;
+  background:
+    radial-gradient(circle 3px at 50% 0, transparent 96%, currentColor 100%) top center / 9px 6px repeat-x,
+    radial-gradient(circle 3px at 50% 100%, transparent 96%, currentColor 100%) bottom center / 9px 6px repeat-x;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  opacity: 0.7;
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  text-transform: uppercase;
+}
+
+.stamp.is-accent {
+  color: var(--accent);
+  transform: rotate(-3deg);
+}
+
+.stamp.is-ink {
+  color: var(--ink-blue);
+  transform: rotate(1.5deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp {
+    transform: none;
+  }
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  margin: auto 0 1.4rem;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+  list-style: none;
+}
+
+.tags li::before {
+  color: var(--accent);
+  content: "#";
+}
+
+.map-link {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--ink);
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+}
+
+.map-link::after {
+  content: "↗";
+  font-size: 1.1rem;
+}
+
+.map-link:hover {
+  background: var(--accent-dark);
+}
+
+/* --- 照片插頁：只有帶 photo 欄位的 place 才會出現 --- */
+/* 刻意不做滿版，照片是夾進筆記本的插頁，不是主視覺 */
+.card-photo {
+  margin: 0 0 1.3rem;
+  max-width: 13rem;
+}
+
+.card-photo.is-contact {
+  max-width: 17rem;
+}
+
+.card-photo.is-ticket {
+  max-width: 15rem;
+}
+
+.card-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--line);
+}
+
+.card-photo figcaption {
+  margin-top: 0.5rem;
+  color: var(--ink-blue);
+  font-family: var(--font-hand);
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+/* 拍立得 */
+.card-photo.is-polaroid {
+  padding: 0.55rem 0.55rem 0.9rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 1px rgba(35, 33, 30, 0.05), 0 6px 14px -10px rgba(35, 33, 30, 0.3);
+}
+
+.card-photo.is-polaroid img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.card-photo.is-polaroid figcaption {
+  margin-top: 0.7rem;
+  text-align: center;
+}
+
+/* 印樣條 */
+.contact-strip {
+  display: grid;
+  padding: 0.4rem;
+  gap: 0.3rem;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  background: var(--ink);
+}
+
+.contact-frame img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.card-photo.is-contact figcaption {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 票根 / 收據：邊緣做出撕票孔 */
+.card-photo.is-ticket .ticket-slip {
+  padding: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  mask-image: radial-gradient(circle 4px at 0 50%, transparent 98%, #000 100%),
+    radial-gradient(circle 4px at 100% 50%, transparent 98%, #000 100%);
+  mask-composite: intersect;
+  -webkit-mask-image: radial-gradient(circle 4px at 0 50%, transparent 98%, #000 100%),
+    radial-gradient(circle 4px at 100% 50%, transparent 98%, #000 100%);
+  -webkit-mask-composite: source-in;
+}
+
+.card-photo.is-ticket figcaption {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+}
+

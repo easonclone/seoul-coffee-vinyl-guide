@@ -1,0 +1,275 @@
+:root {
+  --paper: #f8f5f0;
+  --surface: #fffdfa;
+  --ink: #232a35;
+  --muted: #6d7280;
+  --line: #ded9d0;
+  --line-strong: #a8a196;
+  --accent: #de4d38;
+  --accent-dark: #bd3a27;
+  --map-land: #fbf8f3;
+  --water: #cfe7f4;
+  --water-line: #aed3e6;
+  --hill: #d9ecd9;
+  --hill-line: #a6c9a8;
+  --note: #fffefb;
+  --note-fold: #ebe6dc;
+  --font-display: "Fraunces", "Noto Serif TC", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Noto Sans KR", Arial, sans-serif;
+  --font-korean: "Noto Sans KR", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-hand: "Caveat", "LXGW WenKai TC", "Noto Serif TC", Georgia, cursive;
+  --ink-blue: #35526e;
+  --pencil: #b7c3cc;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)'/%3E%3C/svg%3E");
+  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23g)' opacity='0.045'/%3E%3C/svg%3E");
+  --hand-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 8' preserveAspectRatio='none'%3E%3Cpath d='M2 5.4C30 2.4 52 7 80 4.1S132 1.9 158 5.3 188 4.1 198 3.1' fill='none' stroke='%23de4d38' stroke-width='1.5' stroke-linecap='round' opacity='0.38'/%3E%3C/svg%3E");
+  --hand-ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 130 46' preserveAspectRatio='none'%3E%3Cpath d='M104 7C78-1 30 0 15 12 0 24 9 38 38 42c30 4 74 0 84-13 6-8-1-17-21-22' fill='none' stroke='%23de4d38' stroke-width='1.5' stroke-linecap='round' opacity='0.45'/%3E%3C/svg%3E");
+  --hand-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 34'%3E%3Cg fill='none' stroke='%236d7280' stroke-width='1.6' stroke-linecap='round' opacity='0.6'%3E%3Cpath d='M40 4C30 7 15 11 8 27'/%3E%3Cpath d='M6 30l9-5M6 30l4-9'/%3E%3C/g%3E%3C/svg%3E");
+  --note-arrow: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 22 14'><g fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M2 2v5c0 2 1 3 3 3h12'/><path d='M15 7l4 3-4 3'/></g></svg>");
+  --mark-yellow: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 34' preserveAspectRatio='none'><path d='M3 7c43-4 93 1 145-2 43-2 76 2 89 0l-1 23c-40 4-92-2-144 1-45 3-76-1-89 1z' fill='%23f3e05a' fill-opacity='.58'/><path d='M15 13c48-3 96 3 148 0 31-2 57 1 71 0l-1 10c-37 3-87-2-137 1-42 2-70-1-82 0z' fill='%23f3e05a' fill-opacity='.34'/></svg>");
+  --mark-green: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 34' preserveAspectRatio='none'><path d='M3 7c43-4 93 1 145-2 43-2 76 2 89 0l-1 23c-40 4-92-2-144 1-45 3-76-1-89 1z' fill='%23a9df7c' fill-opacity='.58'/><path d='M15 13c48-3 96 3 148 0 31-2 57 1 71 0l-1 10c-37 3-87-2-137 1-42 2-70-1-82 0z' fill='%23a9df7c' fill-opacity='.34'/></svg>");
+  --mark-pink: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 34' preserveAspectRatio='none'><path d='M3 7c43-4 93 1 145-2 43-2 76 2 89 0l-1 23c-40 4-92-2-144 1-45 3-76-1-89 1z' fill='%23f4a6c0' fill-opacity='.58'/><path d='M15 13c48-3 96 3 148 0 31-2 57 1 71 0l-1 10c-37 3-87-2-137 1-42 2-70-1-82 0z' fill='%23f4a6c0' fill-opacity='.34'/></svg>");
+  --mark-blue: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 34' preserveAspectRatio='none'><path d='M3 7c43-4 93 1 145-2 43-2 76 2 89 0l-1 23c-40 4-92-2-144 1-45 3-76-1-89 1z' fill='%2393d4ef' fill-opacity='.58'/><path d='M15 13c48-3 96 3 148 0 31-2 57 1 71 0l-1 10c-37 3-87-2-137 1-42 2-70-1-82 0z' fill='%2393d4ef' fill-opacity='.34'/></svg>");
+  --rule-yellow: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'><path d='M2 4c44-3 94 2 146-1 43-2 76 2 90 0l-1 8c-40 3-92-2-144 1-45 3-77-1-91 1z' fill='%23f3e05a' fill-opacity='.75'/></svg>");
+  --rule-green: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'><path d='M2 4c44-3 94 2 146-1 43-2 76 2 90 0l-1 8c-40 3-92-2-144 1-45 3-77-1-91 1z' fill='%23a9df7c' fill-opacity='.75'/></svg>");
+  --rule-pink: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'><path d='M2 4c44-3 94 2 146-1 43-2 76 2 90 0l-1 8c-40 3-92-2-144 1-45 3-77-1-91 1z' fill='%23f4a6c0' fill-opacity='.75'/></svg>");
+  --rule-blue: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 240 14' preserveAspectRatio='none'><path d='M2 4c44-3 94 2 146-1 43-2 76 2 90 0l-1 8c-40 3-92-2-144 1-45 3-77-1-91 1z' fill='%2393d4ef' fill-opacity='.75'/></svg>");
+  --torn-top: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 10' preserveAspectRatio='none'%3E%3Cpath d='M0 0h120v5.6c-8-1.8-12 2.4-20 .6s-14-3.4-22 .8-16-2.6-24 .4-14 2.6-22 .2L0 8z' fill='%23f8f5f0'/%3E%3C/svg%3E");
+  --blush: #f9dcd9;
+  --coral: #f4907c;
+  --butter: #fbe9a0;
+  --mint: #c6e7d2;
+  --sky: #c3e2f5;
+  --lilac: #ded7f2;
+  --navy: #2f4266;
+  --tab-colors: 7;
+  --grid-fine: 26px;
+  --grid-bold: 130px;
+  --doodle-heart: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 24 22'><path d='M12 20C6 15.5 2 12.4 2 8.2 2 5 4.4 3 7.2 3 9 3 10.8 4 12 5.6 13.2 4 15 3 16.8 3 19.6 3 22 5 22 8.2c0 4.2-4 7.3-10 11.8z' fill='none' stroke='%23de4d38' stroke-width='2' stroke-linejoin='round'/></svg>");
+  --doodle-star: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2.5l2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.4 6.3 19.9l1.5-6.4-5-4.3 6.6-.6z' fill='none' stroke='%23de4d38' stroke-width='2' stroke-linejoin='round'/></svg>");
+  --doodle-flower: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 24 24'><g fill='none' stroke='%23de4d38' stroke-width='2'><circle cx='12' cy='6' r='3.4'/><circle cx='12' cy='18' r='3.4'/><circle cx='6' cy='12' r='3.4'/><circle cx='18' cy='12' r='3.4'/></g></svg>");
+  --doodle-sparkle: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2c1 6 4 9 10 10-6 1-9 4-10 10-1-6-4-9-10-10 6-1 9-4 10-10z' fill='none' stroke='%23de4d38' stroke-width='2' stroke-linejoin='round'/></svg>");
+  --doodle-cat: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 26 24'><g fill='none' stroke='%23de4d38' stroke-width='2' stroke-linejoin='round'><path d='M5 10L3.5 3 9 6.5h8L22.5 3 21 10c1 5-3 10-8 10s-9-5-8-10z'/><circle cx='10' cy='12.5' r='.6'/><circle cx='16' cy='12.5' r='.6'/><path d='M13 15v1.5M10.5 18h5' stroke-linecap='round'/></g></svg>");
+  --doodle-cup: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 26 24'><g fill='none' stroke='%23de4d38' stroke-width='2' stroke-linejoin='round'><path d='M4 8h15v7a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z'/><path d='M19 10h2.5a2.5 2.5 0 0 1 0 5H19'/><path d='M8 4.5c0 1-1 1.5-1 2.5M13 3.5c0 1.2-1 1.8-1 3' stroke-linecap='round'/></g></svg>");
+  --doodle-disc: url("data:image/svg+xml,<svg xmlns='http%3A//www.w3.org/2000/svg' viewBox='0 0 24 24'><g fill='none' stroke='%23de4d38' stroke-width='2'><circle cx='12' cy='12' r='9.5'/><circle cx='12' cy='12' r='3'/></g></svg>");
+  --max-width: 1320px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* 紙膠帶與散落貼紙會超出內容欄，在捲動容器這一層夾住避免水平捲動；
+     用 clip 而不是 hidden，才不會把 position: fixed 的底紙一起關進來 */
+  overflow-x: clip;
+  scroll-behavior: smooth;
+}
+
+/* 頁面底紙：淡格線 + 極輕的紙張顆粒，明亮不泛黃 */
+body::before {
+  position: fixed;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(116, 158, 190, 0.17) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(116, 158, 190, 0.17) 1px, transparent 1px),
+    linear-gradient(to right, rgba(116, 158, 190, 0.075) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(116, 158, 190, 0.075) 1px, transparent 1px);
+  background-size:
+    var(--grid-bold) var(--grid-bold),
+    var(--grid-bold) var(--grid-bold),
+    var(--grid-fine) var(--grid-fine),
+    var(--grid-fine) var(--grid-fine);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+}
+
+body::after {
+  position: fixed;
+  z-index: 0;
+  background-image: var(--grain);
+  background-size: 150px 150px;
+  content: "";
+  inset: 0;
+  mix-blend-mode: multiply;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+select {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 20;
+  padding: 0.65rem 0.9rem;
+  background: var(--ink);
+  color: white;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site-header,
+main,
+footer {
+  width: min(calc(100% - 2rem), var(--max-width));
+  margin-inline: auto;
+}
+
+.site-header {
+  position: relative;
+  padding: 2.5rem 0 2rem;
+  border-bottom: 2px solid var(--ink);
+}
+
+/* 貼在標頭後面的紅色格紋紙片，純裝飾 */
+.site-header::before {
+  position: absolute;
+  z-index: -1;
+  top: 1.2rem;
+  right: 4%;
+  width: clamp(6rem, 14vw, 11rem);
+  height: clamp(4.5rem, 10vw, 8rem);
+  background-color: rgba(222, 77, 56, 0.13);
+  background-image:
+    repeating-linear-gradient(to right, rgba(222, 77, 56, 0.22) 0 1px, transparent 1px 14px),
+    repeating-linear-gradient(to bottom, rgba(222, 77, 56, 0.22) 0 1px, transparent 1px 14px);
+  content: "";
+  transform: rotate(-2.5deg);
+}
+
+.site-header::after {
+  position: absolute;
+  z-index: -1;
+  top: 0.4rem;
+  right: calc(4% + clamp(1.5rem, 5vw, 4rem));
+  width: 4.2rem;
+  height: 1.05rem;
+  background: rgba(147, 212, 239, 0.5);
+  content: "";
+  transform: rotate(-6deg);
+}
+
+.header-inner {
+  position: relative;
+}
+
+.header-inner {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.edition,
+.empty-kicker {
+  margin: 0 0 0.8rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+h1 {
+  max-width: 900px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 6vw, 5.5rem);
+  font-variation-settings: "SOFT" 45, "WONK" 1;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.94;
+}
+
+h1 span {
+  color: var(--accent);
+  font-style: italic;
+}
+
+
+.subtitle {
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  letter-spacing: 0.05em;
+}
+
+.record-mark {
+  position: relative;
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  flex: 0 0 4rem;
+  place-items: center;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.record-mark::before,
+.record-mark::after {
+  position: absolute;
+  content: "";
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+}
+
+.record-mark::before {
+  width: 2.8rem;
+  height: 2.8rem;
+}
+
+.record-mark::after {
+  width: 0.45rem;
+  height: 0.45rem;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.record-mark span {
+  position: absolute;
+  right: -0.25rem;
+  bottom: -1.5rem;
+}
+

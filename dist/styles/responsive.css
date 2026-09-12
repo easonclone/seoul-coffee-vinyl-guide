@@ -1,0 +1,217 @@
+@media (min-width: 1200px) {
+  .card-grid,
+  .name-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1300px) {
+  .area-map-body {
+    grid-template-columns: 1fr;
+  }
+
+  .area-map-aside {
+    position: static;
+  }
+
+  .area-index {
+    position: static;
+    overflow-y: visible;
+  }
+
+  .area-index b,
+  .area-index small {
+    overflow: visible;
+    white-space: normal;
+  }
+
+  .area-map-figure {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .area-index {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .area-index li,
+  .area-index li + li {
+    border-top: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .area-index li:nth-child(odd) {
+    border-right: 1px solid var(--line);
+  }
+
+  .area-index li:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .site-header,
+  main,
+  footer {
+    width: min(calc(100% - 1.25rem), var(--max-width));
+  }
+
+  .site-header {
+    padding-top: 1.5rem;
+  }
+
+  .header-inner {
+    align-items: flex-start;
+  }
+
+  .record-mark {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-basis: 2.75rem;
+  }
+
+  .record-mark::before {
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .record-mark span {
+    display: none;
+  }
+
+  .area-map {
+    margin-top: 1.75rem;
+  }
+
+  .area-map-head {
+    padding: 0.85rem 1rem;
+  }
+
+  .area-map-note {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+
+  .map-node i {
+    width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.56rem;
+  }
+
+  .area-index a {
+    padding: 0.55rem 0.75rem;
+    grid-template-columns: 1.4rem minmax(0, 1fr) auto;
+  }
+
+  .search-wrap {
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .search-wrap label {
+    grid-column: 1 / -1;
+  }
+
+  .toolbar-row {
+    flex-direction: column;
+  }
+
+  .sort-control {
+    width: 100%;
+    justify-content: space-between;
+    padding-top: 0.6rem;
+  }
+
+  .sort-control select {
+    min-width: 7rem;
+  }
+
+  .place-group {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 2.1rem 0 2.6rem;
+  }
+
+  .place-group > .area-block {
+    grid-column: 1;
+  }
+
+  /* 手機上細格線太密，只保留放大後的粗格 */
+  body::before {
+    background-image:
+      linear-gradient(to right, rgba(116, 158, 190, 0.12) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(116, 158, 190, 0.12) 1px, transparent 1px);
+    background-size: 88px 88px, 88px 88px;
+  }
+
+  .group-header {
+    padding-left: 0.85rem;
+  }
+
+  .group-index {
+    margin-left: -0.85rem;
+    padding-left: 0.85rem;
+  }
+
+  .group-folio {
+    margin-top: 1.8rem;
+  }
+
+  .place-group > .area-block + .area-block {
+    margin-top: 1.5rem;
+  }
+
+  .filters-sub {
+    padding-top: 0.85rem;
+  }
+
+  /* cluster 名稱較長，手機上改回單欄避免每列折成三行 */
+  .area-index {
+    grid-template-columns: 1fr;
+  }
+
+  .area-index li:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .group-index {
+    margin-bottom: 0.6rem;
+  }
+
+  .card-grid,
+  .name-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .name-grid {
+    padding: 2rem 0 2.6rem;
+  }
+
+  .card-tool {
+    min-height: 2.9rem;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.78rem;
+  }
+
+  .toast {
+    right: 0.75rem;
+    left: 0.75rem;
+    transform: rotate(-1.2deg);
+  }
+
+  .place-card {
+    min-height: 0;
+  }
+
+  footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
