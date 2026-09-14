@@ -40,6 +40,11 @@
   --sticker-fg: #7a5a12;
 }
 
+.card-sticker[data-category="bakery"] {
+  --sticker-bg: var(--blush);
+  --sticker-fg: #914236;
+}
+
 .card-sticker[data-category="vinyl"] {
   --sticker-bg: var(--blush);
   --sticker-fg: #a53a2c;
@@ -48,6 +53,11 @@
 .card-sticker[data-category="restaurant"] {
   --sticker-bg: var(--mint);
   --sticker-fg: #2f6b4b;
+}
+
+.card-sticker[data-category="lifestyle"] {
+  --sticker-bg: var(--sky);
+  --sticker-fg: #245a7c;
 }
 
 .card-sticker[data-category="fashion"] {
@@ -375,4 +385,3 @@
   font-size: 0.7rem;
   letter-spacing: 0.06em;
 }
-

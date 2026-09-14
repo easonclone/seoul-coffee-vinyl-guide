@@ -126,12 +126,20 @@
   --card-backing: var(--butter);
 }
 
+.place-card:has(.card-sticker[data-category="bakery"]) {
+  --card-backing: var(--blush);
+}
+
 .place-card:has(.card-sticker[data-category="vinyl"]) {
   --card-backing: var(--blush);
 }
 
 .place-card:has(.card-sticker[data-category="restaurant"]) {
   --card-backing: var(--mint);
+}
+
+.place-card:has(.card-sticker[data-category="lifestyle"]) {
+  --card-backing: var(--sky);
 }
 
 .place-card:has(.card-sticker[data-category="fashion"]) {
@@ -226,4 +234,3 @@
     transition: none;
   }
 }
-

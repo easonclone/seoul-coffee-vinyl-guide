@@ -18,7 +18,7 @@
    * 分類的顯示順序。實際可選分類仍由 places 資料 derive，
    * 這裡只決定排序；沒列到的分類會排在後面。
    */
-  window.CATEGORY_ORDER = ["Coffee", "Vinyl", "Restaurant", "Lifestyle", "Fashion", "Attraction"];
+  window.CATEGORY_ORDER = ["Coffee", "Bakery", "Vinyl", "Restaurant", "Lifestyle", "Fashion", "Attraction"];
 
   /**
    * 以實際旅遊動線（可步行 / 同一趟行程）分群，而不是行政區。
@@ -29,7 +29,7 @@
    */
   window.CLUSTERS = [
     { slug: "seochon", name: "西村・景福宮・仁王山", roman: "Seochon · Inwangsan" },
-    { slug: "wonseo", name: "苑西洞・昌德宮", roman: "Wonseo · Changdeokgung" },
+    { slug: "wonseo", name: "安國・苑西洞・昌德宮", roman: "Anguk · Wonseo" },
     { slug: "junggu", name: "中區・會賢洞", roman: "Jung-gu · Hoehyeon" },
     { slug: "jangchung", name: "獎忠洞・東大入口", roman: "Jangchung" },
     { slug: "seongsu", name: "聖水洞", roman: "Seongsu" },
@@ -52,7 +52,7 @@
     { slug: "seochon", name: "西村・景福宮", roman: "Seochon", cluster: "seochon", lat: 37.579, lng: 126.97, nudge: { x: 8, y: 10 } },
     { slug: "cheongun", name: "清雲洞・仁王山", roman: "Cheongun", cluster: "seochon", lat: 37.5872, lng: 126.966, nudge: { x: -5, y: -12 } },
     { slug: "dongnimmun", name: "獨立門", roman: "Dongnimmun", cluster: "seochon", lat: 37.573, lng: 126.9585, nudge: { x: -15, y: 8 } },
-    { slug: "wonseo", name: "苑西洞・昌德宮", roman: "Wonseo", cluster: "wonseo", lat: 37.58, lng: 126.9865, nudge: { x: 14, y: -2 } },
+    { slug: "wonseo", name: "安國・苑西洞・昌德宮", roman: "Anguk · Wonseo", cluster: "wonseo", lat: 37.58, lng: 126.9865, nudge: { x: 14, y: -2 } },
     { slug: "hoehyeon", name: "會賢洞", roman: "Hoehyeon", cluster: "junggu", lat: 37.558, lng: 126.98 },
     { slug: "jangchung", name: "獎忠洞・東大入口", roman: "Jangchung", cluster: "jangchung", lat: 37.558, lng: 127.006 },
     { slug: "seongsu", name: "聖水洞", roman: "Seongsu", cluster: "seongsu", lat: 37.5445, lng: 127.0557 },

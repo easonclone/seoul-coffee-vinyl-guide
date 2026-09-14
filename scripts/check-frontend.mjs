@@ -109,6 +109,11 @@ windowObject.PLACES.forEach((place) => {
     place.noteColor === undefined || noteColors.has(place.noteColor),
     `店家使用未知的 noteColor：${place.id}`
   );
+  assert(
+    !place.naverMapUrl || /^https:\/\/(?:map\.naver\.com|naver\.me)\//.test(place.naverMapUrl),
+    `店家的 NAVER 連結格式不正確：${place.id}`
+  );
+  assert(!place.naverMapUrl || !place.naverMapUrl.includes("utm_"), `NAVER 連結不應包含追蹤參數：${place.id}`);
 });
 
 assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");

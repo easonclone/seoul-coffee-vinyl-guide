@@ -89,7 +89,7 @@
 
 - `id`：穩定且唯一的識別值
 - `name`、`koreanName`：英文與韓文名稱
-- `category`：單一 top-level 分類（`Coffee`／`Vinyl`／`Restaurant`／`Attraction`…），篩選選項由此 derive
+- `category`：單一 top-level 分類（`Coffee`／`Bakery`／`Vinyl`／`Restaurant`／`Lifestyle`…），篩選選項由此 derive
 - `subcategory`：選填細分類，多個值以 `" / "` 分隔（例如 `"Korean / Seafood"`），UI 會自動拆成第二層篩選
 - `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊；`areaSlug` 對應 `data/areas.js`
 - `address`、`naverMapUrl`：地址與外部地圖連結
