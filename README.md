@@ -95,6 +95,7 @@
 - `address`、`naverMapUrl`：地址與外部地圖連結
 - `openingHours`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
   與 Area／Address 同屬 FACTS，一律排版體、不上螢光筆
+- `rating`：選填的一至五星推薦程度；`priority: "benchmark"` 則顯示為「基準」
 - `notes`：旅行中隨手記下的一句，會進 MY NOTE 區塊並標上螢光筆
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態

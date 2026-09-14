@@ -94,5 +94,19 @@ expectedScripts.forEach((relativePath) => {
   new vm.Script(source, { filename: relativePath }).runInContext(context);
 });
 
+const placeIds = windowObject.PLACES.map((place) => place.id);
+const areaSlugs = new Set(windowObject.AREAS.map((area) => area.slug));
+assert(new Set(placeIds).size === placeIds.length, "店家資料包含重複的 id");
+windowObject.PLACES.forEach((place) => {
+  assert(place.id && place.name && place.category && place.areaSlug, "店家缺少必要欄位");
+  assert(areaSlugs.has(place.areaSlug), `店家使用未知的 areaSlug：${place.areaSlug}`);
+  assert(
+    place.rating === undefined || (Number.isInteger(place.rating) && place.rating >= 1 && place.rating <= 5),
+    `店家星等必須介於一至五星：${place.id}`
+  );
+});
+
 assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");
-console.log(`前端檢查通過：${localReferences.length} 個資源、${expectedScripts.length} 個腳本`);
+console.log(
+  `前端檢查通過：${localReferences.length} 個資源、${expectedScripts.length} 個腳本、${placeIds.length} 間店家`
+);

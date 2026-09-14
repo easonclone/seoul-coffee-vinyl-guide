@@ -18,7 +18,7 @@
    * 分類的顯示順序。實際可選分類仍由 places 資料 derive，
    * 這裡只決定排序；沒列到的分類會排在後面。
    */
-  window.CATEGORY_ORDER = ["Coffee", "Vinyl", "Restaurant", "Fashion", "Attraction"];
+  window.CATEGORY_ORDER = ["Coffee", "Vinyl", "Restaurant", "Lifestyle", "Fashion", "Attraction"];
 
   /**
    * 以實際旅遊動線（可步行 / 同一趟行程）分群，而不是行政區。

@@ -22,6 +22,15 @@
     list.append(row);
   }
 
+  /** 推薦資訊可使用一至五星；基準店則顯示使用者指定的基準標記。 */
+  function ratingLabelOf(place) {
+    if (place.priority === "benchmark") return "基準";
+
+    const rating = Number(place.rating);
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) return null;
+    return `${"★".repeat(rating)}${"☆".repeat(5 - rating)}`;
+  }
+
   /** 旅行記錄：全部選填，沒有就不 render */
   function travelMetaOf(place) {
     const items = [];
@@ -296,6 +305,7 @@
     appendDetail(details, "Area", place.area);
     appendDetail(details, "Address", place.address);
     appendDetail(details, "Hours", place.openingHours);
+    appendDetail(details, "Rating", ratingLabelOf(place));
     appendDetail(details, "Source", place.source);
     article.append(details);
 
@@ -572,4 +582,3 @@
     createPlaceCard, renderScatter, hydrateStickers, renderGroupedPlaces, renderNameSortedPlaces
   });
 })(window.SeoulGuide);
-
