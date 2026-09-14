@@ -240,7 +240,7 @@ window.STICKER_EVERY = 2;   // 每幾章放一張；1 = 每章、0 = 關閉
 不做成正式的 GIS 視覺。
 
 **卡片動作**：NAVER Map 維持唯一的主要按鈕（深色橫條），底下再放一排純文字的
-次要動作 `이름 복사 · 주소 복사 · 링크 복사`，用細底線而不是按鈕框，避免變成工具列。
+次要動作 `Name · Address · Link` 搭配複製圖示，用細底線而不是按鈕框，避免變成工具列。
 手機上每個動作的點擊高度約 46px。刻意不使用 Web Share API：桌面版 Chrome 呼叫
 `navigator.share()` 會直接終止分頁（RESULT_CODE_KILLED_BAD_MESSAGE），改為單純
 複製連結。複製的回饋是一張貼著紙膠帶的小便條
@@ -330,7 +330,7 @@ python3 -m http.server 8000 --directory dist
 
 ### `?place=` 單一店家連結
 
-每張卡片的「링크 복사」會複製 `?place=<place.id>` 的永久連結，並**保留當下的篩選條件**：
+每張卡片的「Link」會複製 `?place=<place.id>` 的永久連結，並**保留當下的篩選條件**：
 
 ```
 ?category=Restaurant&area=nonhyeon&place=daegabang-main

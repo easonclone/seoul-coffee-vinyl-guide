@@ -262,9 +262,10 @@
   }
 
   function createToolButton(label, accessibleLabel, handler) {
-    const button = createElement("button", "card-tool", label);
+    const button = createElement("button", "card-tool");
     button.type = "button";
     button.setAttribute("aria-label", accessibleLabel);
+    button.append(createElement("span", "", label), createCopyIcon());
     button.addEventListener("click", () => {
       // 同步呼叫 handler，讓 clipboard / share 還握有這次點擊的 user activation
       try {
@@ -277,6 +278,31 @@
       }
     });
     return button;
+  }
+
+  /** 次要動作以複製圖示表達共同行為，文字只保留被複製的內容。 */
+  function createCopyIcon() {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+
+    const back = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    back.setAttribute("x", "4");
+    back.setAttribute("y", "4");
+    back.setAttribute("width", "11");
+    back.setAttribute("height", "11");
+    back.setAttribute("rx", "2");
+
+    const front = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    front.setAttribute("x", "9");
+    front.setAttribute("y", "9");
+    front.setAttribute("width", "11");
+    front.setAttribute("height", "11");
+    front.setAttribute("rx", "2");
+
+    svg.append(back, front);
+    return svg;
   }
 
   /** 卡片外部連結使用內建線條圖示，不依賴額外圖示套件。 */
@@ -422,7 +448,7 @@
     const nameValue = place.koreanName || place.name;
     if (nameValue) {
       tools.append(
-        createToolButton("이름 복사", `複製店名 ${nameValue}`, async () => {
+        createToolButton("Name", `複製店名 ${nameValue}`, async () => {
           const ok = await copyText(nameValue);
           showToast(ok ? "店名已複製 ✓" : "複製失敗，請長按選取店名", ok ? "ok" : "error");
         })
@@ -431,7 +457,7 @@
 
     if (place.address) {
       tools.append(
-        createToolButton("주소 복사", `複製 ${place.name} 的地址`, async () => {
+        createToolButton("Address", `複製 ${place.name} 的地址`, async () => {
           const ok = await copyText(place.address);
           showToast(ok ? "地址已複製 ✓" : "複製失敗，請長按選取地址", ok ? "ok" : "error");
         })
@@ -439,7 +465,7 @@
     }
 
     tools.append(
-      createToolButton("링크 복사", `複製 ${place.name} 的分享連結`, () => copyPlaceLink(place))
+      createToolButton("Link", `複製 ${place.name} 的分享連結`, () => copyPlaceLink(place))
     );
 
     actions.append(tools);

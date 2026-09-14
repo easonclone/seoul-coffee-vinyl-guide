@@ -127,6 +127,9 @@
 
 /* 像便條上隨手寫的小動作，不是工具列按鈕 */
 .card-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
   min-height: 2.75rem;
   padding: 0.35rem 0.45rem;
   background: transparent;
@@ -141,6 +144,16 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 0.28em;
   transition: color 140ms ease, text-decoration-color 140ms ease;
+}
+
+.card-tool svg {
+  width: 0.82rem;
+  height: 0.82rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.7;
 }
 
 .card-tool:hover,
