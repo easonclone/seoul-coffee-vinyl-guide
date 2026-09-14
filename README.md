@@ -93,6 +93,7 @@
 - `subcategory`：選填細分類，多個值以 `" / "` 分隔（例如 `"Korean / Seafood"`），UI 會自動拆成第二層篩選
 - `area`、`areaSlug`、`district`：分組、網址狀態與行政區資訊；`areaSlug` 對應 `data/areas.js`
 - `address`、`naverMapUrl`：地址與外部地圖連結
+- `instagramUrl`、`websiteUrl`：選填的 Instagram 與官方網站，會顯示為卡片底部小型動作
 - `openingHours`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
   與 Area／Address 同屬 FACTS，一律排版體、不上螢光筆
 - `rating`：選填的一至五星推薦程度；`priority: "benchmark"` 則顯示為「基準」
@@ -170,7 +171,7 @@ window.ROUTES = [
   `width`，既有的底圖路徑座標就完全不必重算
 - `window.CATEGORY_ORDER`：只影響分類按鈕的排序，實際選項仍由 places 資料 derive
 
-已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`instagramUrl`、`websiteUrl`、`priceLevel`、`rating`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。
+已預留 `latitude`、`longitude`。未來可以安全增加 `googleMapUrl`、`priceLevel`、`priority`、`visited`、`favorite`、`recommendedDuration`、`nearestStation`、`image`、`lastVerifiedAt` 等選填欄位。
 
 ## 視覺語言
 

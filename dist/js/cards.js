@@ -279,6 +279,51 @@
     return button;
   }
 
+  /** 卡片外部連結使用內建線條圖示，不依賴額外圖示套件。 */
+  function createActionIcon(type) {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("focusable", "false");
+
+    const addShape = (name, attributes) => {
+      const shape = document.createElementNS("http://www.w3.org/2000/svg", name);
+      Object.entries(attributes).forEach(([key, value]) => shape.setAttribute(key, value));
+      svg.append(shape);
+    };
+
+    if (type === "instagram") {
+      addShape("rect", { x: "3", y: "3", width: "18", height: "18", rx: "5" });
+      addShape("circle", { cx: "12", cy: "12", r: "4" });
+      addShape("circle", { cx: "17.5", cy: "6.5", r: "1", class: "is-filled" });
+    } else {
+      addShape("circle", { cx: "12", cy: "12", r: "9" });
+      addShape("path", { d: "M3 12h18M12 3c3 3.3 3 14.7 0 18M12 3c-3 3.3-3 14.7 0 18" });
+    }
+
+    return svg;
+  }
+
+  function createExternalLink(place, label, url, icon) {
+    if (!url) return null;
+
+    let externalUrl;
+    try {
+      externalUrl = new URL(url);
+      if (externalUrl.protocol !== "https:") return null;
+    } catch (error) {
+      return null;
+    }
+
+    const link = createElement("a", "card-external-link");
+    link.href = externalUrl.toString();
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.setAttribute("aria-label", `在新分頁開啟 ${place.name} 的 ${label}`);
+    link.append(createActionIcon(icon), createElement("span", "", `${label} ↗`));
+    return link;
+  }
+
   function createPlaceCard(place, index) {
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
@@ -359,6 +404,16 @@
       link.rel = "noopener noreferrer";
       link.setAttribute("aria-label", `在新分頁以關鍵字搜尋 ${place.name}`);
       actions.append(link);
+    }
+
+    const externalLinks = [
+      createExternalLink(place, "IG", place.instagramUrl, "instagram"),
+      createExternalLink(place, "WEB", place.websiteUrl, "website")
+    ].filter(Boolean);
+    if (externalLinks.length) {
+      const externalActions = createElement("div", "card-external-links");
+      externalActions.append(...externalLinks);
+      actions.append(externalActions);
     }
 
     // 次要動作：只用文字，不做成第二排主按鈕

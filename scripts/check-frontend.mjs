@@ -114,6 +114,14 @@ windowObject.PLACES.forEach((place) => {
     `店家的 NAVER 連結格式不正確：${place.id}`
   );
   assert(!place.naverMapUrl || !place.naverMapUrl.includes("utm_"), `NAVER 連結不應包含追蹤參數：${place.id}`);
+  assert(
+    !place.instagramUrl || /^https:\/\/www\.instagram\.com\/[A-Za-z0-9._]+\/$/.test(place.instagramUrl),
+    `店家的 Instagram 連結格式不正確：${place.id}`
+  );
+  assert(
+    !place.websiteUrl || (place.websiteUrl.startsWith("https://") && !place.websiteUrl.includes("utm_")),
+    `店家的官網連結格式不正確：${place.id}`
+  );
 });
 
 assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");
