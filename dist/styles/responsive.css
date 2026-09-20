@@ -1,4 +1,18 @@
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
+  .card-grid,
+  .name-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .card-grid,
+  .name-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
   .card-grid,
   .name-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -128,13 +142,7 @@
   }
 
   .place-group {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
     padding: 2.1rem 0 2.6rem;
-  }
-
-  .place-group > .area-block {
-    grid-column: 1;
   }
 
   /* 手機上細格線太密，只保留放大後的粗格 */
@@ -146,6 +154,7 @@
   }
 
   .group-header {
+    display: block;
     padding-left: 0.85rem;
   }
 

@@ -120,6 +120,7 @@
 | `favorite` / `recommended` | boolean | 蓋對應的章 |
 | `mustGo` | boolean | 顯示「已安排 · 必去」行程標籤與卡片內框 |
 | `photo` | object | 見下方「照片插頁」 |
+| `mapillary` | object | 見下方「Mapillary 實景」；有 `photo` 時不重複顯示 |
 
 ### MY NOTE 與螢光筆
 
@@ -140,7 +141,7 @@
 ### 照片插頁
 
 ```js
-photo: { src: "photos/protokoll.jpg", caption: "延禧洞的早晨", style: "polaroid" }
+photo: { src: "photos/protokoll.jpg", width: 800, height: 600, caption: "延禧洞的早晨", style: "polaroid" }
 photo: { srcs: ["a.jpg", "b.jpg", "c.jpg"], caption: "Contact sheet", style: "contact" }
 photo: { src: "photos/receipt.jpg", caption: "收據 · 2025-04-13", style: "ticket" }
 ```
@@ -148,6 +149,25 @@ photo: { src: "photos/receipt.jpg", caption: "收據 · 2025-04-13", style: "tic
 `style` 為 `polaroid`（預設）／`contact`（最多 4 張的印樣條）／`ticket`（票根、收據）。
 圖檔請放在 `dist/` 底下用相對路徑引用（CSP 的 `img-src` 只允許 `'self'` 與 `data:`）。
 照片刻意不做滿版，是夾進筆記本的插頁而不是主視覺。
+
+沒有合法且與店家相符的照片時，卡片維持純文字內容，不顯示圖片佔位或模擬圖片效果。
+
+照片若來自開放授權來源，請一併保存 `credit`、`sourceUrl`、`license` 與 `licenseUrl`；
+若曾裁切、縮放或轉檔，另以 `changes` 說明。介面會在圖片下方顯示作者、來源、授權與變更。
+建議填寫 `width`、`height` 以避免載入時版面位移。
+
+### Mapillary 實景
+
+```js
+mapillary: {
+  embedUrl: "https://www.mapillary.com/embed?...",
+  caption: "店面所在街道 · 拍攝日期請以 Mapillary 為準"
+}
+```
+
+`embedUrl` 必須由 Mapillary 分享功能針對**確切 capture** 產生；不可只因為影像在店家附近就加入。
+卡片起初只顯示「開啟 Mapillary 實景」按鈕，點擊後才建立 iframe，因此不會讓列表初次載入時
+同時下載多個街景 viewer。沒有合法照片及確切 capture 時，卡片完全不 render 影像區塊。
 
 ### Area schema（`dist/data/areas.js`）
 
@@ -266,14 +286,17 @@ Noto Serif TC，韓文店名使用 Noto Sans KR，個人備註使用 Caveat；�
 `Caveat` → `LXGW WenKai TC`（使用者本機有才會套用）→ `Noto Serif TC`，
 中文部分靠墨藍色與側線呈現註記感，而不是硬套裝飾字體。
 
-為此 `index.html` 的 CSP 放寬了兩個網域，其餘指令維持不變：
+`index.html` 的 CSP 僅為遠端字體與按需 Mapillary viewer 放行必要網域，其餘指令維持不變：
 
 ```
 style-src 'self' https://fonts.googleapis.com;
 font-src  'self' https://fonts.gstatic.com;
+frame-src https://www.mapillary.com;
 ```
 
-若要完全不連外，可改為自行託管字體檔並把這兩條改回 `'self'`。
+`frame-src` 僅供資料中已有確切 capture 的 Mapillary 點擊式實景使用；沒有使用者操作時不建立 iframe。
+
+若要完全不連外，可改為自行託管字體檔、移除 Mapillary 欄位，並把這三條改回 `'self'`。
 
 ## 本機預覽
 

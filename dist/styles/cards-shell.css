@@ -11,6 +11,8 @@
   border: 1px solid var(--line);
   box-shadow: 0 1px 1px rgba(35, 33, 30, 0.04), 0 5px 12px -9px rgba(35, 33, 30, 0.25);
   transition: transform 220ms ease, box-shadow 220ms ease;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 38rem;
 }
 
 /* 一片片貼上去的紙：極小角度與上緣落差，不做整頁亂轉 */

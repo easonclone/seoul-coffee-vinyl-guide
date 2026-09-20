@@ -61,6 +61,7 @@
         img.src = src;
         img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
         img.loading = "lazy";
+        img.decoding = "async";
         frame.append(img);
         strip.append(frame);
       });
@@ -72,6 +73,7 @@
         img.src = photo.src;
         img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
         img.loading = "lazy";
+        img.decoding = "async";
         slip.append(img);
       }
       figure.append(slip);
@@ -81,12 +83,79 @@
       img.src = photo.src;
       img.alt = photo.caption ? `${place.name}：${photo.caption}` : place.name;
       img.loading = "lazy";
+      img.decoding = "async";
+      if (photo.width) img.width = photo.width;
+      if (photo.height) img.height = photo.height;
       figure.append(img);
     }
 
-    if (photo.caption) {
-      figure.append(createElement("figcaption", "", photo.caption));
+    if (photo.caption || photo.credit || photo.license || photo.changes) {
+      const caption = createElement("figcaption", "");
+      if (photo.caption) caption.append(createElement("span", "photo-caption", photo.caption));
+
+      const attribution = createElement("span", "photo-attribution");
+      if (photo.credit) {
+        const credit = createElement(photo.sourceUrl ? "a" : "span", "", `照片：${photo.credit}`);
+        if (photo.sourceUrl) {
+          credit.href = photo.sourceUrl;
+          credit.target = "_blank";
+          credit.rel = "noopener noreferrer";
+        }
+        attribution.append(credit);
+      }
+      if (photo.credit && photo.license) attribution.append(createElement("span", "", " · "));
+      if (photo.license) {
+        const license = createElement(photo.licenseUrl ? "a" : "span", "", photo.license);
+        if (photo.licenseUrl) {
+          license.href = photo.licenseUrl;
+          license.target = "_blank";
+          license.rel = "noopener noreferrer";
+        }
+        attribution.append(license);
+      }
+      if ((photo.credit || photo.license) && photo.changes) attribution.append(createElement("span", "", " · "));
+      if (photo.changes) attribution.append(createElement("span", "", photo.changes));
+      if (photo.credit || photo.license || photo.changes) caption.append(attribution);
+      figure.append(caption);
     }
+    return figure;
+  }
+
+  /**
+   * Mapillary 僅接受後台分享功能產生的確切 embed URL。
+   * 為避免載入沉重街景程式，使用者點擊後才建立 iframe。
+   */
+  function createMapillary(place) {
+    const mapillary = place.mapillary;
+    if (!mapillary || !mapillary.embedUrl) return null;
+
+    let embedUrl;
+    try {
+      embedUrl = new URL(mapillary.embedUrl);
+      if (embedUrl.protocol !== "https:" || embedUrl.hostname !== "www.mapillary.com" || embedUrl.pathname !== "/embed") {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+
+    const figure = createElement("figure", "card-mapillary");
+    const viewport = createElement("div", "mapillary-viewport");
+    const loadButton = createElement("button", "mapillary-load", "開啟 Mapillary 實景");
+    loadButton.type = "button";
+    loadButton.addEventListener("click", () => {
+      const iframe = document.createElement("iframe");
+      iframe.src = embedUrl.toString();
+      iframe.title = `${place.name} 的 Mapillary 實景`;
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox");
+      viewport.replaceChildren(iframe);
+    }, { once: true });
+    viewport.append(loadButton);
+    figure.append(viewport);
+    if (mapillary.caption) figure.append(createElement("figcaption", "", mapillary.caption));
     return figure;
   }
 
@@ -398,7 +467,8 @@
     }
 
     const photo = createPhoto(place);
-    if (photo) article.append(photo);
+    const mapillary = photo ? null : createMapillary(place);
+    if (photo || mapillary) article.append(photo || mapillary);
 
     const note = createNote(place);
     if (note) article.append(note);

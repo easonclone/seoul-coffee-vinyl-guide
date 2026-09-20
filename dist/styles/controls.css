@@ -155,7 +155,7 @@ input[type="search"]::placeholder {
 }
 
 .place-group > .area-block {
-  grid-column: 2;
+  width: 100%;
 }
 
 .place-group > .area-block + .area-block {

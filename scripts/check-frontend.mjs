@@ -126,6 +126,37 @@ windowObject.PLACES.forEach((place) => {
     !place.websiteUrl || (place.websiteUrl.startsWith("https://") && !place.websiteUrl.includes("utm_")),
     `店家的官網連結格式不正確：${place.id}`
   );
+  if (place.photo) {
+    const photoSources = (Array.isArray(place.photo.srcs) ? place.photo.srcs : [place.photo.src]).filter(Boolean);
+    photoSources.forEach((source) => {
+      assert(!path.isAbsolute(source) && !source.includes(".."), `照片必須使用 dist 內的安全相對路徑：${place.id}`);
+      assert(fs.existsSync(path.join(distRoot, source)), `找不到店家照片：${place.id} / ${source}`);
+    });
+    assert(
+      !place.photo.sourceUrl || place.photo.sourceUrl.startsWith("https://"),
+      `照片來源必須使用 HTTPS：${place.id}`
+    );
+    assert(
+      !place.photo.licenseUrl || place.photo.licenseUrl.startsWith("https://"),
+      `照片授權連結必須使用 HTTPS：${place.id}`
+    );
+    assert(
+      !place.photo.credit || (place.photo.sourceUrl && place.photo.license && place.photo.licenseUrl),
+      `有署名的照片必須同時提供來源與授權：${place.id}`
+    );
+    assert(
+      !place.photo.width || (Number.isInteger(place.photo.width) && place.photo.width > 0),
+      `照片寬度必須是正整數：${place.id}`
+    );
+    assert(
+      !place.photo.height || (Number.isInteger(place.photo.height) && place.photo.height > 0),
+      `照片高度必須是正整數：${place.id}`
+    );
+  }
+  assert(
+    !place.mapillary || /^https:\/\/www\.mapillary\.com\/embed(?:\?|$)/.test(place.mapillary.embedUrl || ""),
+    `Mapillary 必須使用官方 embed URL：${place.id}`
+  );
 });
 
 assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");

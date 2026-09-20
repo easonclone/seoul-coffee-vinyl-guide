@@ -7,7 +7,7 @@
    * 必要欄位：id, name, category, area, areaSlug, city, country, tags
    * 選用欄位（缺少時 UI 不會 render 空白欄位）：
    *   koreanName, subcategory, district, address, naverMapUrl, instagramUrl, websiteUrl,
-   *   openingHours, notes, source, brand, rating, priority, mustGo, latitude, longitude
+   *   openingHours, notes, source, brand, rating, priority, mustGo, latitude, longitude, mapillary
    *
    * 事實與隨手筆記分開：
    *   FACTS（Area / Address / Hours / Source）一律排版體，不上任何螢光筆
@@ -27,6 +27,8 @@
    *   mustGo       true，顯示「已安排 · 必去」行程標籤與卡片內框
    *   photo        { src, caption, style }，style 為 polaroid | contact | ticket；
    *                contact 用 srcs 陣列。沒有 photo 就完全不 render
+   *   mapillary    { embedUrl, caption }，只接受 Mapillary 分享功能產生的確切 capture embed；
+   *                有 photo 時優先顯示照片，兩者都沒有就維持純文字卡片
    *
    * category 為單一 top-level 分類（Coffee / Bakery / Vinyl / Restaurant / Lifestyle…），
    * 可選的 subcategory 為細分類，多個值以 " / " 分隔，UI 會自動拆成篩選選項。
@@ -991,6 +993,18 @@
       openingHours: "10:30–22:00",
       notes: "比街邊店更容易順路逛，除了衣服也有不少小物；適合把它當樂天世界 Mall 裡的一站。",
       noteColor: "green",
+      photo: {
+        src: "photos/lotte-world-mall-seoul.webp",
+        width: 800,
+        height: 600,
+        caption: "Lotte World Mall 入口 · HUMAN MADE 位於商場 1 樓",
+        style: "polaroid",
+        credit: "Christophe95 / Wikimedia Commons",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Lotte_World_Mall_in_Seoul.jpg",
+        license: "CC BY-SA 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+        changes: "已縮放並轉為 WebP"
+      },
       source: null,
       tags: ["fashion", "streetwear", "human-made", "jamsil", "lotte-world-mall"],
       brand: "HUMAN MADE",
@@ -1452,6 +1466,18 @@
       openingHours: "Mon–Fri 約 10:00–19:00；Sat–Sun 約 09:00–18:00",
       notes: "就在明洞聖堂內，很適合中區行程順路停一杯；這間有分店限定 blend，和延南店的體驗不完全相同。",
       noteColor: "green",
+      photo: {
+        src: "photos/myeongdong-cathedral.webp",
+        width: 800,
+        height: 600,
+        caption: "明洞聖堂外觀 · Coffee Libre 位於 1898廣場",
+        style: "polaroid",
+        credit: "Kimhs5400 / Wikimedia Commons",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Myeongdongchurch2025.jpg",
+        license: "CC BY 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+        changes: "已縮放並轉為 WebP"
+      },
       source: null,
       tags: ["coffee", "roastery", "specialty-coffee", "coffee-libre", "myeongdong", "jung-gu"],
       brand: "Coffee Libre",
@@ -1476,6 +1502,18 @@
       openingHours: "約 10:30–22:00",
       notes: "和 오월의종 麵包店結合的大型門市，空間比延南店寬鬆很多；適合同時想喝咖啡、吃麵包又不想擠小店。",
       noteColor: "green",
+      photo: {
+        src: "photos/times-square-seoul.webp",
+        width: 800,
+        height: 600,
+        caption: "永登浦 Times Square 室內 · Coffee Libre 位於商場 1 樓",
+        style: "polaroid",
+        credit: "Brit in Seoul / Wikimedia Commons",
+        sourceUrl: "https://commons.wikimedia.org/wiki/File:Times_Square,_Seoul.jpg",
+        license: "CC BY-SA 4.0",
+        licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+        changes: "已縮放並轉為 WebP"
+      },
       source: null,
       tags: ["coffee", "roastery", "bakery", "coffee-libre", "times-square", "yeongdeungpo"],
       brand: "Coffee Libre",
