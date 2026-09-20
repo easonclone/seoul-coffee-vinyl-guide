@@ -110,6 +110,10 @@ windowObject.PLACES.forEach((place) => {
     `店家使用未知的 noteColor：${place.id}`
   );
   assert(
+    place.mustGo === undefined || typeof place.mustGo === "boolean",
+    `店家的 mustGo 必須是布林值：${place.id}`
+  );
+  assert(
     !place.naverMapUrl || /^https:\/\/(?:map\.naver\.com|naver\.me)\//.test(place.naverMapUrl),
     `店家的 NAVER 連結格式不正確：${place.id}`
   );
@@ -125,6 +129,16 @@ windowObject.PLACES.forEach((place) => {
 });
 
 assert(typeof windowObject.SeoulGuide.render === "function", "網站啟動流程未正確載入");
+
+windowObject.location.search = "?mustGo=1";
+windowObject.SeoulGuide.readUrlState();
+assert(windowObject.SeoulGuide.state.mustGo === true, "網址未能還原必去篩選");
+const mustGoPlaces = windowObject.SeoulGuide.getVisiblePlaces();
+assert(mustGoPlaces.length > 0, "必去篩選沒有任何結果");
+assert(mustGoPlaces.every((place) => place.mustGo === true), "必去篩選包含未標記的店家");
+windowObject.location.search = "";
+windowObject.SeoulGuide.state.mustGo = false;
+
 console.log(
   `前端檢查通過：${localReferences.length} 個資源、${expectedScripts.length} 個腳本、${placeIds.length} 間店家`
 );

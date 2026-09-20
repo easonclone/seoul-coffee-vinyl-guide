@@ -97,6 +97,7 @@
 - `openingHours`、`source`：可為 `null` 的客觀補充（`source` 用於節目、推薦人等出處），
   與 Area／Address 同屬 FACTS，一律排版體、不上螢光筆
 - `rating`：選填的一至五星推薦程度；`priority: "benchmark"` 則顯示為「基準」
+- `mustGo`：選填布林值；設為 `true` 時顯示「已安排 · 必去」標籤與卡片內框，供所有店家共用
 - `notes`：旅行中隨手記下的一句，會進 MY NOTE 區塊並標上螢光筆
 - `tags`：搜尋與複合篩選使用的字串陣列
 - `brand`、`city`、`country`、`active`：品牌、地點與啟用狀態
@@ -117,6 +118,7 @@
 | `plannedAt` | `"2025-04-14"` | 顯示 `PLANNED …`，並蓋 PLANNED 章（已有 visitedAt 時不重複） |
 | `tripDay` | number | 顯示 `DAY 2` |
 | `favorite` / `recommended` | boolean | 蓋對應的章 |
+| `mustGo` | boolean | 顯示「已安排 · 必去」行程標籤與卡片內框 |
 | `photo` | object | 見下方「照片插頁」 |
 
 ### MY NOTE 與螢光筆
@@ -324,6 +326,7 @@ python3 -m http.server 8000 --directory dist
 - `?category=Restaurant&sub=chinese&sub=eel`
 - `?category=Coffee&brand=fritz%20coffee%20company`
 - `?area=yeonhui`
+- `?mustGo=1`
 - `?sort=name`
 
 舊版的 `?tag=` 與 `?city=` 仍然可用。

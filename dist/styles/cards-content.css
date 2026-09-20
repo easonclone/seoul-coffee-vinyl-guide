@@ -2,15 +2,58 @@
   position: relative;
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.9rem;
+}
+
+.card-topline-lead {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
 .card-index {
   color: var(--muted);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
+}
+
+.must-go-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.48rem;
+  background: var(--accent);
+  border: 1px solid var(--accent-dark);
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 var(--blush);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  transform: rotate(-2deg);
+  white-space: nowrap;
+}
+
+.must-go-badge::before {
+  content: "★";
+  font-size: 0.72rem;
+}
+
+.place-card.is-must-go .card-index {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.place-card.is-must-go h3 {
+  width: fit-content;
+  background: linear-gradient(to bottom, transparent 68%, rgba(244, 166, 192, 0.72) 68% 92%, transparent 92%);
 }
 
 .card-kind {

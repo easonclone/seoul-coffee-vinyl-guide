@@ -36,6 +36,7 @@ window.SeoulGuide = window.SeoulGuide || {};
     tags: new Set(),
     cities: new Set(),
     area: "",
+    mustGo: false,
     sort: "area",
     place: ""
   };
@@ -161,6 +162,7 @@ window.SeoulGuide = window.SeoulGuide || {};
     state.query = params.get("q") || "";
     state.category = params.get("category") || "";
     state.area = normalize(params.get("area"));
+    state.mustGo = params.get("mustGo") === "1";
     state.sort = params.get("sort") === "name" ? "name" : "area";
     state.place = params.get("place") || "";
     app.pendingPlaceFocus = Boolean(state.place);
@@ -182,6 +184,7 @@ window.SeoulGuide = window.SeoulGuide || {};
     if (state.query) params.set("q", state.query);
     if (state.category) params.set("category", state.category);
     if (state.area) params.set("area", state.area);
+    if (state.mustGo) params.set("mustGo", "1");
     state.facets.forEach((facet) => params.append("sub", facet));
     state.brands.forEach((brand) => params.append("brand", brand));
     state.tags.forEach((tag) => params.append("tag", tag));
@@ -229,8 +232,10 @@ window.SeoulGuide = window.SeoulGuide || {};
     const hasEveryTag = [...state.tags].every((tag) => placeTags.has(tag));
     const matchesCity = state.cities.size === 0 || state.cities.has(normalize(place.city));
     const matchesArea = !state.area || normalize(place.areaSlug) === state.area || placeTags.has(state.area);
+    const matchesMustGo = !state.mustGo || place.mustGo === true;
 
-    return matchesCategory && matchesFacet && matchesBrand && hasEveryTag && matchesCity && matchesArea;
+    return matchesCategory && matchesFacet && matchesBrand && hasEveryTag && matchesCity
+      && matchesArea && matchesMustGo;
   }
 
   function getVisiblePlaces() {

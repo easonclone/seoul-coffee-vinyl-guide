@@ -40,6 +40,7 @@
     state.tags.clear();
     state.cities.clear();
     state.area = "";
+    state.mustGo = false;
     state.sort = "area";
     leavePlaceContext();
     render();

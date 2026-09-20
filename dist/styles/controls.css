@@ -84,6 +84,26 @@ input[type="search"]::placeholder {
   color: #fff;
 }
 
+/* 行程狀態固定在分類最前方，視覺像一張小行程貼紙。 */
+.filter-chip.is-must-go-filter {
+  background: var(--blush);
+  border-color: rgba(201, 63, 45, 0.5);
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+
+.filter-chip.is-must-go-filter:hover {
+  border-color: var(--accent);
+}
+
+.filter-chip.is-must-go-filter.is-active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 3px 3px 0 var(--blush);
+  color: #fff;
+  transform: rotate(-1deg);
+}
+
 .sort-control {
   display: flex;
   align-items: center;
@@ -221,4 +241,3 @@ input[type="search"]::placeholder {
 .active-area {
   color: var(--accent);
 }
-

@@ -353,18 +353,25 @@
   function createPlaceCard(place, index) {
     const article = createElement("article", "place-card");
     article.dataset.placeId = place.id;
+    if (place.mustGo) article.classList.add("is-must-go");
 
     const seed = hashOf(place.id);
     article.dataset.paper = String(seed % 6);
     article.dataset.tape = String((seed >>> 5) % 3);
 
     const topline = createElement("div", "card-topline");
+    const toplineLead = createElement("div", "card-topline-lead");
+    toplineLead.append(createElement("span", "card-index", String(index + 1).padStart(2, "0")));
+    if (place.mustGo) {
+      toplineLead.append(createElement("span", "must-go-badge", "已安排 · 必去"));
+    }
+
     const kind = createElement("span", "card-kind");
     const sticker = createElement("b", "card-sticker", place.category);
     sticker.dataset.category = normalize(place.category);
     kind.append(sticker);
     if (place.subcategory) kind.append(createElement("i", "card-sub", place.subcategory));
-    topline.append(createElement("span", "card-index", String(index + 1).padStart(2, "0")), kind);
+    topline.append(toplineLead, kind);
 
     article.append(topline, createElement("h3", "", place.name));
     if (place.koreanName) {

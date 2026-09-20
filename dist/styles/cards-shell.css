@@ -39,6 +39,18 @@
   transform: rotate(0deg) translateY(-2px);
 }
 
+/* 已確定排入行程：保留紙片材質，以內框與行程標籤提高辨識度。 */
+.place-card.is-must-go {
+  border-color: rgba(201, 63, 45, 0.72);
+  outline: 3px solid rgba(201, 63, 45, 0.55);
+  outline-offset: -0.62rem;
+}
+
+.place-card.is-must-go:hover,
+.place-card.is-must-go:focus-within {
+  box-shadow: 0 3px 3px rgba(201, 63, 45, 0.08), 0 16px 26px -15px rgba(116, 39, 29, 0.42);
+}
+
 /* --- 六種紙片：memo / 便條本 / 方格 / 索引卡 / 收據 / 貼紙底 --- */
 
 /* 1 便條本：撕下來的上緣 + 橫線 */

@@ -18,9 +18,19 @@
   function renderCategoryChips() {
     categoryFilters.replaceChildren();
 
-    const allChip = createChip("全部", !state.category);
+    const mustGoChip = createChip("★ 必去", state.mustGo);
+    mustGoChip.classList.add("is-must-go-filter");
+    mustGoChip.addEventListener("click", () => {
+      state.mustGo = !state.mustGo;
+      leavePlaceContext();
+      app.render();
+    });
+    categoryFilters.append(mustGoChip);
+
+    const allChip = createChip("全部", !state.category && !state.mustGo);
     allChip.addEventListener("click", () => {
       state.category = "";
+      state.mustGo = false;
       state.facets.clear();
       state.brands.clear();
       leavePlaceContext();
